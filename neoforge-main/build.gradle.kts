@@ -107,6 +107,7 @@ runs {
     create("server") {
         systemProperty("forge.enabledGameTestNamespaces", modId)
         environmentVariables("CM_TEST_RESOURCES", project.file("src/test/resources").path)
+        programArguments("nogui")
         modSource(project.sourceSets.test.get())
     }
 
