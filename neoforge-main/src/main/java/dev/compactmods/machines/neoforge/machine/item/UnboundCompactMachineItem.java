@@ -82,7 +82,7 @@ public class UnboundCompactMachineItem extends BlockItem implements IUnboundComp
         return Optional.empty();
     }
 
-    public static ItemStack forTemplate(ResourceLocation templateId, RoomTemplate template) {
+    public static ItemStack forTemplate(@NotNull ResourceLocation templateId, @NotNull RoomTemplate template) {
         final var stack = new ItemStack(Machines.UNBOUND_MACHINE_BLOCK_ITEM.get(), 1);
         if (stack.getItem() instanceof IUnboundCompactMachineItem unbound) {
             unbound.setTemplate(stack, templateId);

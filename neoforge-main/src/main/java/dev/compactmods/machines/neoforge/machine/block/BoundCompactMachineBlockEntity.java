@@ -1,5 +1,6 @@
 package dev.compactmods.machines.neoforge.machine.block;
 
+import dev.compactmods.machines.api.machine.block.IBoundCompactMachineBlockEntity;
 import dev.compactmods.machines.api.room.RoomApi;
 import dev.compactmods.machines.api.machine.IColoredMachine;
 import dev.compactmods.machines.neoforge.machine.Machines;
@@ -18,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 import java.util.UUID;
 
-public class BoundCompactMachineBlockEntity extends BlockEntity implements IColoredMachine {
+public class BoundCompactMachineBlockEntity extends BlockEntity implements IBoundCompactMachineBlockEntity, IColoredMachine {
 
     protected UUID owner;
     private String roomCode;
@@ -29,11 +30,6 @@ public class BoundCompactMachineBlockEntity extends BlockEntity implements IColo
 
     @Nullable
     private Component customName;
-
-    public static final String NBT_OWNER = "owner";
-    public static final String NBT_COLOR = "machine_color";
-    public static final String NBT_ROOM_CODE = "room_code";
-    public static final String NBT_ROOM_COLOR = "room_color";
 
     public BoundCompactMachineBlockEntity(BlockPos pos, BlockState state) {
         super(Machines.MACHINE_ENTITY.get(), pos, state);
@@ -94,11 +90,8 @@ public class BoundCompactMachineBlockEntity extends BlockEntity implements IColo
             data.putString(NBT_ROOM_CODE, roomCode);
         }
 
-        if (level instanceof ServerLevel) {
-            // TODO - Internal player list
-            if (this.owner != null)
-                data.putUUID("owner", this.owner);
-        }
+        if (this.owner != null)
+            data.putUUID("owner", this.owner);
 
         if (hasMachineColorOverride)
             data.putInt(NBT_COLOR, machineColor);

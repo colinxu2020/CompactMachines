@@ -10,8 +10,10 @@ import dev.compactmods.machines.api.room.history.RoomEntryPoint;
 import dev.compactmods.machines.api.shrinking.PSDTags;
 import dev.compactmods.machines.neoforge.machine.Machines;
 import dev.compactmods.machines.neoforge.machine.item.UnboundCompactMachineItem;
+import dev.compactmods.machines.neoforge.network.machine.UnboundMachineTemplateSyncPacket;
 import dev.compactmods.machines.neoforge.room.RoomHelper;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -27,6 +29,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,8 +41,10 @@ public class UnboundCompactMachineBlock extends Block implements EntityBlock {
     @Override
     public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player) {
         if (level.getBlockEntity(pos) instanceof UnboundCompactMachineEntity be) {
+            final var id = be.templateId();
             final var temp = be.template().orElseThrow();
-            return UnboundCompactMachineItem.forTemplate(be.templateId(), temp);
+            if(id != null && temp != RoomTemplate.INVALID_TEMPLATE)
+                return UnboundCompactMachineItem.forTemplate(id, temp);
         }
 
         return MachineCreator.unbound();
@@ -48,16 +53,6 @@ public class UnboundCompactMachineBlock extends Block implements EntityBlock {
     @Override
     public @Nullable BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         return new UnboundCompactMachineEntity(pos, state);
-    }
-
-    @Override
-    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
-        level.getBlockEntity(pos, Machines.UNBOUND_MACHINE_ENTITY.get()).ifPresent(tile -> {
-            if(stack.getItem() instanceof IUnboundCompactMachineItem unbound) {
-                final var template = unbound.getTemplateId(stack);
-                tile.setTemplate(template);
-            }
-        });
     }
 
     @Override

@@ -49,12 +49,18 @@ public class BoundCompactMachineBlock extends Block implements EntityBlock {
 
     @Override
     public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player) {
-        if (level.getBlockEntity(pos) instanceof BoundCompactMachineBlockEntity be) {
-            return MachineCreator.boundToRoom(be.connectedRoom(), be.getColor());
+        try {
+            if (level.getBlockEntity(pos) instanceof BoundCompactMachineBlockEntity be) {
+                return MachineCreator.boundToRoom(be.connectedRoom(), be.getColor());
+            }
+
+            return MachineCreator.unbound();
         }
 
-        LoggingUtil.modLog().warn("Warning: tried to pick block on a machine that does not have an associated block entity.");
-        return MachineCreator.unbound();
+        catch(Exception ex) {
+            LoggingUtil.modLog().warn("Warning: tried to pick block on a bound machine that does not have a room bound.", ex);
+            return MachineCreator.unbound();
+        }
     }
 
     @Override
@@ -87,29 +93,6 @@ public class BoundCompactMachineBlock extends Block implements EntityBlock {
             return normalHardness;
         } else {
             return normalHardness;
-        }
-    }
-
-    @Override
-    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
-        if (level.getBlockEntity(pos) instanceof BoundCompactMachineBlockEntity tile) {
-            // force client redraw
-            if (stack.getItem() instanceof IBoundCompactMachineItem bound) {
-                if (!level.isClientSide) {
-                    bound.getRoom(stack).ifPresent(roomCode -> {
-                        if(placer instanceof ServerPlayer sp && RoomHelper.entityInsideRoom(sp, roomCode)) {
-                            // TODO: Ouroboros advancement
-                        }
-
-                        tile.setConnectedRoom(roomCode);
-                    });
-                } else {
-                    final int color = bound.getMachineColor(stack);
-                    tile.setColor(color);
-                }
-//                    PacketDistributor.TRACKING_CHUNK.with(level.getChunkAt(pos))
-//                            .send(ClientboundBlockEntityDataPacket.create(tile));
-            }
         }
     }
 

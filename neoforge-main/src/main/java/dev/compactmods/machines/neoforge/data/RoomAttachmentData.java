@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
 
 public class RoomAttachmentData extends AttachmentHolder {
 
@@ -62,6 +63,10 @@ public class RoomAttachmentData extends AttachmentHolder {
         }
 
         try {
+            if(!file.exists()) {
+                Files.createDirectories(file.toPath());
+            }
+            
             NbtIo.writeCompressed(fullTag, file.toPath());
         } catch (IOException e) {
             LoggingUtil.modLog().error("Failed to write room data: " + roomCode, e);

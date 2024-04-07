@@ -38,25 +38,6 @@ public class BoundCompactMachineItem extends BlockItem implements IBoundCompactM
         return FALLBACK_ID;
     }
 
-//    public static Vec3i getRoomSize(ItemStack stack) {
-//        if (!stack.hasTag()) return Vec3i.ZERO;
-//        final var tag = stack.getTag();
-//        if (tag == null || tag.isEmpty() || !tag.contains(NBT_ROOM_DIMENSIONS)) return Vec3i.ZERO;
-//        final var dimNbt = tag.getIntArray(NBT_ROOM_DIMENSIONS);
-//        return new Vec3i(dimNbt[0], dimNbt[1], dimNbt[2]);
-//    }
-//
-//    public static ItemStack setRoomSize(ItemStack stack, Vec3i innerBounds) {
-//        var tag = stack.getOrCreateTag();
-//        tag.putIntArray(NBT_ROOM_DIMENSIONS, new int[]{
-//                innerBounds.getX(),
-//                innerBounds.getY(),
-//                innerBounds.getZ()
-//        });
-//
-//        return stack;
-//    }
-
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
