@@ -30,7 +30,7 @@ public class EnglishLangGenerator extends BaseLangGenerator {
 
         // Machine Translations
         add(MachineTranslations.IDs.OWNER, "Owner: %s");
-        add(MachineTranslations.IDs.SIZE, "Internal Size: %1$sx%1$sx%1$s");
+        add(MachineTranslations.IDs.SIZE, "Internal Size: %1$s");
         add(MachineTranslations.IDs.BOUND_TO, "Bound to: %1$s");
         add(MachineTranslations.IDs.NEW_MACHINE, "New Machine");
 

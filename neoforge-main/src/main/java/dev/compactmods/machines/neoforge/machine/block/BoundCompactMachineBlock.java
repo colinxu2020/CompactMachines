@@ -152,28 +152,6 @@ public class BoundCompactMachineBlock extends Block implements EntityBlock {
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
-    @Nullable
-    public static InteractionResult tryApplyNametag(Level level, BlockPos pos, Player player) {
-        ItemStack mainItem = player.getMainHandItem();
-        if (mainItem.getItem() instanceof NameTagItem && mainItem.hasCustomHoverName()) {
-            if (level.getBlockEntity(pos) instanceof BoundCompactMachineBlockEntity tile) {
-                boolean isOwner = tile.owner.equals(player.getUUID());
-                boolean isOp = player.hasPermissions(Commands.LEVEL_MODERATORS);
-
-                if (!isOp || !isOwner) {
-                    final var ownerProfile = tile.getOwnerUUID().flatMap(id -> PlayerUtil.getProfileByUUID(level, id));
-                    ownerProfile.ifPresent(owner -> {
-                        player.displayClientMessage(RoomTranslations.CANNOT_RENAME_NOT_OWNER.apply(owner), true);
-                    });
-                }
-
-                final var newName = mainItem.getHoverName().getString(120);
-                // FIXME Renamable rooms Rooms.updateName(level.getServer(), tile.connectedRoom(), newName);
-            }
-        }
-        return null;
-    }
-
     @Override
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pMovedByPiston) {
         super.onRemove(pState, pLevel, pPos, pNewState, pMovedByPiston);
