@@ -1,7 +1,10 @@
 package dev.compactmods.machines.neoforge.room;
 
+import dev.compactmods.machines.api.Translations;
+import dev.compactmods.machines.api.machine.MachineTranslations;
 import dev.compactmods.machines.api.room.RoomApi;
 import dev.compactmods.machines.api.room.RoomInstance;
+import dev.compactmods.machines.api.room.RoomTranslations;
 import dev.compactmods.machines.api.room.history.RoomEntryPoint;
 import dev.compactmods.machines.LoggingUtil;
 import dev.compactmods.machines.api.dimension.CompactDimension;

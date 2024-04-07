@@ -4,9 +4,9 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.compactmods.machines.LoggingUtil;
-import dev.compactmods.machines.api.command.CMCommands;
+import dev.compactmods.machines.api.command.CommandTranslations;
 import dev.compactmods.machines.api.dimension.CompactDimension;
-import dev.compactmods.machines.i18n.TranslationUtil;
+import dev.compactmods.machines.api.machine.MachineTranslations;
 import dev.compactmods.machines.neoforge.config.ServerConfig;
 import dev.compactmods.machines.neoforge.machine.block.BoundCompactMachineBlockEntity;
 import net.minecraft.commands.CommandSourceStack;
@@ -31,15 +31,13 @@ public class CMUnbindSubcommand {
         final var compactDim = server.getLevel(CompactDimension.LEVEL_KEY);
         final var source = ctx.getSource();
 
-        if (compactDim == null) {
-            source.sendFailure(TranslationUtil.command(CMCommands.LEVEL_NOT_FOUND));
-        }
+        if (compactDim == null) return -1;
 
         final var rebindingMachine = BlockPosArgument.getLoadedBlockPos(ctx, "pos");
 
         if (!(level.getBlockEntity(rebindingMachine) instanceof BoundCompactMachineBlockEntity machine)) {
             LoggingUtil.modLog().error("Refusing to rebind block at {}; block has invalid machine data.", rebindingMachine);
-            source.sendFailure(TranslationUtil.command(CMCommands.NOT_A_MACHINE_BLOCK));
+            source.sendFailure(MachineTranslations.NOT_A_MACHINE_BLOCK.apply(rebindingMachine));
             return -1;
         }
 

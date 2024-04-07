@@ -1,15 +1,14 @@
 package dev.compactmods.machines.neoforge.compat.jade;
 
 import com.mojang.authlib.GameProfile;
-import dev.compactmods.machines.api.Tooltips;
+import dev.compactmods.machines.api.machine.MachineTranslations;
 import dev.compactmods.machines.api.room.RoomApi;
-import dev.compactmods.machines.i18n.TranslationUtil;
 import dev.compactmods.machines.neoforge.CompactMachines;
 import dev.compactmods.machines.neoforge.machine.block.BoundCompactMachineBlockEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
@@ -39,7 +38,6 @@ public class CompactMachineJadeProvider implements IBlockComponentProvider, ISer
         }
     }
 
-
     @Override
     public void appendTooltip(ITooltip tooltip, BlockAccessor blockAccessor, IPluginConfig config) {
         final var serverData = blockAccessor.getServerData();
@@ -47,20 +45,16 @@ public class CompactMachineJadeProvider implements IBlockComponentProvider, ISer
             final var owner = blockAccessor.getLevel().getPlayerByUUID(serverData.getUUID("owner"));
             if (owner != null) {
                 GameProfile ownerProfile = owner.getGameProfile();
-                MutableComponent ownerText = TranslationUtil
-                        .tooltip(Tooltips.Machines.OWNER, ownerProfile.getName())
-                        .withStyle(ChatFormatting.GRAY);
-
-                tooltip.add(ownerText);
+                tooltip.add(Component
+                        .translatable(MachineTranslations.IDs.OWNER, ownerProfile.getName())
+                        .withStyle(ChatFormatting.GRAY));
             }
         }
 
         if (serverData.contains("room_code")) {
-            final var connectedComponent = TranslationUtil
-                    .tooltip(Tooltips.Machines.BOUND_TO, serverData.getString("room_code"))
-                    .withStyle(ChatFormatting.DARK_GRAY);
-
-            tooltip.add(connectedComponent);
+            tooltip.add(Component
+                    .translatable(MachineTranslations.IDs.BOUND_TO, serverData.getString("room_code"))
+                    .withStyle(ChatFormatting.DARK_GRAY));
         }
     }
 }

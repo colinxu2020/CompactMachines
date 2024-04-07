@@ -4,11 +4,12 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import dev.compactmods.machines.api.room.RoomApi;
-import dev.compactmods.machines.api.command.CMCommands;
-import dev.compactmods.machines.i18n.TranslationUtil;
+import dev.compactmods.machines.api.command.CommandTranslations;
+import dev.compactmods.machines.api.room.RoomTranslations;
 import dev.compactmods.machines.neoforge.config.ServerConfig;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.network.chat.Component;
 
 public class SpawnSubcommand {
 
@@ -32,7 +33,7 @@ public class SpawnSubcommand {
         final var spawnManager = RoomApi.spawnManager(roomCode);
 
         // FIXME roomProvider.setDefaultSpawn();
-        src.sendSuccess(() -> TranslationUtil.command(CMCommands.SPAWN_CHANGED_SUCCESSFULLY, "%s".formatted(roomCode)), true);
+        src.sendSuccess(() -> Component.translatable(CommandTranslations.IDs.SPAWN_CHANGED_SUCCESSFULLY, roomCode), true);
         return 0;
     }
 }

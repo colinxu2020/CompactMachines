@@ -4,7 +4,6 @@ import dev.compactmods.machines.api.Constants;
 import dev.compactmods.machines.datagen.compat.curios.CurioEntityGenerator;
 import dev.compactmods.machines.datagen.compat.curios.CurioSlotGenerator;
 import dev.compactmods.machines.datagen.lang.EnglishLangGenerator;
-import dev.compactmods.machines.datagen.lang.RussianLangGenerator;
 import dev.compactmods.machines.datagen.tags.BlockTagGenerator;
 import dev.compactmods.machines.datagen.tags.ItemTagGenerator;
 import dev.compactmods.machines.datagen.tags.PointOfInterestTagGenerator;
@@ -48,15 +47,12 @@ public class DataGeneration {
         generator.addProvider(server, new CurioEntityGenerator(packOut, holderLookup, fileHelper));
 
         generator.addProvider(server, new PointOfInterestTagGenerator(packOut, holderLookup, fileHelper));
-        // generator.addProvider(event.includeServer(), new PackMetaGenerator(packOut));
 
         // Client
         boolean client = event.includeClient();
         generator.addProvider(client, new StateGenerator(packOut, fileHelper));
-        // generator.addProvider(client, new TunnelWallStateGenerator(packOut, helper));
         generator.addProvider(client, new ItemModelGenerator(packOut, fileHelper));
 
         generator.addProvider(client, new EnglishLangGenerator(generator));
-        generator.addProvider(client, new RussianLangGenerator(generator));
     }
 }

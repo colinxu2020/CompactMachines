@@ -7,10 +7,9 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.compactmods.machines.api.room.RoomApi;
 import dev.compactmods.machines.api.room.RoomTemplate;
 import dev.compactmods.machines.LoggingUtil;
-import dev.compactmods.machines.api.command.CMCommands;
-import dev.compactmods.machines.api.Messages;
+import dev.compactmods.machines.api.command.CommandTranslations;
 import dev.compactmods.machines.api.machine.MachineCreator;
-import dev.compactmods.machines.i18n.TranslationUtil;
+import dev.compactmods.machines.api.room.RoomTranslations;
 import dev.compactmods.machines.neoforge.command.argument.Suggestors;
 import dev.compactmods.machines.neoforge.config.ServerConfig;
 import dev.compactmods.machines.neoforge.machine.item.UnboundCompactMachineItem;
@@ -117,12 +116,12 @@ public class CMGiveMachineSubcommand {
         if(template != null) {
             final var item = UnboundCompactMachineItem.forTemplate(templateId, template);
             if (!player.addItem(item)) {
-                src.sendFailure(TranslationUtil.command(CMCommands.CANNOT_GIVE_MACHINE));
+                src.sendFailure(CommandTranslations.CANNOT_GIVE_MACHINE.get());
             } else {
-                src.sendSuccess(() -> TranslationUtil.command(CMCommands.MACHINE_GIVEN, player.getDisplayName()), true);
+                src.sendSuccess(() -> CommandTranslations.MACHINE_GIVEN.apply(player), true);
             }
         } else {
-            src.sendFailure(TranslationUtil.command(CMCommands.CANNOT_GIVE_MACHINE));
+            src.sendFailure(CommandTranslations.CANNOT_GIVE_MACHINE.get());
         }
     }
 
@@ -130,13 +129,13 @@ public class CMGiveMachineSubcommand {
         RoomApi.registrar().get(roomCode).ifPresentOrElse(room -> {
             ItemStack newItem = MachineCreator.boundToRoom(room.code(), room.defaultMachineColor());
             if (!player.addItem(newItem)) {
-                src.sendFailure(TranslationUtil.command(CMCommands.CANNOT_GIVE_MACHINE));
+                src.sendFailure(CommandTranslations.CANNOT_GIVE_MACHINE.get());
             } else {
-                src.sendSuccess(() -> TranslationUtil.command(CMCommands.MACHINE_GIVEN, player.getDisplayName()), true);
+                src.sendSuccess(() -> CommandTranslations.MACHINE_GIVEN.apply(player), true);
             }
         }, () -> {
             LOGGER.error("Error giving player a new machine block: room not found.");
-            src.sendFailure(TranslationUtil.message(Messages.UNKNOWN_ROOM_CHUNK, roomCode));
+            src.sendFailure(RoomTranslations.UNKNOWN_ROOM_BY_CODE.apply(roomCode));
         });
     }
 }

@@ -42,8 +42,6 @@ public class RoomUpgradeScreen extends AbstractContainerScreen<RoomUpgradeMenu> 
                 .sliceSize(4, 4)
                 .textureSize(32, 32)
                 .build();
-
-
     }
 
     @Override

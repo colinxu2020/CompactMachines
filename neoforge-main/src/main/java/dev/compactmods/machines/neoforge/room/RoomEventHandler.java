@@ -1,9 +1,9 @@
 package dev.compactmods.machines.neoforge.room;
 
 import dev.compactmods.machines.api.Constants;
-import dev.compactmods.machines.api.Messages;
+import dev.compactmods.machines.api.Translations;
 import dev.compactmods.machines.api.dimension.CompactDimension;
-import dev.compactmods.machines.i18n.TranslationUtil;
+import dev.compactmods.machines.api.room.RoomApi;
 import dev.compactmods.machines.neoforge.data.RoomAttachmentDataManager;
 import net.minecraft.ChatFormatting;
 import net.minecraft.server.level.ServerLevel;
@@ -25,7 +25,7 @@ public class RoomEventHandler {
 
     @SubscribeEvent
     public static void onWorldSaved(final LevelEvent.Save level) {
-        if(level.getLevel() instanceof Level l && CompactDimension.isLevelCompact(l)) {
+        if (level.getLevel() instanceof Level l && CompactDimension.isLevelCompact(l)) {
             RoomAttachmentDataManager.instance().ifPresent(RoomAttachmentDataManager::save);
         }
     }
@@ -94,24 +94,19 @@ public class RoomEventHandler {
         final var level = entity.level();
         if (!level.dimension().equals(CompactDimension.LEVEL_KEY)) return false;
 
-        if (level instanceof ServerLevel compactDim) {
-            ChunkPos playerChunk = entity.chunkPosition();
-            return true;
-            // FIXME
-//            return Rooms.chunkManager().findRoomByChunk(playerChunk)
-//                    .map(reg -> reg.)
-//                    .map(ib -> ib.contains(target))
-//                    .orElse(false);
-        }
-
-        return false;
+        return RoomApi.chunkManager()
+                .findRoomByChunk(entity.chunkPosition())
+                .flatMap(RoomApi::room)
+                .map(ib -> ib.boundaries().innerBounds().contains(target))
+                .orElse(false);
     }
 
     private static void doEntityTeleportHandle(EntityTeleportEvent evt, Vec3 target, Entity ent) {
         if (!positionInsideRoom(ent, target)) {
-            if (ent instanceof ServerPlayer) {
-                ((ServerPlayer) ent).displayClientMessage(TranslationUtil.message(Messages.TELEPORT_OUT_OF_BOUNDS, ent.getName()).withStyle(ChatFormatting.RED).withStyle(ChatFormatting.ITALIC), true);
+            if (ent instanceof ServerPlayer sp) {
+                sp.displayClientMessage(Translations.TELEPORT_OUT_OF_BOUNDS.get(), true);
             }
+
             evt.setCanceled(true);
         }
     }

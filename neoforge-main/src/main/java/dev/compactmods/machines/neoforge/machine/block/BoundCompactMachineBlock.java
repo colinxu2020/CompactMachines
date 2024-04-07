@@ -1,12 +1,12 @@
 package dev.compactmods.machines.neoforge.machine.block;
 
 import dev.compactmods.machines.LoggingUtil;
-import dev.compactmods.machines.api.Messages;
+import dev.compactmods.machines.api.Translations;
 import dev.compactmods.machines.api.machine.MachineCreator;
 import dev.compactmods.machines.api.machine.item.IBoundCompactMachineItem;
 import dev.compactmods.machines.api.room.RoomApi;
+import dev.compactmods.machines.api.room.RoomTranslations;
 import dev.compactmods.machines.api.shrinking.PSDTags;
-import dev.compactmods.machines.i18n.TranslationUtil;
 import dev.compactmods.machines.machine.EnumMachinePlayersBreakHandling;
 import dev.compactmods.machines.neoforge.config.ServerConfig;
 import dev.compactmods.machines.neoforge.machine.Machines;
@@ -163,8 +163,7 @@ public class BoundCompactMachineBlock extends Block implements EntityBlock {
                 if (!isOp || !isOwner) {
                     final var ownerProfile = tile.getOwnerUUID().flatMap(id -> PlayerUtil.getProfileByUUID(level, id));
                     ownerProfile.ifPresent(owner -> {
-                        player.displayClientMessage(TranslationUtil.message(Messages.CANNOT_RENAME_NOT_OWNER,
-                                owner.getName()), true);
+                        player.displayClientMessage(RoomTranslations.CANNOT_RENAME_NOT_OWNER.apply(owner), true);
                     });
                 }
 

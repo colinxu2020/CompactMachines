@@ -6,10 +6,10 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.compactmods.machines.api.room.RoomApi;
 import dev.compactmods.machines.LoggingUtil;
-import dev.compactmods.machines.api.Messages;
+import dev.compactmods.machines.api.Translations;
 import dev.compactmods.machines.api.dimension.MissingDimensionException;
+import dev.compactmods.machines.api.room.RoomTranslations;
 import dev.compactmods.machines.api.room.history.RoomEntryPoint;
-import dev.compactmods.machines.i18n.TranslationUtil;
 import dev.compactmods.machines.neoforge.command.argument.Suggestors;
 import dev.compactmods.machines.neoforge.config.ServerConfig;
 import dev.compactmods.machines.neoforge.room.RoomHelper;
@@ -49,7 +49,7 @@ public class CMTeleportSubcommand {
             }
         }, () -> {
             LOGGER.error("Error teleporting player into room: room not found.");
-            src.sendFailure(TranslationUtil.message(Messages.UNKNOWN_ROOM_CHUNK, roomCode));
+            src.sendFailure(RoomTranslations.UNKNOWN_ROOM_BY_CODE.apply(roomCode));
         });
     }
 

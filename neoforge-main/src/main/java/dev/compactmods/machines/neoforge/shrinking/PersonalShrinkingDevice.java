@@ -1,10 +1,9 @@
 package dev.compactmods.machines.neoforge.shrinking;
 
 import dev.compactmods.machines.api.room.RoomApi;
-import dev.compactmods.machines.api.Messages;
-import dev.compactmods.machines.api.Tooltips;
+import dev.compactmods.machines.api.Translations;
 import dev.compactmods.machines.api.dimension.CompactDimension;
-import dev.compactmods.machines.i18n.TranslationUtil;
+import dev.compactmods.machines.api.room.RoomTranslations;
 import dev.compactmods.machines.neoforge.room.RoomHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
@@ -33,14 +32,7 @@ public class PersonalShrinkingDevice extends Item {
     public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
 
-        if (Screen.hasShiftDown()) {
-            tooltip.add(TranslationUtil.tooltip(Tooltips.Details.PERSONAL_SHRINKING_DEVICE)
-                    .withStyle(ChatFormatting.YELLOW));
-        } else {
-            tooltip.add(TranslationUtil.tooltip(Tooltips.HINT_HOLD_SHIFT)
-                    .withStyle(ChatFormatting.DARK_GRAY)
-                    .withStyle(ChatFormatting.ITALIC));
-        }
+        tooltip.add(Screen.hasShiftDown() ? Translations.UNBREAKABLE_BLOCK.get() : Translations.HINT_HOLD_SHIFT.get());
     }
 
     @Override
@@ -57,31 +49,17 @@ public class PersonalShrinkingDevice extends Item {
             return InteractionResultHolder.success(stack);
         }
 
-        if (world instanceof ServerLevel && player instanceof ServerPlayer serverPlayer) {
-            ServerLevel playerDim = serverPlayer.serverLevel();
+        if (world instanceof ServerLevel playerDim && player instanceof ServerPlayer serverPlayer) {
             if (playerDim.dimension().equals(CompactDimension.LEVEL_KEY)) {
                 if (player.isShiftKeyDown()) {
-                    // FIXME Change Spawnpoint
-                    RoomApi.chunkManager()
+                    final var roomCode = RoomApi.chunkManager()
                             .findRoomByChunk(serverPlayer.chunkPosition())
-                            .map(RoomApi::spawnManager)
-                            .ifPresent(spawnManager -> {
-                                spawnManager.setPlayerSpawn(serverPlayer.getUUID(), player.position(), player.getRotationVector());
+                            .orElseThrow();
 
-                                MutableComponent tc = TranslationUtil.message(Messages.ROOM_SPAWNPOINT_SET)
-                                        .withStyle(ChatFormatting.GREEN);
+                    final var spawnManager = RoomApi.spawnManager(roomCode);
+                    spawnManager.setPlayerSpawn(serverPlayer);
 
-                                player.displayClientMessage(tc, true);
-
-                            });
-
-//                    final var roomInfo = CompactRoomProvider.instance(playerDim);
-//                    roomInfo.findByChunk(player.chunkPosition()).ifPresent(room -> {
-//                        if(room instanceof IMutableRoomRegistration mutableRoom) {
-//                            mutableRoom.setSpawnPosition(player.position());
-//                            mutableRoom.setSpawnRotation(PlayerUtil.getLookDirection(player));
-//                        }
-//                    });
+                    player.displayClientMessage(RoomTranslations.ROOM_SPAWNPOINT_SET.apply(serverPlayer, roomCode), true);
                 } else {
                     RoomHelper.teleportPlayerOutOfRoom(serverPlayer);
                 }
