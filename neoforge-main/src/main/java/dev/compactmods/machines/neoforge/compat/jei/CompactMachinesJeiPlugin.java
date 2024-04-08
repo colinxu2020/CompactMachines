@@ -1,11 +1,9 @@
 package dev.compactmods.machines.neoforge.compat.jei;
 
 import dev.compactmods.machines.api.Constants;
-import dev.compactmods.machines.api.machine.MachineCreator;
-import dev.compactmods.machines.api.machine.MachineTranslations;
+import dev.compactmods.machines.neoforge.machine.MachineCreator;
 import dev.compactmods.machines.api.machine.item.IUnboundCompactMachineItem;
 import dev.compactmods.machines.api.room.RoomApi;
-import dev.compactmods.machines.compat.jei.JeiInfo;
 import dev.compactmods.machines.neoforge.CompactMachines;
 import dev.compactmods.machines.neoforge.machine.Machines;
 import dev.compactmods.machines.neoforge.machine.item.UnboundCompactMachineItem;

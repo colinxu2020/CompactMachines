@@ -1,17 +1,14 @@
 package dev.compactmods.machines.neoforge.command;
 
-import com.mojang.brigadier.Command;
 import dev.compactmods.machines.api.Constants;
 import dev.compactmods.machines.command.Commands;
 import dev.compactmods.machines.neoforge.command.subcommand.CMEjectSubcommand;
 import dev.compactmods.machines.neoforge.command.subcommand.CMGiveMachineSubcommand;
 import dev.compactmods.machines.neoforge.command.subcommand.CMRebindSubcommand;
 import dev.compactmods.machines.neoforge.command.subcommand.CMRoomsSubcommand;
-import dev.compactmods.machines.neoforge.command.subcommand.CMSummarySubcommand;
 import dev.compactmods.machines.neoforge.command.subcommand.CMTeleportSubcommand;
 import dev.compactmods.machines.neoforge.command.subcommand.CMUnbindSubcommand;
 import dev.compactmods.machines.neoforge.command.subcommand.SpawnSubcommand;
-import dev.compactmods.machines.neoforge.data.RoomAttachmentDataManager;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
@@ -24,7 +21,6 @@ public class ForgeCommands {
 
         cm.then(CMTeleportSubcommand.make());
         cm.then(CMEjectSubcommand.make());
-        cm.then(CMSummarySubcommand.make());
         cm.then(CMRebindSubcommand.make());
         cm.then(CMUnbindSubcommand.make());
         cm.then(CMRoomsSubcommand.make());

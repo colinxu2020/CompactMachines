@@ -1,7 +1,7 @@
 package dev.compactmods.machines.neoforge.network;
 
 import dev.compactmods.machines.api.Constants;
-import dev.compactmods.machines.neoforge.network.machine.UnboundMachineTemplateSyncPacket;
+import dev.compactmods.machines.neoforge.network.machine.MachineColorSyncPacket;
 import net.minecraft.network.FriendlyByteBuf;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
@@ -31,7 +31,7 @@ public class CMNetworks {
         main.play(PlayerRequestedUpgradeMenuPacket.ID, (FriendlyByteBuf b) -> b.readJsonWithCodec(PlayerRequestedUpgradeMenuPacket.CODEC),
                 builder -> builder.server(PlayerRequestedUpgradeMenuPacket.HANDLER));
 
-        main.play(UnboundMachineTemplateSyncPacket.ID, buf -> buf.readJsonWithCodec(UnboundMachineTemplateSyncPacket.CODEC),
-                b -> b.client(UnboundMachineTemplateSyncPacket.HANDLER));
+        main.play(MachineColorSyncPacket.ID, buf -> buf.readJsonWithCodec(MachineColorSyncPacket.CODEC),
+                b -> b.client(MachineColorSyncPacket.HANDLER));
     }
 }

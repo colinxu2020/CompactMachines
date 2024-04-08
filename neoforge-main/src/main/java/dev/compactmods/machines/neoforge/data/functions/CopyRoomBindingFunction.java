@@ -3,6 +3,7 @@ package dev.compactmods.machines.neoforge.data.functions;
 import com.mojang.serialization.Codec;
 import dev.compactmods.machines.api.machine.MachineConstants;
 import dev.compactmods.machines.api.machine.item.IBoundCompactMachineItem;
+import dev.compactmods.machines.neoforge.machine.Machines;
 import dev.compactmods.machines.neoforge.machine.block.BoundCompactMachineBlockEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -21,7 +22,7 @@ public class CopyRoomBindingFunction implements LootItemFunction {
         if(state.is(MachineConstants.MACHINE_BLOCK)) {
             var data = ctx.getParam(LootContextParams.BLOCK_ENTITY);
             if (data instanceof BoundCompactMachineBlockEntity machine && stack.getItem() instanceof IBoundCompactMachineItem bound) {
-                bound.setColor(stack, machine.getColor());
+                stack.setData(Machines.MACHINE_COLOR, machine.getColor());
                 bound.setRoom(stack, machine.connectedRoom());
             }
         }

@@ -1,5 +1,7 @@
 package dev.compactmods.machines.neoforge.machine;
 
+import com.google.common.base.Predicates;
+import com.mojang.serialization.Codec;
 import dev.compactmods.machines.api.machine.MachineConstants;
 import dev.compactmods.machines.neoforge.Registries;
 import dev.compactmods.machines.neoforge.machine.block.BoundCompactMachineBlock;
@@ -8,13 +10,29 @@ import dev.compactmods.machines.neoforge.machine.block.BoundCompactMachineBlockE
 import dev.compactmods.machines.neoforge.machine.block.UnboundCompactMachineEntity;
 import dev.compactmods.machines.neoforge.machine.item.BoundCompactMachineItem;
 import dev.compactmods.machines.neoforge.machine.item.UnboundCompactMachineItem;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.IntTag;
+import net.minecraft.nbt.NumericTag;
+import net.minecraft.nbt.StreamTagVisitor;
+import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.TagType;
+import net.minecraft.nbt.TagVisitor;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.neoforged.neoforge.attachment.AttachmentType;
+import net.neoforged.neoforge.attachment.IAttachmentHolder;
+import net.neoforged.neoforge.attachment.IAttachmentSerializer;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
+import org.jetbrains.annotations.Nullable;
 
+import java.io.DataOutput;
+import java.io.IOException;
 import java.util.function.Supplier;
 
 @SuppressWarnings("removal")
@@ -47,6 +65,20 @@ public interface Machines {
             BlockEntityType.Builder.of(BoundCompactMachineBlockEntity::new, MACHINE_BLOCK.get())
                     .build(null));
 
+    Supplier<AttachmentType<Integer>> MACHINE_COLOR = Registries.ATTACHMENT_TYPES.register("machine_color", () -> AttachmentType
+            .builder(() -> 0xFFFFFFFF)
+            .serialize(new IAttachmentSerializer<IntTag, Integer>() {
+                @Override
+                public Integer read(IAttachmentHolder holder, IntTag tag) {
+                    return tag.getAsInt();
+                }
+
+                @Override
+                public @Nullable IntTag write(Integer attachment) {
+                    return IntTag.valueOf(attachment);
+                }
+            })
+            .build());
 
     static void prepare() {
 

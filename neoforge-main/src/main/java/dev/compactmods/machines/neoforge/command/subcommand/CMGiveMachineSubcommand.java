@@ -8,7 +8,7 @@ import dev.compactmods.machines.api.room.RoomApi;
 import dev.compactmods.machines.api.room.RoomTemplate;
 import dev.compactmods.machines.LoggingUtil;
 import dev.compactmods.machines.api.command.CommandTranslations;
-import dev.compactmods.machines.api.machine.MachineCreator;
+import dev.compactmods.machines.neoforge.machine.MachineCreator;
 import dev.compactmods.machines.api.room.RoomTranslations;
 import dev.compactmods.machines.neoforge.command.argument.Suggestors;
 import dev.compactmods.machines.neoforge.config.ServerConfig;

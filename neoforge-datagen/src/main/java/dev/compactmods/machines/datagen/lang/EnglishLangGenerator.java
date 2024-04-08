@@ -68,6 +68,8 @@ public class EnglishLangGenerator extends BaseLangGenerator {
 
         add(RoomExitKeyMapping.CATEGORY, "Compact Machines");
         add(RoomExitKeyMapping.NAME, "Quick-Exit Compact Machine");
+
+        addJade();
     }
 
     private void blocksAndItems() {
@@ -101,5 +103,10 @@ public class EnglishLangGenerator extends BaseLangGenerator {
         add(CommandTranslations.IDs.MACHINE_GIVEN, "Created a new machine item and gave it to %s.");
         add(CommandTranslations.IDs.ROOM_COUNT, "Number of registered rooms: %s");
         add(CommandTranslations.IDs.SPAWN_CHANGED_SUCCESSFULLY, "Spawn point for room [%s] was changed successfully.");
+    }
+
+    private void addJade() {
+        add("config.jade.plugin_compactmachines.bound_machine", "Bound Compact Machines");
+        add("config.jade.plugin_compactmachines.show_owner", "Show Machine Owners");
     }
 }

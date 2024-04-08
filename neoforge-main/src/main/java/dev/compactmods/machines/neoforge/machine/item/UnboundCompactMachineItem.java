@@ -86,7 +86,7 @@ public class UnboundCompactMachineItem extends BlockItem implements IUnboundComp
         final var stack = new ItemStack(Machines.UNBOUND_MACHINE_BLOCK_ITEM.get(), 1);
         if (stack.getItem() instanceof IUnboundCompactMachineItem unbound) {
             unbound.setTemplate(stack, templateId);
-            unbound.setColor(stack, template.color());
+            stack.setData(Machines.MACHINE_COLOR, template.color());
         }
 
         final var tag = stack.getOrCreateTag();

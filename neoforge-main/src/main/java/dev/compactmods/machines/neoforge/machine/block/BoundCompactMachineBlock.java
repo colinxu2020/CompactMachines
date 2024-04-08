@@ -1,11 +1,8 @@
 package dev.compactmods.machines.neoforge.machine.block;
 
 import dev.compactmods.machines.LoggingUtil;
-import dev.compactmods.machines.api.Translations;
-import dev.compactmods.machines.api.machine.MachineCreator;
-import dev.compactmods.machines.api.machine.item.IBoundCompactMachineItem;
+import dev.compactmods.machines.neoforge.machine.MachineCreator;
 import dev.compactmods.machines.api.room.RoomApi;
-import dev.compactmods.machines.api.room.RoomTranslations;
 import dev.compactmods.machines.api.shrinking.PSDTags;
 import dev.compactmods.machines.machine.EnumMachinePlayersBreakHandling;
 import dev.compactmods.machines.neoforge.config.ServerConfig;
@@ -13,18 +10,15 @@ import dev.compactmods.machines.neoforge.machine.Machines;
 import dev.compactmods.machines.neoforge.room.RoomHelper;
 import dev.compactmods.machines.neoforge.room.Rooms;
 import dev.compactmods.machines.neoforge.room.ui.preview.MachineRoomMenu;
-import dev.compactmods.machines.util.PlayerUtil;
-import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.NameTagItem;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -42,7 +36,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 import java.util.UUID;
 
-public class BoundCompactMachineBlock extends Block implements EntityBlock {
+public class BoundCompactMachineBlock extends CompactMachineBlock implements EntityBlock {
     public BoundCompactMachineBlock(Properties props) {
         super(props);
     }
@@ -106,6 +100,11 @@ public class BoundCompactMachineBlock extends Block implements EntityBlock {
     @Override
     public InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
         ItemStack mainItem = player.getMainHandItem();
+
+        if (mainItem.getItem() instanceof DyeItem dye && !level.isClientSide) {
+            return tryDyingMachine(level, pos, player, dye, mainItem);
+        }
+
         if (mainItem.is(PSDTags.ITEM)
                 && player instanceof ServerPlayer sp
                 && level.getBlockEntity(pos) instanceof BoundCompactMachineBlockEntity tile) {

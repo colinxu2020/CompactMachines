@@ -2,7 +2,6 @@ package dev.compactmods.machines.neoforge.machine.block;
 
 import dev.compactmods.machines.api.machine.block.IBoundCompactMachineBlockEntity;
 import dev.compactmods.machines.api.room.RoomApi;
-import dev.compactmods.machines.api.machine.IColoredMachine;
 import dev.compactmods.machines.neoforge.machine.Machines;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
@@ -19,14 +18,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 import java.util.UUID;
 
-public class BoundCompactMachineBlockEntity extends BlockEntity implements IBoundCompactMachineBlockEntity, IColoredMachine {
+public class BoundCompactMachineBlockEntity extends BlockEntity implements IBoundCompactMachineBlockEntity {
 
     protected UUID owner;
     private String roomCode;
-
-    private boolean hasMachineColorOverride = false;
-    private int machineColor;
-    private int roomColor;
 
     @Nullable
     private Component customName;
@@ -48,20 +43,6 @@ public class BoundCompactMachineBlockEntity extends BlockEntity implements IBoun
         } else {
             owner = null;
         }
-
-        if(nbt.contains(NBT_ROOM_COLOR)) {
-            roomColor = nbt.getInt(NBT_COLOR);
-        }
-
-        if (nbt.contains(NBT_COLOR)) {
-            machineColor = nbt.getInt(NBT_COLOR);
-            hasMachineColorOverride = true;
-        } else {
-            hasMachineColorOverride = false;
-        }
-
-        if (level != null && !level.isClientSide)
-            this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
     }
 
     @Override
@@ -72,11 +53,6 @@ public class BoundCompactMachineBlockEntity extends BlockEntity implements IBoun
             nbt.putUUID(NBT_OWNER, this.owner);
         }
 
-        if (hasMachineColorOverride)
-            nbt.putInt(NBT_COLOR, machineColor);
-
-        nbt.putInt(NBT_ROOM_COLOR, roomColor);
-
         if (roomCode != null)
             nbt.putString(NBT_ROOM_CODE, roomCode);
     }
@@ -84,6 +60,7 @@ public class BoundCompactMachineBlockEntity extends BlockEntity implements IBoun
     @Override
     public CompoundTag getUpdateTag() {
         CompoundTag data = super.getUpdateTag();
+        saveAdditional(data);
 
         if (this.roomCode != null) {
             // data.putString(ROOM_POS_NBT, room);
@@ -92,11 +69,6 @@ public class BoundCompactMachineBlockEntity extends BlockEntity implements IBoun
 
         if (this.owner != null)
             data.putUUID("owner", this.owner);
-
-        if (hasMachineColorOverride)
-            data.putInt(NBT_COLOR, machineColor);
-        else
-            data.putInt(NBT_ROOM_COLOR, getColor());
 
         return data;
     }
@@ -109,21 +81,6 @@ public class BoundCompactMachineBlockEntity extends BlockEntity implements IBoun
             CompoundTag players = tag.getCompound("players");
             // playerData = CompactMachinePlayerData.fromNBT(players);
 
-        }
-
-        if (tag.contains(NBT_ROOM_CODE)) {
-            this.roomCode = tag.getString(NBT_ROOM_CODE);
-        }
-
-        if (tag.contains(NBT_ROOM_COLOR)) {
-            roomColor = tag.getInt(NBT_ROOM_COLOR);
-        }
-
-        if (tag.contains(NBT_COLOR)) {
-            hasMachineColorOverride = true;
-            machineColor = tag.getInt(NBT_COLOR);
-        } else {
-            hasMachineColorOverride = false;
         }
 
         if (tag.contains("owner"))
@@ -159,11 +116,11 @@ public class BoundCompactMachineBlockEntity extends BlockEntity implements IBoun
             this.roomCode = roomCode;
 
             RoomApi.room(roomCode).ifPresentOrElse(inst -> {
-                this.roomColor = inst.defaultMachineColor();
-                this.hasMachineColorOverride = false;
-            }, () -> {
-                this.roomColor = DyeColor.WHITE.getTextColor();
-            });
+                        this.setData(Machines.MACHINE_COLOR, inst.defaultMachineColor());
+                    },
+                    () -> {
+                        this.setData(Machines.MACHINE_COLOR, DyeColor.WHITE.getTextColor());
+                    });
 
             this.setChanged();
         }
@@ -179,18 +136,6 @@ public class BoundCompactMachineBlockEntity extends BlockEntity implements IBoun
         }
     }
 
-    public int getColor() {
-        return hasMachineColorOverride ? machineColor : roomColor;
-    }
-
-    public void setColor(int color) {
-        if(color != roomColor) {
-            this.machineColor = color;
-            this.hasMachineColorOverride = true;
-            this.setChanged();
-        }
-    }
-
     @NotNull
     public String connectedRoom() {
         return roomCode;
@@ -203,5 +148,10 @@ public class BoundCompactMachineBlockEntity extends BlockEntity implements IBoun
     public void setCustomName(Component customName) {
         this.customName = customName;
         this.setChanged();
+    }
+
+    @Override
+    public int getColor() {
+        return this.getData(Machines.MACHINE_COLOR);
     }
 }

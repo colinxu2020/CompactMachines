@@ -1,6 +1,8 @@
 package dev.compactmods.machines.neoforge.machine.item;
 
+import dev.compactmods.machines.api.machine.MachineTranslations;
 import dev.compactmods.machines.api.machine.item.IBoundCompactMachineItem;
+import dev.compactmods.machines.api.room.RoomTranslations;
 import dev.compactmods.machines.neoforge.CompactMachines;
 import dev.compactmods.machines.neoforge.machine.Machines;
 import net.minecraft.Util;
@@ -41,9 +43,11 @@ public class BoundCompactMachineItem extends BlockItem implements IBoundCompactM
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
-//        getRoom(stack).ifPresent(room -> {
-//            // TODO - Server-synced room name list
-//            tooltip.add(TranslationUtil.tooltip(Tooltips.ROOM_NAME, room));
-//        });
+        getRoom(stack).ifPresent(room -> {
+            // TODO - Server-synced room name list
+            // tooltip.add(TranslationUtil.tooltip(Tooltips.ROOM_NAME, room));
+            tooltip.add(Component.translatableWithFallback(MachineTranslations.IDs.BOUND_TO, "Bound To: %s", room));
+        });
     }
 }
+
