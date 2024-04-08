@@ -34,6 +34,7 @@ jobs:
           change_path: "neoforge-main"
           version_format: "${major}.${minor}.${patch}.${increment}-nightly"
           search_commit_body: true
+          bump_each_commit: true
 
   datagen:
     needs: [vars]
