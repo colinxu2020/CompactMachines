@@ -8,8 +8,8 @@ on:
         type: string
 
 jobs:
-  datagen:
-      name: Data Generators
+  run-tests:
+      name: Run Game Testss
       runs-on: ubuntu-22.04
       steps:
         - name: Checkout

@@ -4,10 +4,10 @@ import dev.compactmods.machines.api.Constants;
 import dev.compactmods.machines.datagen.compat.curios.CurioEntityGenerator;
 import dev.compactmods.machines.datagen.compat.curios.CurioSlotGenerator;
 import dev.compactmods.machines.datagen.lang.EnglishLangGenerator;
+import dev.compactmods.machines.datagen.loot.BlockLootGenerator;
 import dev.compactmods.machines.datagen.tags.BlockTagGenerator;
 import dev.compactmods.machines.datagen.tags.ItemTagGenerator;
 import dev.compactmods.machines.datagen.tags.PointOfInterestTagGenerator;
-import net.minecraft.data.DataProvider;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -31,7 +31,7 @@ public class DataGeneration {
         // Server
         boolean server = event.includeServer();
         generator.addProvider(server, new DatapackRegisteredStuff(packOut, holderLookup));
-        generator.addProvider(server, (DataProvider.Factory<LootTableProvider>) output -> new LootTableProvider(output,
+        generator.addProvider(server, new LootTableProvider(packOut,
                 Collections.emptySet(),
                 List.of(new LootTableProvider.SubProviderEntry(BlockLootGenerator::new, LootContextParamSets.BLOCK))
         ));
