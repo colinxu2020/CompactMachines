@@ -53,7 +53,7 @@ public class RoomUpgradeScreen extends AbstractContainerScreen<RoomUpgradeMenu> 
                 .size(8, 12)
                 .message(Component.literal("Close"))
                 .onPress(button -> {
-                    PacketDistributor.SERVER.noArg().send(new PlayerRequestedRoomUIPacket(menu.room.code()));
+                    PacketDistributor.SERVER.noArg().send(new PlayerRequestedRoomUIPacket(menu.roomCode));
                 })
                 .build();
 

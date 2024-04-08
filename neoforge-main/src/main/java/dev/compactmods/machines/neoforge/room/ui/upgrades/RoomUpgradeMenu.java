@@ -21,12 +21,12 @@ import org.jetbrains.annotations.NotNull;
 
 public class RoomUpgradeMenu extends AbstractContainerMenu {
     private final Inventory playerInv;
-    final RoomInstance room;
+    public final String roomCode;
 
-    protected RoomUpgradeMenu(int winId, Inventory playerInv, RoomInstance room, NeoforgeRoomUpgradeInventory upgradeInv) {
+    protected RoomUpgradeMenu(int winId, Inventory playerInv, String roomCode, NeoforgeRoomUpgradeInventory upgradeInv) {
         super(Rooms.ROOM_UPGRADE_MENU.get(), winId);
         this.playerInv = playerInv;
-        this.room = room;
+        this.roomCode = roomCode;
 
         // Room inventory
         for(int slot = 0; slot < 9; slot++) {
@@ -82,7 +82,7 @@ public class RoomUpgradeMenu extends AbstractContainerMenu {
                         .data(room.code())
                         .getData(Rooms.UPGRADE_INV);
 
-                return new RoomUpgradeMenu(winId, inventory, room, serverUpgInv);
+                return new RoomUpgradeMenu(winId, inventory, room.code(), serverUpgInv);
             }
 
             @Override
@@ -94,8 +94,7 @@ public class RoomUpgradeMenu extends AbstractContainerMenu {
 
     public static RoomUpgradeMenu createClientMenu(int id, Inventory playerInv, FriendlyByteBuf extraData) {
         final var code = extraData.readUtf();
-        final var data = RoomApi.room(code).orElseThrow();
 
-        return new RoomUpgradeMenu(id, playerInv, data, NeoforgeRoomUpgradeInventory.EMPTY);
+        return new RoomUpgradeMenu(id, playerInv, code, NeoforgeRoomUpgradeInventory.EMPTY);
     }
 }
