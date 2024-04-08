@@ -45,7 +45,7 @@ public class BoundCompactMachineBlock extends CompactMachineBlock implements Ent
     public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player) {
         try {
             if (level.getBlockEntity(pos) instanceof BoundCompactMachineBlockEntity be) {
-                return MachineCreator.boundToRoom(be.connectedRoom(), be.getColor());
+                return MachineCreator.boundToRoom(be.connectedRoom(), be.getData(Machines.MACHINE_COLOR));
             }
 
             return MachineCreator.unbound();

@@ -62,11 +62,6 @@ public class UnboundCompactMachineEntity extends BlockEntity implements IUnbound
         this.setChanged();
     }
 
-    @Override
-    public int getColor() {
-        return this.getData(Machines.MACHINE_COLOR);
-    }
-
     @Nullable
     public ResourceLocation templateId() {
         return templateId;

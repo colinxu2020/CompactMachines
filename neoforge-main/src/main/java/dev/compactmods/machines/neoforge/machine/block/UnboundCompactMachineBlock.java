@@ -76,6 +76,8 @@ public class UnboundCompactMachineBlock extends CompactMachineBlock implements E
             level.getBlockEntity(pos, Machines.UNBOUND_MACHINE_ENTITY.get()).ifPresent(unboundEntity -> {
                 RoomTemplate template = unboundEntity.template().orElse(RoomTemplate.INVALID_TEMPLATE);
                 if (!template.equals(RoomTemplate.INVALID_TEMPLATE)) {
+                    int color = unboundEntity.getData(Machines.MACHINE_COLOR);
+
                     try {
                         // Generate a new machine room
                         final var newRoom = RoomApi.newRoom(server, template, sp.getUUID());
@@ -86,6 +88,7 @@ public class UnboundCompactMachineBlock extends CompactMachineBlock implements E
                         // Set up binding and enter
                         level.getBlockEntity(pos, Machines.MACHINE_ENTITY.get()).ifPresent(ent -> {
                             ent.setConnectedRoom(newRoom.code());
+                            ent.setData(Machines.MACHINE_COLOR, color);
 
                             try {
                                 RoomHelper.teleportPlayerIntoRoom(server, sp, newRoom, RoomEntryPoint.playerEnteringMachine(player));

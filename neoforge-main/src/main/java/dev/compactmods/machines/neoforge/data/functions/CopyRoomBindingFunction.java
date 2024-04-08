@@ -22,7 +22,7 @@ public class CopyRoomBindingFunction implements LootItemFunction {
         if(state.is(MachineConstants.MACHINE_BLOCK)) {
             var data = ctx.getParam(LootContextParams.BLOCK_ENTITY);
             if (data instanceof BoundCompactMachineBlockEntity machine && stack.getItem() instanceof IBoundCompactMachineItem bound) {
-                stack.setData(Machines.MACHINE_COLOR, machine.getColor());
+                stack.setData(Machines.MACHINE_COLOR, machine.getData(Machines.MACHINE_COLOR));
                 bound.setRoom(stack, machine.connectedRoom());
             }
         }

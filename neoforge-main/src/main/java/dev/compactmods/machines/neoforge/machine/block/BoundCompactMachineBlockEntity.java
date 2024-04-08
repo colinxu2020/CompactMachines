@@ -77,6 +77,9 @@ public class BoundCompactMachineBlockEntity extends BlockEntity implements IBoun
     public void handleUpdateTag(CompoundTag tag) {
         super.handleUpdateTag(tag);
 
+        if(tag.contains(NBT_ROOM_CODE))
+            this.roomCode = tag.getString(NBT_ROOM_CODE);
+
         if (tag.contains("players")) {
             CompoundTag players = tag.getCompound("players");
             // playerData = CompactMachinePlayerData.fromNBT(players);
@@ -148,10 +151,5 @@ public class BoundCompactMachineBlockEntity extends BlockEntity implements IBoun
     public void setCustomName(Component customName) {
         this.customName = customName;
         this.setChanged();
-    }
-
-    @Override
-    public int getColor() {
-        return this.getData(Machines.MACHINE_COLOR);
     }
 }
