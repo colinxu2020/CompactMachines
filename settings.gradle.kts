@@ -1,4 +1,27 @@
 dependencyResolutionManagement {
+    versionCatalogs.create("neoforged") {
+        version("neogradle", "7.0.119")
+        version("neoform", "7.0.119")
+
+        plugin("common", "net.neoforged.gradle.common")
+            .versionRef("neogradle")
+
+        plugin("vanilla", "net.neoforged.gradle.neoform")
+            .versionRef("neoform")
+
+        plugin("userdev", "net.neoforged.gradle.userdev")
+            .versionRef("neogradle")
+    }
+
+    versionCatalogs.create("mojang") {
+        library("minecraft", "net.minecraft", "neoform_joined")
+            .versionRef("neoform");
+
+        version("neoform", "1.20.6-20240429.153634")
+        version("neoforge", "20.6.18-beta")
+        version("minecraft", "1.20.6")
+    }
+
     versionCatalogs.create("libraries") {
         library("feather", "dev.compactmods", "feather")
                 .versionRef("feather")
@@ -6,13 +29,12 @@ dependencyResolutionManagement {
         library("jnanoid", "com.aventrix.jnanoid", "jnanoid")
                 .versionRef("jnanoid")
 
-        library("neoforge", "net.neoforged", "neoforge")
-                .versionRef("neoforge")
-
-        version("minecraft", "1.20.4")
+        version("minecraft", "1.20.6")
         version("feather", "[0.1.8, 2.0)")
         version("jnanoid", "[2.0.0, 3)")
-        version("neoforge", "20.4.223")
+
+        version("parchment-mc", "1.20.6")
+        version("parchment", "2024.05.01")
     }
 
     versionCatalogs.create("mods") {
@@ -47,10 +69,6 @@ pluginManagement {
         maven("https://maven.neoforged.net/releases") {
             name = "NeoForged"
         }
-
-        maven("https://repo.spongepowered.org/repository/maven-public/") {
-            name = "Sponge Snapshots"
-        }
     }
 }
 
@@ -69,5 +87,5 @@ project(":core:room-api").projectDir = file("./core/room-api")
 project(":core:room-upgrade-api").projectDir = file("./core/room-upgrade-api")
 
 include("neoforge-main")
-include("neoforge-datagen")
+//include("neoforge-datagen")
 
