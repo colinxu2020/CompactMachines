@@ -1,18 +1,12 @@
 package dev.compactmods.machines.neoforge;
 
-import dev.compactmods.machines.api.room.IRoomRegistrar;
 import dev.compactmods.machines.api.room.RoomApi;
-import dev.compactmods.machines.api.room.owner.IRoomOwners;
-import dev.compactmods.machines.api.room.spawn.IRoomSpawnManagers;
 import dev.compactmods.machines.LoggingUtil;
 import dev.compactmods.machines.api.Constants;
 import dev.compactmods.machines.api.dimension.CompactDimension;
 import dev.compactmods.machines.api.dimension.MissingDimensionException;
-import dev.compactmods.machines.neoforge.data.RoomAttachmentDataManager;
+import dev.compactmods.machines.neoforge.room.data.RoomAttachmentDataManager;
 import dev.compactmods.machines.room.RoomApiInstance;
-import dev.compactmods.machines.room.RoomRegistrar;
-import dev.compactmods.machines.room.spatial.GraphChunkManager;
-import dev.compactmods.machines.room.spawn.RoomSpawnManagers;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.neoforged.bus.api.SubscribeEvent;

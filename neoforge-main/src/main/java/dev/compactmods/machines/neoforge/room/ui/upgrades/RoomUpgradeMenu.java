@@ -1,11 +1,9 @@
 package dev.compactmods.machines.neoforge.room.ui.upgrades;
 
 import dev.compactmods.machines.api.Constants;
-import dev.compactmods.machines.api.room.RoomApi;
 import dev.compactmods.machines.api.room.RoomInstance;
-import dev.compactmods.machines.api.room.upgrade.RoomUpgrade;
 import dev.compactmods.machines.neoforge.client.render.ConditionalGhostSlot;
-import dev.compactmods.machines.neoforge.data.RoomAttachmentDataManager;
+import dev.compactmods.machines.neoforge.room.data.RoomAttachmentDataManager;
 import dev.compactmods.machines.neoforge.room.Rooms;
 import dev.compactmods.machines.neoforge.room.upgrade.NeoforgeRoomUpgradeInventory;
 import net.minecraft.network.FriendlyByteBuf;
@@ -15,7 +13,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
 

@@ -10,6 +10,7 @@ import dev.compactmods.machines.LoggingUtil;
 import dev.compactmods.machines.api.dimension.CompactDimension;
 import dev.compactmods.machines.api.dimension.MissingDimensionException;
 import dev.compactmods.machines.neoforge.dimension.SimpleTeleporter;
+import dev.compactmods.machines.neoforge.room.capability.RoomCapability;
 import dev.compactmods.machines.neoforge.shrinking.Shrinking;
 import dev.compactmods.machines.neoforge.util.ForgePlayerUtil;
 import dev.compactmods.machines.player.PlayerEntryPointHistory;
@@ -21,6 +22,12 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.attachment.AttachmentHolder;
+import net.neoforged.neoforge.attachment.AttachmentUtils;
+import net.neoforged.neoforge.capabilities.BlockCapability;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.CapabilityHooks;
+import net.neoforged.neoforge.capabilities.CapabilityRegistry;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
@@ -40,6 +47,7 @@ public abstract class RoomHelper {
 
     public static void teleportPlayerIntoMachine(Level machineLevel, ServerPlayer player, GlobalPos machinePos, String roomCode) {
         MinecraftServer serv = machineLevel.getServer();
+
 
         LOGS.debug("Player {} entering machine at: {}", player.getName(), machinePos);
         RoomApi.room(roomCode).ifPresent(roomInfo -> {

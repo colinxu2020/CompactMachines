@@ -1,4 +1,4 @@
-package dev.compactmods.machines.neoforge.data;
+package dev.compactmods.machines.neoforge.room.data;
 
 import dev.compactmods.machines.LoggingUtil;
 import dev.compactmods.machines.api.dimension.CompactDimension;
@@ -7,11 +7,9 @@ import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.server.MinecraftServer;
 import net.neoforged.neoforge.attachment.AttachmentHolder;
-import org.jline.utils.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 
@@ -41,8 +39,7 @@ public class RoomAttachmentData extends AttachmentHolder {
     }
 
     private void load() {
-        try {
-            var is = new FileInputStream(file);
+        try(var is = new FileInputStream(file)) {
             final var tag = NbtIo.readCompressed(is, NbtAccounter.unlimitedHeap());
             if(tag.contains("attachments")) {
                 this.deserializeAttachments(tag.getCompound("attachments"));

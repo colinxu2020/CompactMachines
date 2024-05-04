@@ -1,7 +1,6 @@
-package dev.compactmods.machines.neoforge.data;
+package dev.compactmods.machines.neoforge.room.data;
 
 import net.minecraft.server.MinecraftServer;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Optional;
