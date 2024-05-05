@@ -1,5 +1,6 @@
 package dev.compactmods.machines.neoforge.room.data;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.server.MinecraftServer;
 
 import java.util.HashMap;
@@ -28,7 +29,7 @@ public class RoomAttachmentDataManager {
 
         // Compare instance servers. If they aren't a match, save the old instance and set up fresh
         if(INSTANCE.server != server) {
-            INSTANCE.save();
+            INSTANCE.save(server.registryAccess());
             INSTANCE = new RoomAttachmentDataManager(server);
             return INSTANCE;
         } else {
@@ -40,7 +41,7 @@ public class RoomAttachmentDataManager {
         return cache.computeIfAbsent(roomCode, k -> RoomAttachmentData.createForRoom(server, roomCode));
     }
 
-    public void save() {
-        cache.forEach((key, data) -> data.save());
+    public void save(HolderLookup.Provider provider) {
+        cache.forEach((key, data) -> data.save(provider));
     }
 }

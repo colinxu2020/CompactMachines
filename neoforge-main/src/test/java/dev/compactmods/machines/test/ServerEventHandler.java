@@ -10,6 +10,7 @@ import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.world.level.validation.DirectoryValidator;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
@@ -19,7 +20,7 @@ import org.apache.logging.log4j.Logger;
 import java.nio.file.Path;
 import java.util.concurrent.ExecutionException;
 
-@Mod.EventBusSubscriber(modid = Constants.MOD_ID)
+@EventBusSubscriber(modid = Constants.MOD_ID)
 public class ServerEventHandler {
 
     final static Logger LOG = LogManager.getLogger();
@@ -27,7 +28,7 @@ public class ServerEventHandler {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onServerStarting(final ServerStartingEvent evt) {
         final var serverStarting = evt.getServer();
-        DimensionForcer.forceLoadCMDim(serverStarting);
+// TODO Fix Dimension forcer        DimensionForcer.forceLoadCMDim(serverStarting);
     }
 
     @SubscribeEvent

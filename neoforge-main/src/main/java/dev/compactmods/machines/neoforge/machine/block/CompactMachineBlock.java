@@ -5,11 +5,15 @@ import dev.compactmods.machines.neoforge.machine.Machines;
 import dev.compactmods.machines.neoforge.network.machine.MachineColorSyncPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -23,32 +27,31 @@ public class CompactMachineBlock extends Block {
     }
 
     @Override
-    public void setPlacedBy(Level pLevel, BlockPos pPos, BlockState pState, @Nullable LivingEntity pPlacer, ItemStack pStack) {
-        super.setPlacedBy(pLevel, pPos, pState, pPlacer, pStack);
+    public void setPlacedBy(Level level, BlockPos pPos, BlockState pState, @Nullable LivingEntity pPlacer, ItemStack pStack) {
+        super.setPlacedBy(level, pPos, pState, pPlacer, pStack);
 
-        pStack.getExistingData(Machines.MACHINE_COLOR).ifPresent(color -> {
-            final var be = pLevel.getBlockEntity(pPos);
-            if(be != null)
-                be.setData(Machines.MACHINE_COLOR, color);
-        });
+        final var color = pStack.getOrDefault(Machines.DataComponents.MACHINE_COLOR, DyeColor.WHITE.getFireworkColor());
+        final var be = level.getBlockEntity(pPos);
+        if(be != null)
+            be.setData(Machines.Attachments.MACHINE_COLOR, color);
     }
 
     @NotNull
-    protected static InteractionResult tryDyingMachine(Level level, @NotNull BlockPos pos, Player player, DyeItem dye, ItemStack mainItem) {
+    protected static ItemInteractionResult tryDyingMachine(ServerLevel level, @NotNull BlockPos pos, Player player, DyeItem dye, ItemStack mainItem) {
         var color = dye.getDyeColor();
         final var blockEntity = level.getBlockEntity(pos);
         if (blockEntity instanceof ICompactMachineBlockEntity) {
-            blockEntity.setData(Machines.MACHINE_COLOR, color.getFireworkColor());
+            blockEntity.setData(Machines.Attachments.MACHINE_COLOR, color.getFireworkColor());
 
-            PacketDistributor.TRACKING_CHUNK.with(level.getChunkAt(pos))
-                    .send(new MachineColorSyncPacket(GlobalPos.of(level.dimension(), pos), color.getFireworkColor()));
+            PacketDistributor.sendToPlayersTrackingChunk(
+                    level, new ChunkPos(pos), new MachineColorSyncPacket(GlobalPos.of(level.dimension(), pos), color.getFireworkColor()));
 
             if (!player.isCreative())
                 mainItem.shrink(1);
 
-            return InteractionResult.CONSUME;
+            return ItemInteractionResult.CONSUME;
         }
 
-        return InteractionResult.FAIL;
+        return ItemInteractionResult.FAIL;
     }
 }

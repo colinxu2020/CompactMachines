@@ -42,7 +42,7 @@ public class CodecTests {
     public static void canSerializeVector3d(final GameTestHelper test) {
         Vec3 expected = new Vec3(1.25d, 2.50d, 3.75d);
 
-        DataResult<Tag> nbtResult = CodecExtensions.VECTOR3D.encodeStart(NbtOps.INSTANCE, expected);
+        DataResult<Tag> nbtResult = Vec3.CODEC.encodeStart(NbtOps.INSTANCE, expected);
         nbtResult.resultOrPartial(test::fail)
                 .ifPresent(nbt -> {
                     ListTag list = (ListTag) nbt;

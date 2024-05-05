@@ -15,7 +15,7 @@ public class ClientMachinePacketHandler {
             var state = mc.level.getBlockState(position.pos());
             var blockEntity = mc.level.getBlockEntity(position.pos());
             if(state.is(MachineConstants.MACHINE_BLOCK)) {
-                blockEntity.setData(Machines.MACHINE_COLOR, newColor);
+                blockEntity.setData(Machines.Attachments.MACHINE_COLOR, newColor);
                 mc.level.sendBlockUpdated(position.pos(), state, state, Block.UPDATE_ALL_IMMEDIATE);
             }
         }

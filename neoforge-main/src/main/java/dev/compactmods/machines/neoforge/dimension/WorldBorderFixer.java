@@ -2,6 +2,7 @@ package dev.compactmods.machines.neoforge.dimension;
 
 import dev.compactmods.machines.api.Constants;
 import dev.compactmods.machines.api.dimension.CompactDimension;
+import dev.compactmods.machines.api.dimension.MissingDimensionException;
 import net.minecraft.network.protocol.game.ClientboundInitializeBorderPacket;
 import net.minecraft.network.protocol.game.ClientboundSetBorderSizePacket;
 import net.minecraft.server.MinecraftServer;
@@ -10,14 +11,16 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.border.BorderChangeListener;
 import net.minecraft.world.level.border.WorldBorder;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.level.LevelEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
+import java.util.Collections;
 import java.util.stream.Collectors;
 
-@Mod.EventBusSubscriber(modid = Constants.MOD_ID)
+@EventBusSubscriber(modid = Constants.MOD_ID)
 public class WorldBorderFixer {
 
     @SubscribeEvent
@@ -43,11 +46,13 @@ public class WorldBorderFixer {
         final var cwBorder = compactDim.getWorldBorder();
 
         // Filter border listeners down to the compact world, then remove them from the OW listener list
-        final var listeners = owBorder.listeners.stream()
-                .filter(border -> border instanceof BorderChangeListener.DelegateBorderChangeListener)
-                .map(BorderChangeListener.DelegateBorderChangeListener.class::cast)
-                .filter(list -> list.worldBorder == cwBorder)
-                .collect(Collectors.toSet());
+        final var listeners = Collections.<BorderChangeListener>emptySet();
+        // TODO Fix World Border (AT issue)
+//        final var listeners = owBorder.listeners.stream()
+//                .filter(border -> border instanceof BorderChangeListener.DelegateBorderChangeListener)
+//                .map(BorderChangeListener.DelegateBorderChangeListener.class::cast)
+//                .filter(list -> list.worldBorder == cwBorder)
+//                .collect(Collectors.toSet());
 
         for (var listener : listeners)
             owBorder.removeListener(listener);
@@ -55,8 +60,9 @@ public class WorldBorderFixer {
         // Fix set compact world border if it was loaded weirdly
         cwBorder.setCenter(0, 0);
         cwBorder.setSize(WorldBorder.MAX_SIZE);
-        PacketDistributor.DIMENSION.with(CompactDimension.LEVEL_KEY)
-                .send(new ClientboundSetBorderSizePacket(cwBorder));
+
+        // Send update to all players
+        serv.getPlayerList().broadcastAll(new ClientboundSetBorderSizePacket(cwBorder), compactDim.dimension());
     }
 
     public static void sendClientWorldBorderFix(ServerPlayer player) {

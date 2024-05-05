@@ -1,6 +1,6 @@
 package dev.compactmods.machines.neoforge.villager;
 
-// @Mod.EventBusSubscriber(modid = Constants.MOD_ID)
+// @EventBusSubscriber(modid = Constants.MOD_ID)
 public class VillagerTradesEventHandler {
 
 //    @SubscribeEvent

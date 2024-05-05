@@ -4,7 +4,6 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import dev.compactmods.machines.api.room.RoomApi;
 import dev.compactmods.machines.api.room.RoomTemplate;
-import dev.compactmods.machines.api.room.upgrade.RoomUpgrade;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.core.Registry;

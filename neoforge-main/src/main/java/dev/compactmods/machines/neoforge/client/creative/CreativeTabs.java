@@ -2,9 +2,8 @@ package dev.compactmods.machines.neoforge.client.creative;
 
 import dev.compactmods.machines.api.room.RoomTemplate;
 import dev.compactmods.machines.api.Constants;
-import dev.compactmods.machines.neoforge.machine.MachineCreator;
+import dev.compactmods.machines.neoforge.machine.MachineItemCreator;
 import dev.compactmods.machines.neoforge.CompactMachines;
-import dev.compactmods.machines.neoforge.machine.item.UnboundCompactMachineItem;
 import dev.compactmods.machines.neoforge.room.Rooms;
 import dev.compactmods.machines.neoforge.shrinking.Shrinking;
 import net.minecraft.network.chat.Component;
@@ -20,14 +19,14 @@ public interface CreativeTabs {
     ResourceLocation LINKED_MACHINES_RL = new ResourceLocation(Constants.MOD_ID, "linked_machines");
 
     DeferredHolder<CreativeModeTab, CreativeModeTab> NEW_MACHINES = TABS.register(MAIN_RL.getPath(), () -> CreativeModeTab.builder()
-            .icon(MachineCreator::unbound)
+            .icon(MachineItemCreator::unbound)
             .title(Component.translatableWithFallback("itemGroup.compactmachines.main", "Compact Machines"))
             .displayItems(CreativeTabs::fillItems)
             .build());
 
     DeferredHolder<CreativeModeTab, CreativeModeTab> EXISTING_MACHINES = TABS.register(LINKED_MACHINES_RL.getPath(), () -> CreativeModeTab.builder()
             .icon(() -> {
-                final var ub = MachineCreator.unboundColored(CompactMachines.BRAND_MACHINE_COLOR);
+                final var ub = MachineItemCreator.unboundColored(CompactMachines.BRAND_MACHINE_COLOR);
                 return ub;
             })
             .title(Component.translatableWithFallback("itemGroup.compactmachines.linked_machines", "Linked Machines"))
@@ -44,7 +43,7 @@ public interface CreativeTabs {
 
         final var lookup = params.holders().lookupOrThrow(RoomTemplate.REGISTRY_KEY);
         final var machines = lookup.listElements()
-                .map(k -> UnboundCompactMachineItem.forTemplate(k.key().location(), k.value()))
+                .map(k -> MachineItemCreator.forNewRoom(k.key().location(), k.value()))
                 .toList();
 
         output.acceptAll(machines, CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);

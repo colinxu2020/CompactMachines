@@ -2,36 +2,29 @@ package dev.compactmods.machines.neoforge.network;
 
 import dev.compactmods.machines.api.Constants;
 import dev.compactmods.machines.neoforge.network.machine.MachineColorSyncPacket;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
-import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
-@Mod.EventBusSubscriber(modid = Constants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Constants.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class CMNetworks {
 
     @SubscribeEvent
-    public static void onPacketRegistration(final RegisterPayloadHandlerEvent payloads) {
-        final IPayloadRegistrar main = payloads.registrar(Constants.MOD_ID)
-                .versioned("6.0.0");
+    public static void onPacketRegistration(final RegisterPayloadHandlersEvent payloads) {
+        final PayloadRegistrar main = payloads.registrar("6.0.0");
 
-        main.play(PlayerRequestedTeleportPacket.ID, PlayerRequestedTeleportPacket.READER, builder ->
-                builder.server(PlayerRequestedTeleportPacket.HANDLER));
+        main.playToServer(PlayerRequestedTeleportPacket.TYPE, PlayerRequestedTeleportPacket.STREAM_CODEC, PlayerRequestedTeleportPacket.HANDLER);
 
-        main.play(SyncRoomMetadataPacket.ID, SyncRoomMetadataPacket.READER, builder ->
-                builder.client(SyncRoomMetadataPacket.HANDLER));
+        main.playToClient(SyncRoomMetadataPacket.TYPE, SyncRoomMetadataPacket.STREAM_CODEC, SyncRoomMetadataPacket.HANDLER);
 
-        main.play(PlayerRequestedLeavePacket.ID, (b) -> new PlayerRequestedLeavePacket(), builder ->
-                builder.server(PlayerRequestedLeavePacket.HANDLER));
+        main.playToServer(PlayerRequestedLeavePacket.TYPE, StreamCodec.unit(new PlayerRequestedLeavePacket()), PlayerRequestedLeavePacket.HANDLER);
 
-        main.play(PlayerRequestedRoomUIPacket.ID, (FriendlyByteBuf b) -> b.readJsonWithCodec(PlayerRequestedRoomUIPacket.CODEC),
-                builder -> builder.server(PlayerRequestedRoomUIPacket.HANDLER));
+        main.playToServer(PlayerRequestedRoomUIPacket.TYPE, PlayerRequestedRoomUIPacket.STREAM_CODEC, PlayerRequestedRoomUIPacket.HANDLER);
 
-        main.play(PlayerRequestedUpgradeMenuPacket.ID, (FriendlyByteBuf b) -> b.readJsonWithCodec(PlayerRequestedUpgradeMenuPacket.CODEC),
-                builder -> builder.server(PlayerRequestedUpgradeMenuPacket.HANDLER));
+        main.playToServer(PlayerRequestedUpgradeMenuPacket.TYPE, PlayerRequestedUpgradeMenuPacket.STREAM_CODEC, PlayerRequestedUpgradeMenuPacket.HANDLER);
 
-        main.play(MachineColorSyncPacket.ID, buf -> buf.readJsonWithCodec(MachineColorSyncPacket.CODEC),
-                b -> b.client(MachineColorSyncPacket.HANDLER));
+        main.playToClient(MachineColorSyncPacket.TYPE, MachineColorSyncPacket.STREAM_CODEC, MachineColorSyncPacket.HANDLER);
     }
 }

@@ -1,6 +1,5 @@
 @file:Suppress("SpellCheckingInspection")
 
-import net.neoforged.gradle.dsl.common.runs.run.Run
 import org.ajoberstar.grgit.Grgit
 import java.text.SimpleDateFormat
 import java.util.*
@@ -12,20 +11,19 @@ if (envVersion.startsWith("v"))
 val modId: String = property("mod_id") as String
 val isRelease: Boolean = (System.getenv("RELEASE") ?: "false").equals("true", true)
 
-val core = project(":core:core")
-val coreApi = project(":core:core-api")
-val roomApi = project(":core:room-api")
-val roomUpgradeApi = project(":core:room-upgrade-api")
+val coreApi = project(":core-api")
+val roomApi = project(":room-api")
+val roomUpgradeApi = project(":room-upgrade-api")
 
-val coreProjects = listOf(core, coreApi, roomApi, roomUpgradeApi)
+val coreProjects = listOf(coreApi, roomApi, roomUpgradeApi)
 
 plugins {
+    java
     id("idea")
     id("eclipse")
     id("maven-publish")
-    id("java-library")
-    id("net.neoforged.gradle.userdev") version ("7.0.93")
     id("org.ajoberstar.grgit") version("5.2.1")
+    alias(neoforged.plugins.userdev)
 }
 
 coreProjects.forEach {
@@ -39,7 +37,7 @@ base {
 }
 
 java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 }
 
 jarJar.enable()
@@ -73,7 +71,6 @@ minecraft {
 runs {
     // applies to all the run configs below
     configureEach {
-        // Recommended logging data for a userdev environment
         systemProperty("forge.logging.markers", "") // 'SCAN,REGISTRIES,REGISTRYDUMP'
 
         // Recommended logging level for the console
@@ -86,7 +83,7 @@ runs {
 
         if(!System.getenv().containsKey("CI")) {
             // JetBrains Runtime Hotswap
-            jvmArgument("-XX:+AllowEnhancedClassRedefinition")
+            // jvmArgument("-XX:+AllowEnhancedClassRedefinition")
         }
 
         modSource(sourceSets.main.get())
@@ -155,12 +152,12 @@ repositories {
 dependencies {
     // Core Projects and Libraries
     this {
-        implementation(libraries.neoforge)
+        implementation(neoforged.neoforge)
 
         implementation(libraries.jnanoid)
         jarJar(libraries.jnanoid)
 
-        listOf(core, coreApi, roomApi, roomUpgradeApi).forEach {
+        listOf(coreApi, roomApi, roomUpgradeApi).forEach {
             compileOnly(it)
             testCompileOnly(it)
         }
@@ -180,6 +177,7 @@ tasks.withType<ProcessResources> {
 
 tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
+    options.compilerArgs.addAll(arrayOf("-Xmaxerrs", "9000"))
 }
 
 tasks.withType<Jar> {
@@ -202,8 +200,8 @@ tasks.withType<Jar> {
                 "Implementation-Version" to archiveVersion,
                 "Implementation-Vendor" to "CompactMods",
                 "Implementation-Timestamp" to now,
-                "Minecraft-Version" to libraries.versions.minecraft.get(),
-                "NeoForge-Version" to libraries.versions.neoforge.get(),
+                "Minecraft-Version" to mojang.versions.minecraft.get(),
+                "NeoForge-Version" to neoforged.versions.neoforge.get(),
                 "Main-Commit" to mainGit.head().id,
                 "Core-Commit" to coreGit.head().id
         ))

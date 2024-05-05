@@ -1,12 +1,10 @@
 package dev.compactmods.machines.neoforge.compat.jei;
 
 import dev.compactmods.machines.api.Constants;
-import dev.compactmods.machines.neoforge.machine.MachineCreator;
-import dev.compactmods.machines.api.machine.item.IUnboundCompactMachineItem;
+import dev.compactmods.machines.neoforge.machine.MachineItemCreator;
 import dev.compactmods.machines.api.room.RoomApi;
 import dev.compactmods.machines.neoforge.CompactMachines;
 import dev.compactmods.machines.neoforge.machine.Machines;
-import dev.compactmods.machines.neoforge.machine.item.UnboundCompactMachineItem;
 import dev.compactmods.machines.neoforge.shrinking.Shrinking;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
@@ -30,7 +28,7 @@ public class CompactMachinesJeiPlugin implements IModPlugin {
         final var ingManager = registration.getIngredientManager();
 
         registration.addIngredientInfo(
-                MachineCreator.unboundColored(CompactMachines.BRAND_MACHINE_COLOR),
+                MachineItemCreator.unboundColored(CompactMachines.BRAND_MACHINE_COLOR),
                 VanillaTypes.ITEM_STACK,
                 Component.translatable("jei.compactmachines.machines"));
 
@@ -38,7 +36,7 @@ public class CompactMachinesJeiPlugin implements IModPlugin {
         RoomApi.getTemplates(ServerLifecycleHooks.getCurrentServer())
                 .entrySet()
                 .stream()
-                .map(t -> UnboundCompactMachineItem.forTemplate(t.getKey().location(), t.getValue()))
+                .map(t -> MachineItemCreator.forNewRoom(t.getKey().location(), t.getValue()))
                 .forEach(t -> registration.addIngredientInfo(t, VanillaTypes.ITEM_STACK, Component.translatable("jei.compactmachines.machines")));
 
         registration.addIngredientInfo(
@@ -49,10 +47,10 @@ public class CompactMachinesJeiPlugin implements IModPlugin {
 
     @Override
     public void registerItemSubtypes(ISubtypeRegistration registration) {
-        registration.registerSubtypeInterpreter(Machines.UNBOUND_MACHINE_BLOCK_ITEM.get(),
+        registration.registerSubtypeInterpreter(Machines.Items.UNBOUND_MACHINE.get(),
                 (ingredient, context) -> {
-                    return (ingredient.getItem() instanceof IUnboundCompactMachineItem ub ?
-                            ub.getTemplateId(ingredient).toString() : "");
+                    // return (ingredient.has(ROOM_TEMPLATE) ? ub.getTemplateId(ingredient).toString() : "");
+                    return "";
                 });
     }
 }

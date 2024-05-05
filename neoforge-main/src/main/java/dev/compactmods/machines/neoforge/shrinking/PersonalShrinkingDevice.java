@@ -29,10 +29,9 @@ public class PersonalShrinkingDevice extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-        super.appendHoverText(stack, worldIn, tooltip, flagIn);
-
-        tooltip.add(Screen.hasShiftDown() ? Translations.UNBREAKABLE_BLOCK.get() : Translations.HINT_HOLD_SHIFT.get());
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltips, TooltipFlag flags) {
+        super.appendHoverText(stack, context, tooltips, flags);
+        tooltips.add(Screen.hasShiftDown() ? Translations.UNBREAKABLE_BLOCK.get() : Translations.HINT_HOLD_SHIFT.get());
     }
 
     @Override

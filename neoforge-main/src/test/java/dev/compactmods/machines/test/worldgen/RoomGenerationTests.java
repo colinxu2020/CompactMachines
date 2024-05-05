@@ -5,18 +5,16 @@ import dev.compactmods.machines.api.room.RoomTemplate;
 import dev.compactmods.machines.api.Constants;
 import dev.compactmods.machines.api.util.BlockSpaceUtil;
 import dev.compactmods.machines.machine.BuiltInRoomTemplate;
-import dev.compactmods.machines.test.util.TestUtil;
+import dev.compactmods.machines.test.util.CompactGameTestHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestGenerator;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.gametest.framework.TestFunction;
-import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import org.apache.logging.log4j.LogManager;
@@ -44,7 +42,7 @@ public class RoomGenerationTests {
                     200,
                     0,
                     true,
-                    testHelper -> makeTemplateTest(testHelper, template.template())
+                    testHelper -> makeTemplateTest(new CompactGameTestHelper(testHelper.testInfo), template.template())
             );
             funcs.add(func);
         }
@@ -52,8 +50,8 @@ public class RoomGenerationTests {
         return funcs;
     }
 
-    private static void makeTemplateTest(GameTestHelper testHelper, RoomTemplate template) {
-        final AABB localBounds = TestUtil.localBounds(testHelper);
+    private static void makeTemplateTest(CompactGameTestHelper testHelper, RoomTemplate template) {
+        final AABB localBounds = testHelper.localBounds();
         final AABB worldBounds = testHelper.getBounds();
         final BlockPos testCenter = BlockPos.containing(localBounds.getCenter());
 
@@ -64,10 +62,10 @@ public class RoomGenerationTests {
     }
 
     @GameTest(template = "empty_15x15", batch = BATCH)
-    public static void checkOffsetsNormalTest(final GameTestHelper testHelper) {
+    public static void checkOffsetsNormalTest(final CompactGameTestHelper testHelper) {
         final var logs = LogManager.getLogger();
 
-        AABB localBounds = TestUtil.localBounds(testHelper);
+        AABB localBounds = testHelper.localBounds();
 
         var center = BlockPos.containing(localBounds.getCenter());
         testHelper.setBlock(center, Blocks.GOLD_BLOCK.defaultBlockState());
@@ -85,9 +83,9 @@ public class RoomGenerationTests {
     }
 
     @GameTest(template = "empty_15x15", batch = BATCH)
-    public static void checkRoomGeneratorNormal(final GameTestHelper testHelper) {
+    public static void checkRoomGeneratorNormal(final CompactGameTestHelper testHelper) {
 
-        AABB localBounds = TestUtil.localBounds(testHelper);
+        AABB localBounds = testHelper.localBounds();
 
         var center = BlockPos.containing(localBounds.getCenter());
         testHelper.setBlock(center, Blocks.GOLD_BLOCK.defaultBlockState());
@@ -99,9 +97,9 @@ public class RoomGenerationTests {
     }
 
     @GameTest(template = "empty_15x15", batch = BATCH)
-    public static void checkRoomGeneratorWeirdShape(final GameTestHelper testHelper) {
+    public static void checkRoomGeneratorWeirdShape(final CompactGameTestHelper testHelper) {
 
-        AABB localBounds = TestUtil.localBounds(testHelper);
+        AABB localBounds = testHelper.localBounds();
 
         final var roomDims = AABB.ofSize(localBounds.getCenter(), 5, 5, 9)
                 .move(testHelper.absolutePos(BlockPos.ZERO));

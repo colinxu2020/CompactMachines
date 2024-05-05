@@ -5,6 +5,7 @@ import dev.compactmods.machines.api.room.RoomApi;
 import dev.compactmods.machines.neoforge.machine.Machines;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -27,13 +28,12 @@ public class BoundCompactMachineBlockEntity extends BlockEntity implements IBoun
     private Component customName;
 
     public BoundCompactMachineBlockEntity(BlockPos pos, BlockState state) {
-        super(Machines.MACHINE_ENTITY.get(), pos, state);
+        super(Machines.BlockEntities.MACHINE.get(), pos, state);
     }
 
     @Override
-    public void load(@NotNull CompoundTag nbt) {
-        super.load(nbt);
-
+    protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider holders) {
+        super.loadAdditional(nbt, holders);
         if (nbt.contains(NBT_ROOM_CODE)) {
             this.roomCode = nbt.getString(NBT_ROOM_CODE);
         }
@@ -46,8 +46,8 @@ public class BoundCompactMachineBlockEntity extends BlockEntity implements IBoun
     }
 
     @Override
-    protected void saveAdditional(@NotNull CompoundTag nbt) {
-        super.saveAdditional(nbt);
+    protected void saveAdditional(@NotNull CompoundTag nbt, HolderLookup.Provider holders) {
+        super.saveAdditional(nbt, holders);
 
         if (owner != null) {
             nbt.putUUID(NBT_OWNER, this.owner);
@@ -58,9 +58,9 @@ public class BoundCompactMachineBlockEntity extends BlockEntity implements IBoun
     }
 
     @Override
-    public CompoundTag getUpdateTag() {
-        CompoundTag data = super.getUpdateTag();
-        saveAdditional(data);
+    public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
+        var data = super.getUpdateTag(provider);
+        saveAdditional(data, provider);
 
         if (this.roomCode != null) {
             // data.putString(ROOM_POS_NBT, room);
@@ -74,8 +74,8 @@ public class BoundCompactMachineBlockEntity extends BlockEntity implements IBoun
     }
 
     @Override
-    public void handleUpdateTag(CompoundTag tag) {
-        super.handleUpdateTag(tag);
+    public void handleUpdateTag(CompoundTag tag, HolderLookup.Provider provider) {
+        super.handleUpdateTag(tag, provider);
 
         if(tag.contains(NBT_ROOM_CODE))
             this.roomCode = tag.getString(NBT_ROOM_CODE);
@@ -119,10 +119,10 @@ public class BoundCompactMachineBlockEntity extends BlockEntity implements IBoun
             this.roomCode = roomCode;
 
             RoomApi.room(roomCode).ifPresentOrElse(inst -> {
-                        this.setData(Machines.MACHINE_COLOR, inst.defaultMachineColor());
+                        this.setData(Machines.Attachments.MACHINE_COLOR, inst.defaultMachineColor());
                     },
                     () -> {
-                        this.setData(Machines.MACHINE_COLOR, DyeColor.WHITE.getTextColor());
+                        this.setData(Machines.Attachments.MACHINE_COLOR, DyeColor.WHITE.getTextColor());
                     });
 
             this.setChanged();
@@ -135,7 +135,7 @@ public class BoundCompactMachineBlockEntity extends BlockEntity implements IBoun
 //            final var dimMachines = DimensionMachineGraph.forDimension(sl);
 //            dimMachines.unregisterMachine(worldPosition);
 
-            sl.setBlock(worldPosition, Machines.UNBOUND_MACHINE_BLOCK.get().defaultBlockState(), Block.UPDATE_ALL);
+            sl.setBlock(worldPosition, Machines.Blocks.UNBOUND_MACHINE.get().defaultBlockState(), Block.UPDATE_ALL);
         }
     }
 

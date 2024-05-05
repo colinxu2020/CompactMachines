@@ -11,19 +11,20 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.EntityTeleportEvent;
 import net.neoforged.neoforge.event.entity.living.MobSpawnEvent;
 import net.neoforged.neoforge.event.level.LevelEvent;
 
-@Mod.EventBusSubscriber(modid = Constants.MOD_ID)
+@EventBusSubscriber(modid = Constants.MOD_ID)
 public class RoomEventHandler {
 
     @SubscribeEvent
     public static void onWorldSaved(final LevelEvent.Save level) {
         if (level.getLevel() instanceof Level l && CompactDimension.isLevelCompact(l)) {
-            RoomAttachmentDataManager.instance().ifPresent(RoomAttachmentDataManager::save);
+            RoomAttachmentDataManager.instance().ifPresent(manager -> manager.save(l.registryAccess()));
         }
     }
 

@@ -11,13 +11,14 @@ import dev.compactmods.machines.datagen.tags.PointOfInterestTagGenerator;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 import java.util.Collections;
 import java.util.List;
 
-@Mod.EventBusSubscriber(modid = Constants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Constants.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class DataGeneration {
 
     @SubscribeEvent
@@ -33,10 +34,11 @@ public class DataGeneration {
         generator.addProvider(server, new DatapackRegisteredStuff(packOut, holderLookup));
         generator.addProvider(server, new LootTableProvider(packOut,
                 Collections.emptySet(),
-                List.of(new LootTableProvider.SubProviderEntry(BlockLootGenerator::new, LootContextParamSets.BLOCK))
+                List.of(new LootTableProvider.SubProviderEntry(BlockLootGenerator::new, LootContextParamSets.BLOCK)),
+                holderLookup
         ));
 
-        generator.addProvider(server, new RecipeGenerator(packOut));
+        generator.addProvider(server, new RecipeGenerator(packOut, holderLookup));
 
         final var blocks = new BlockTagGenerator(packOut, fileHelper, holderLookup);
         generator.addProvider(server, blocks);

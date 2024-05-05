@@ -4,10 +4,11 @@ import dev.compactmods.machines.LoggingUtil;
 import dev.compactmods.machines.api.Constants;
 import dev.compactmods.machines.neoforge.network.RoomNetworkHandler;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 
-@Mod.EventBusSubscriber(modid = Constants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Constants.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class ModBusEvents {
 
     @SubscribeEvent

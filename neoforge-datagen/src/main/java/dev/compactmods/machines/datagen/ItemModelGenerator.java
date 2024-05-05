@@ -21,8 +21,8 @@ public class ItemModelGenerator extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        withExistingParent(Machines.BOUND_MACHINE_BLOCK_ITEM.getId().getPath(), modLoc("block/machine/machine"));
-        withExistingParent(Machines.UNBOUND_MACHINE_BLOCK_ITEM.getId().getPath(), modLoc("block/machine/machine"));
+        withExistingParent(Machines.Items.BOUND_MACHINE.getId().getPath(), modLoc("block/machine/machine"));
+        withExistingParent(Machines.Items.UNBOUND_MACHINE.getId().getPath(), modLoc("block/machine/machine"));
         
         withExistingParent("solid_wall", modLoc("block/wall"));
         withExistingParent("wall", modLoc("block/wall"));

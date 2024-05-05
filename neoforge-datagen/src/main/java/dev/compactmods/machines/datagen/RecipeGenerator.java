@@ -6,9 +6,11 @@ import dev.compactmods.machines.api.room.RoomTemplate;
 import dev.compactmods.machines.machine.BuiltInRoomTemplate;
 import dev.compactmods.machines.neoforge.CompactMachines;
 import dev.compactmods.machines.neoforge.dimension.Dimension;
+import dev.compactmods.machines.neoforge.machine.MachineItemCreator;
 import dev.compactmods.machines.neoforge.machine.item.UnboundCompactMachineItem;
 import dev.compactmods.machines.neoforge.room.Rooms;
 import dev.compactmods.machines.neoforge.shrinking.Shrinking;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
@@ -21,10 +23,12 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.common.Tags;
 
+import java.util.concurrent.CompletableFuture;
+
 public class RecipeGenerator extends RecipeProvider {
 
-    public RecipeGenerator(PackOutput packOutput) {
-        super(packOutput);
+    public RecipeGenerator(PackOutput packOut, CompletableFuture<HolderLookup.Provider> holders) {
+        super(packOut, holders);
     }
 
     @Override
@@ -34,7 +38,7 @@ public class RecipeGenerator extends RecipeProvider {
                 .pattern("D D")
                 .pattern("DDD")
                 .define('D', Items.POLISHED_DEEPSLATE)
-                .unlockedBy("picked_up_deepslate", has(Tags.Items.COBBLESTONE_DEEPSLATE))
+                .unlockedBy("picked_up_deepslate", has(Tags.Items.COBBLESTONES_DEEPSLATE))
                 .save(recipeOutput);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, Shrinking.PERSONAL_SHRINKING_DEVICE.get())
@@ -81,7 +85,7 @@ public class RecipeGenerator extends RecipeProvider {
         registerMachineRecipe(consumer, BuiltInRoomTemplate.EMPTY_SMALL, Tags.Items.INGOTS_IRON);
         registerMachineRecipe(consumer, BuiltInRoomTemplate.EMPTY_NORMAL, Tags.Items.INGOTS_GOLD);
         registerMachineRecipe(consumer, BuiltInRoomTemplate.EMPTY_LARGE, Tags.Items.GEMS_DIAMOND);
-        registerMachineRecipe(consumer, BuiltInRoomTemplate.EMPTY_GIANT, Tags.Items.OBSIDIAN);
+        registerMachineRecipe(consumer, BuiltInRoomTemplate.EMPTY_GIANT, Tags.Items.OBSIDIANS);
         registerMachineRecipe(consumer, BuiltInRoomTemplate.EMPTY_COLOSSAL, Tags.Items.INGOTS_NETHERITE);
     }
 
@@ -90,7 +94,7 @@ public class RecipeGenerator extends RecipeProvider {
     }
 
     protected void registerMachineRecipe(RecipeOutput consumer, ResourceLocation temId, RoomTemplate template, TagKey<Item> catalyst) {
-        final var recipe = ShapedRecipeBuilder.shaped(RecipeCategory.MISC, UnboundCompactMachineItem.forTemplate(temId, template))
+        final var recipe = ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MachineItemCreator.forNewRoom(temId, template))
                 .pattern("WWW")
                 .pattern("EPS")
                 .pattern("WWW")

@@ -19,11 +19,12 @@ public interface MachineComponents {
     /**
      * Only on new room items - IUnboundMachineItem
      */
-    UnaryOperator<DataComponentType.Builder<ResourceLocation>> NEW_ROOM_TEMPLATE = (builder) -> builder
+    UnaryOperator<DataComponentType.Builder<ResourceLocation>> ROOM_TEMPLATE_ID = (builder) -> builder
             .persistent(ResourceLocation.CODEC)
             .networkSynchronized(ResourceLocation.STREAM_CODEC);
 
     UnaryOperator<DataComponentType.Builder<Integer>> MACHINE_COLOR = (builder) -> builder
             .persistent(Codec.INT)
             .networkSynchronized(ByteBufCodecs.INT);
+
 }

@@ -1,10 +1,9 @@
 package dev.compactmods.machines.neoforge.room.ui.overlay;
 
 import net.minecraft.client.gui.GuiGraphics;
-import net.neoforged.neoforge.client.gui.overlay.ExtendedGui;
-import net.neoforged.neoforge.client.gui.overlay.IGuiOverlay;
+import net.minecraft.client.gui.LayeredDraw;
 
-public class RoomMetadataDebugOverlay implements IGuiOverlay {
+public class RoomMetadataDebugOverlay implements LayeredDraw.Layer {
 // FIXME
 //    @Override
 //    public void render(ForgeGui gui, PoseStack poseStack, float partialTick, int screenWidth, int screenHeight) {
@@ -44,7 +43,7 @@ public class RoomMetadataDebugOverlay implements IGuiOverlay {
 //    }
 
     @Override
-    public void render(ExtendedGui extendedGui, GuiGraphics guiGraphics, float v, int i, int i1) {
+    public void render(GuiGraphics graphics, float partialTicks) {
 
     }
 }

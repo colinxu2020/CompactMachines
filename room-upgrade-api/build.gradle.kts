@@ -4,20 +4,13 @@ import java.util.*
 
 val versionMain: String = System.getenv("VERSION") ?: "0.0.0"
 
-var coreApi: Project;
-var roomApi: Project;
-if (rootProject.name == "Compact Machines Core") {
-    coreApi = project(":core-api")
-    roomApi = project(":room-api")
-} else {
-    coreApi = project(":core:core-api")
-    roomApi = project(":core:room-api")
-}
+var coreApi: Project = project(":core-api")
+var roomApi: Project = project(":room-api")
 
 plugins {
     id("java-library")
     id("maven-publish")
-    alias(neoforged.plugins.vanilla)
+    alias(neoforged.plugins.userdev)
 }
 
 base {
@@ -26,14 +19,14 @@ base {
 }
 
 java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
     withJavadocJar()
 }
 
 dependencies {
     compileOnly(coreApi)
     compileOnly(roomApi)
-    api(mojang.minecraft)
+    // api(libraries.neoforge)
 }
 
 tasks.withType<Jar> {

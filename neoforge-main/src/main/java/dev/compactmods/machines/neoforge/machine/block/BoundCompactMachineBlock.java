@@ -1,7 +1,7 @@
 package dev.compactmods.machines.neoforge.machine.block;
 
 import dev.compactmods.machines.LoggingUtil;
-import dev.compactmods.machines.neoforge.machine.MachineCreator;
+import dev.compactmods.machines.neoforge.machine.MachineItemCreator;
 import dev.compactmods.machines.api.room.RoomApi;
 import dev.compactmods.machines.api.shrinking.PSDTags;
 import dev.compactmods.machines.machine.EnumMachinePlayersBreakHandling;
@@ -13,16 +13,17 @@ import dev.compactmods.machines.neoforge.room.ui.preview.MachineRoomMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -30,7 +31,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.neoforge.common.util.FakePlayer;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -45,15 +45,15 @@ public class BoundCompactMachineBlock extends CompactMachineBlock implements Ent
     public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player) {
         try {
             if (level.getBlockEntity(pos) instanceof BoundCompactMachineBlockEntity be) {
-                return MachineCreator.boundToRoom(be.connectedRoom(), be.getData(Machines.MACHINE_COLOR));
+                return MachineItemCreator.boundToRoom(be.connectedRoom(), be.getData(Machines.Attachments.MACHINE_COLOR));
             }
 
-            return MachineCreator.unbound();
+            return MachineItemCreator.unbound();
         }
 
         catch(Exception ex) {
             LoggingUtil.modLog().warn("Warning: tried to pick block on a bound machine that does not have a room bound.", ex);
-            return MachineCreator.unbound();
+            return MachineItemCreator.unbound();
         }
     }
 
@@ -96,13 +96,10 @@ public class BoundCompactMachineBlock extends CompactMachineBlock implements Ent
         return new BoundCompactMachineBlockEntity(pos, state);
     }
 
-    @NotNull
     @Override
-    public InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
-        ItemStack mainItem = player.getMainHandItem();
-
-        if (mainItem.getItem() instanceof DyeItem dye && !level.isClientSide) {
-            return tryDyingMachine(level, pos, player, dye, mainItem);
+    protected ItemInteractionResult useItemOn(ItemStack mainItem, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+        if (mainItem.getItem() instanceof DyeItem dye && !level.isClientSide && level instanceof ServerLevel sl) {
+            return tryDyingMachine(sl, pos, player, dye, mainItem);
         }
 
         if (mainItem.is(PSDTags.ITEM)
@@ -111,12 +108,17 @@ public class BoundCompactMachineBlock extends CompactMachineBlock implements Ent
 
             // Try to teleport player into room
             RoomHelper.teleportPlayerIntoMachine(level, sp, tile.getLevelPosition(), tile.connectedRoom());
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         }
 
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+    }
+
+    @Override
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         // All other items, open preview screen
         if (!level.isClientSide && !(player instanceof FakePlayer)) {
-            level.getBlockEntity(pos, Machines.MACHINE_ENTITY.get()).ifPresent(machine -> {
+            level.getBlockEntity(pos, Machines.BlockEntities.MACHINE.get()).ifPresent(machine -> {
                 final var roomCode = machine.connectedRoom();
                 RoomApi.room(roomCode).ifPresent(inst -> {
                     if (player instanceof ServerPlayer sp) {

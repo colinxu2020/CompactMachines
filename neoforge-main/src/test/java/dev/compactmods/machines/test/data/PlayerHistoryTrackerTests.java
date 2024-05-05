@@ -22,6 +22,7 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.level.GameType;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
@@ -42,7 +43,7 @@ public class PlayerHistoryTrackerTests {
 
         final var history = new PlayerEntryPointHistory(1);
 
-        final var player = test.makeMockSurvivalPlayer();
+        final var player = test.makeMockPlayer(GameType.SURVIVAL);
         history.enterRoom(player, RoomCodeGenerator.generateRoomId(), RoomEntryPoint.nonexistent());
 
         final var tooFar = history.enterRoom(player, RoomCodeGenerator.generateRoomId(), RoomEntryPoint.nonexistent());
@@ -58,7 +59,7 @@ public class PlayerHistoryTrackerTests {
 
         final var history = new PlayerEntryPointHistory(5);
 
-        final var player = test.makeMockSurvivalPlayer();
+        final var player = test.makeMockPlayer(GameType.SURVIVAL);
 
         Deque<String> codes = new ArrayDeque<>(5);
         for (int i = 0; i < 5; i++) {
@@ -86,7 +87,7 @@ public class PlayerHistoryTrackerTests {
         RoomApi.INSTANCE = TestRoomApi.forTest(test);
 
         final var history = new PlayerEntryPointHistory(5);
-        final var player = test.makeMockSurvivalPlayer();
+        final var player = test.makeMockPlayer(GameType.SURVIVAL);
 
         Deque<String> codes = new ArrayDeque<>(5);
         for (int i = 0; i < 5; i++) {
@@ -112,7 +113,7 @@ public class PlayerHistoryTrackerTests {
     public static void testDataLogic(final GameTestHelper test) throws InterruptedException {
         final var history = new PlayerEntryPointHistory(5);
 
-        final var player = test.makeMockSurvivalPlayer();
+        final var player = test.makeMockPlayer(GameType.SURVIVAL);
 
         Deque<String> codes = new ArrayDeque<>(5);
         for (int i = 0; i < 5; i++) {
@@ -125,10 +126,9 @@ public class PlayerHistoryTrackerTests {
 
         long beforeSave = history.history(player.getUUID()).count();
 
-        final var saved = history.save(new CompoundTag());
+        final var saved = history.save(new CompoundTag(), test.getLevel().registryAccess());
 
-        final var loaded = PlayerEntryPointHistory.CODEC.parse(NbtOps.INSTANCE, saved)
-                .getOrThrow(false, test::fail);
+        final var loaded = PlayerEntryPointHistory.CODEC.parse(NbtOps.INSTANCE, saved).getOrThrow();
 
         long afterLoad = loaded.history(player.getUUID()).count();
 

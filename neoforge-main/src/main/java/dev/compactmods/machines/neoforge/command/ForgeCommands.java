@@ -10,10 +10,11 @@ import dev.compactmods.machines.neoforge.command.subcommand.CMTeleportSubcommand
 import dev.compactmods.machines.neoforge.command.subcommand.CMUnbindSubcommand;
 import dev.compactmods.machines.neoforge.command.subcommand.SpawnSubcommand;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 
-@Mod.EventBusSubscriber(modid = Constants.MOD_ID)
+@EventBusSubscriber(modid = Constants.MOD_ID)
 public class ForgeCommands {
 
     static {

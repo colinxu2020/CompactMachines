@@ -1,24 +1,20 @@
 package dev.compactmods.machines.neoforge.machine.block;
 
-import dev.compactmods.machines.api.machine.item.IUnboundCompactMachineItem;
 import dev.compactmods.machines.api.room.RoomApi;
 import dev.compactmods.machines.api.room.RoomTemplate;
 import dev.compactmods.machines.LoggingUtil;
 import dev.compactmods.machines.api.dimension.MissingDimensionException;
-import dev.compactmods.machines.neoforge.CompactMachines;
-import dev.compactmods.machines.neoforge.machine.MachineCreator;
+import dev.compactmods.machines.neoforge.machine.MachineItemCreator;
 import dev.compactmods.machines.api.room.history.RoomEntryPoint;
 import dev.compactmods.machines.api.shrinking.PSDTags;
 import dev.compactmods.machines.neoforge.machine.Machines;
-import dev.compactmods.machines.neoforge.machine.item.UnboundCompactMachineItem;
-import dev.compactmods.machines.neoforge.network.machine.MachineColorSyncPacket;
 import dev.compactmods.machines.neoforge.room.RoomHelper;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.GlobalPos;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
@@ -30,7 +26,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -46,16 +41,16 @@ public class UnboundCompactMachineBlock extends CompactMachineBlock implements E
             final var temp = be.template().orElse(RoomTemplate.INVALID_TEMPLATE);
 
             if (id != null && !temp.equals(RoomTemplate.INVALID_TEMPLATE)) {
-                var item = UnboundCompactMachineItem.forTemplate(id, temp);
-                be.getExistingData(Machines.MACHINE_COLOR).ifPresent(color -> {
-                    item.setData(Machines.MACHINE_COLOR, color);
+                var item = MachineItemCreator.forNewRoom(id, temp);
+                be.getExistingData(Machines.Attachments.MACHINE_COLOR).ifPresent(color -> {
+                    item.set(Machines.DataComponents.MACHINE_COLOR, color);
                 });
 
                 return item;
             }
         }
 
-        return MachineCreator.unbound();
+        return MachineItemCreator.unbound();
     }
 
     @Override
@@ -64,31 +59,30 @@ public class UnboundCompactMachineBlock extends CompactMachineBlock implements E
     }
 
     @Override
-    public @NotNull InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
-        MinecraftServer server = level.getServer();
-        ItemStack mainItem = player.getMainHandItem();
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand p_316595_, BlockHitResult p_316140_) {
 
-        if (mainItem.getItem() instanceof DyeItem dye && !level.isClientSide) {
-            return tryDyingMachine(level, pos, player, dye, mainItem);
+        if (stack.getItem() instanceof DyeItem dye && !level.isClientSide && level instanceof ServerLevel serverLevel) {
+            return tryDyingMachine(serverLevel, pos, player, dye, stack);
         }
 
-        if (mainItem.is(PSDTags.ITEM) && player instanceof ServerPlayer sp) {
-            level.getBlockEntity(pos, Machines.UNBOUND_MACHINE_ENTITY.get()).ifPresent(unboundEntity -> {
+        MinecraftServer server = level.getServer();
+        if (stack.is(PSDTags.ITEM) && player instanceof ServerPlayer sp) {
+            level.getBlockEntity(pos, Machines.BlockEntities.UNBOUND_MACHINE.get()).ifPresent(unboundEntity -> {
                 RoomTemplate template = unboundEntity.template().orElse(RoomTemplate.INVALID_TEMPLATE);
                 if (!template.equals(RoomTemplate.INVALID_TEMPLATE)) {
-                    int color = unboundEntity.getData(Machines.MACHINE_COLOR);
+                    int color = unboundEntity.getData(Machines.Attachments.MACHINE_COLOR);
 
                     try {
                         // Generate a new machine room
                         final var newRoom = RoomApi.newRoom(server, template, sp.getUUID());
 
                         // Change into a bound machine block
-                        level.setBlock(pos, Machines.MACHINE_BLOCK.get().defaultBlockState(), Block.UPDATE_ALL);
+                        level.setBlock(pos, Machines.Blocks.BOUND_MACHINE.get().defaultBlockState(), Block.UPDATE_ALL);
 
                         // Set up binding and enter
-                        level.getBlockEntity(pos, Machines.MACHINE_ENTITY.get()).ifPresent(ent -> {
+                        level.getBlockEntity(pos, Machines.BlockEntities.MACHINE.get()).ifPresent(ent -> {
                             ent.setConnectedRoom(newRoom.code());
-                            ent.setData(Machines.MACHINE_COLOR, color);
+                            ent.setData(Machines.Attachments.MACHINE_COLOR, color);
 
                             try {
                                 RoomHelper.teleportPlayerIntoRoom(server, sp, newRoom, RoomEntryPoint.playerEnteringMachine(player));
@@ -106,6 +100,6 @@ public class UnboundCompactMachineBlock extends CompactMachineBlock implements E
             });
         }
 
-        return InteractionResult.sidedSuccess(level.isClientSide);
+        return super.useItemOn(stack, state, level, pos, player, p_316595_, p_316140_);
     }
 }

@@ -1,6 +1,5 @@
 package dev.compactmods.machines.neoforge.dimension;
 
-import dev.compactmods.machines.api.dimension.CompactDimension;
 import dev.compactmods.machines.neoforge.Registries;
 import net.neoforged.neoforge.registries.DeferredBlock;
 

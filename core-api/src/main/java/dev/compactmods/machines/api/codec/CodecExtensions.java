@@ -2,8 +2,6 @@ package dev.compactmods.machines.api.codec;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.Util;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtOps;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.phys.Vec2;
 
@@ -21,15 +19,4 @@ public abstract class CodecExtensions {
             .comapFlatMap(i -> Util.fixedSize(i, 2)
                     .map(arr -> new ChunkPos(arr[0], arr[1])), pos -> IntStream.of(pos.x, pos.z));
 
-    public static <T> CompoundTag writeIntoTag(Codec<T> codec, T instance, CompoundTag tag) {
-
-        final var encoded = codec
-                .encodeStart(NbtOps.INSTANCE, instance)
-                .getOrThrow();
-
-        if (encoded instanceof CompoundTag ect)
-            tag.merge(ect);
-
-        return tag;
-    }
 }

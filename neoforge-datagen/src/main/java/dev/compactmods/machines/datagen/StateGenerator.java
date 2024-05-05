@@ -52,11 +52,11 @@ public class StateGenerator extends BlockStateProvider {
                         .end())
                 .end();
 
-        simpleBlock(Machines.UNBOUND_MACHINE_BLOCK.get(), ConfiguredModel.builder()
+        simpleBlock(Machines.Blocks.UNBOUND_MACHINE.get(), ConfiguredModel.builder()
                 .modelFile(m)
                 .build());
 
-        simpleBlock(Machines.MACHINE_BLOCK.get(), ConfiguredModel.builder()
+        simpleBlock(Machines.Blocks.BOUND_MACHINE.get(), ConfiguredModel.builder()
                 .modelFile(m)
                 .build());
 

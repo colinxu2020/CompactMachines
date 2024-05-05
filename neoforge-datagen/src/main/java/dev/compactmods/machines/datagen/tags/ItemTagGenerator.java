@@ -52,11 +52,15 @@ public class ItemTagGenerator extends ItemTagsProvider {
 
     private void machines() {
         var machinesTag = tag(MachineConstants.MACHINE_ITEM);
+        var boundMachines = tag(MachineConstants.BOUND_MACHINE_ITEM);
+        var unboundMachines = tag(MachineConstants.NEW_MACHINE_ITEM);
 
-        var boundMachineItem = Machines.BOUND_MACHINE_BLOCK_ITEM.get();
-        var unboundMachineItem = Machines.UNBOUND_MACHINE_BLOCK_ITEM.get();
+        var boundMachineItem = Machines.Items.BOUND_MACHINE.get();
+        var unboundMachineItem = Machines.Items.UNBOUND_MACHINE.get();
 
         machinesTag.add(boundMachineItem);
         machinesTag.add(unboundMachineItem);
+        boundMachines.add(boundMachineItem);
+        unboundMachines.add(unboundMachineItem);
     }
 }

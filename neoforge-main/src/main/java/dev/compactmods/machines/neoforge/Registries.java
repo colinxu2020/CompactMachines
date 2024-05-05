@@ -39,7 +39,7 @@ public interface Registries {
     DeferredRegister<ArgumentTypeInfo<?, ?>> COMMAND_ARGUMENT_TYPES = DeferredRegister.create(BuiltInRegistries.COMMAND_ARGUMENT_TYPE, MOD_ID);
 
     // LootFunctions
-    DeferredRegister<LootItemFunctionType> LOOT_FUNCS = DeferredRegister.create(BuiltInRegistries.LOOT_FUNCTION_TYPE, MOD_ID);
+    DeferredRegister<LootItemFunctionType<?>> LOOT_FUNCS = DeferredRegister.create(BuiltInRegistries.LOOT_FUNCTION_TYPE, MOD_ID);
 
     // Villagers
     DeferredRegister<VillagerProfession> VILLAGERS = DeferredRegister.create(BuiltInRegistries.VILLAGER_PROFESSION, Constants.MOD_ID);
@@ -47,6 +47,8 @@ public interface Registries {
     DeferredRegister<PoiType> POINTS_OF_INTEREST = DeferredRegister.create(BuiltInRegistries.POINT_OF_INTEREST_TYPE, Constants.MOD_ID);
 
     DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, MOD_ID);
+
+    DeferredRegister.DataComponents DATA_COMPONENTS = DeferredRegister.createDataComponents(MOD_ID);
 
     static Item basicItem() {
         return new Item(new Item.Properties());
@@ -64,6 +66,7 @@ public interface Registries {
         POINTS_OF_INTEREST.register(modBus);
         TABS.register(modBus);
         ATTACHMENT_TYPES.register(modBus);
+        DATA_COMPONENTS.register(modBus);
 
         modBus.addListener((DataPackRegistryEvent.NewRegistry newRegistries) -> {
             newRegistries.dataPackRegistry(RoomTemplate.REGISTRY_KEY, RoomTemplate.CODEC, RoomTemplate.CODEC);

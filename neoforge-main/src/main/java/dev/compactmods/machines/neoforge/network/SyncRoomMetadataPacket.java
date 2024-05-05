@@ -2,31 +2,32 @@ package dev.compactmods.machines.neoforge.network;
 
 import dev.compactmods.machines.api.Constants;
 import dev.compactmods.machines.neoforge.room.client.ClientRoomPacketHandler;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.network.handling.IPlayPayloadHandler;
+import net.neoforged.neoforge.network.handling.IPayloadHandler;
 
 import java.util.UUID;
 
 public record SyncRoomMetadataPacket(String roomCode, UUID owner) implements CustomPacketPayload {
 
-    public static final ResourceLocation ID = new ResourceLocation(Constants.MOD_ID, "sync_room_metadata");
+    public static final Type<SyncRoomMetadataPacket> TYPE = new Type<>(new ResourceLocation(Constants.MOD_ID, "sync_room_metadata"));
 
-    public static final FriendlyByteBuf.Reader<SyncRoomMetadataPacket> READER = (buf) -> new SyncRoomMetadataPacket(buf.readUtf(), buf.readUUID());
+    public static final StreamCodec<FriendlyByteBuf, SyncRoomMetadataPacket> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.STRING_UTF8, SyncRoomMetadataPacket::roomCode,
+            UUIDUtil.STREAM_CODEC, SyncRoomMetadataPacket::owner,
+            SyncRoomMetadataPacket::new
+    );
 
-    public static final IPlayPayloadHandler<SyncRoomMetadataPacket> HANDLER = (pkt, ctx) -> {
+    public static final IPayloadHandler<SyncRoomMetadataPacket> HANDLER = (pkt, ctx) -> {
         ClientRoomPacketHandler.handleRoomSync(pkt.roomCode, pkt.owner);
     };
 
     @Override
-    public void write(FriendlyByteBuf buffer) {
-        buffer.writeUtf(roomCode);
-        buffer.writeUUID(owner);
-    }
-
-    @Override
-    public ResourceLocation id() {
-        return ID;
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 }

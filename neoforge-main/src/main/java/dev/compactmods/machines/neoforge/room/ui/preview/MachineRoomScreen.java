@@ -51,7 +51,7 @@ public class MachineRoomScreen extends AbstractContainerScreen<MachineRoomMenu> 
                 .location(leftPos + imageWidth - 12, topPos + 212)
                 .onPress(btn -> {
                     var room = menu.getRoom();
-                    PacketDistributor.SERVER.noArg().send(new PlayerRequestedTeleportPacket(menu.getMachine(), room));
+                    PacketDistributor.sendToServer(new PlayerRequestedTeleportPacket(menu.getMachine(), room));
                 }).build();
 
         addRenderableWidget(psdButton);
@@ -65,7 +65,7 @@ public class MachineRoomScreen extends AbstractContainerScreen<MachineRoomMenu> 
                 .size(12, 12)
                 .location(leftPos + imageWidth - 24, topPos + 212)
                 .onPress(btn -> {
-                    PacketDistributor.SERVER.noArg().send(new PlayerRequestedUpgradeMenuPacket(menu.getRoom()));
+                    PacketDistributor.sendToServer(new PlayerRequestedUpgradeMenuPacket(menu.getRoom()));
                 }).build();
 
         addRenderableWidget(upgradeScreenBtn);

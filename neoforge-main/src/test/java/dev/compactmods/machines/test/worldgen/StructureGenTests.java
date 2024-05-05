@@ -4,10 +4,9 @@ import dev.compactmods.machines.api.Constants;
 import dev.compactmods.machines.api.room.CompactRoomGenerator;
 import dev.compactmods.machines.api.room.RoomStructureInfo;
 import dev.compactmods.machines.neoforge.CompactMachines;
-import dev.compactmods.machines.test.util.TestUtil;
+import dev.compactmods.machines.test.util.CompactGameTestHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTest;
-import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.gametest.GameTestHolder;
@@ -20,9 +19,9 @@ public class StructureGenTests {
     private static final String BATCH = "structures";
 
     @GameTest(template = "empty_15x15", batch = BATCH)
-    public static void structurePlacedCenter(final GameTestHelper testHelper) {
+    public static void structurePlacedCenter(final CompactGameTestHelper testHelper) {
 
-        AABB localBounds = TestUtil.localBounds(testHelper);
+        AABB localBounds = testHelper.localBounds();
 
         final var roomDims = AABB.ofSize(localBounds.getCenter(), 11, 11, 9)
                 .move(testHelper.absolutePos(BlockPos.ZERO));
@@ -37,9 +36,9 @@ public class StructureGenTests {
     }
 
     @GameTest(template = "empty_15x15", batch = BATCH)
-    public static void structurePlacedCeiling(final GameTestHelper testHelper) {
+    public static void structurePlacedCeiling(final CompactGameTestHelper testHelper) {
 
-        AABB localBounds = TestUtil.localBounds(testHelper);
+        AABB localBounds = testHelper.localBounds();
 
         final var roomDims = AABB.ofSize(localBounds.getCenter(), 11, 11, 9)
                 .move(testHelper.absolutePos(BlockPos.ZERO));
@@ -54,9 +53,9 @@ public class StructureGenTests {
     }
 
     @GameTest(template = "empty_15x15", batch = BATCH)
-    public static void structurePlacedFloor(final GameTestHelper testHelper) {
+    public static void structurePlacedFloor(final CompactGameTestHelper testHelper) {
 
-        AABB localBounds = TestUtil.localBounds(testHelper);
+        AABB localBounds = testHelper.localBounds();
 
         final var roomDims = AABB.ofSize(localBounds.getCenter(), 11, 11, 9)
                 .move(testHelper.absolutePos(BlockPos.ZERO));

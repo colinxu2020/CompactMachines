@@ -28,13 +28,13 @@ public class BlockTagGenerator extends BlockTagsProvider {
         pickaxe.add(breakableWall);
         ironTool.add(breakableWall);
 
-        var boundMachine = Machines.MACHINE_BLOCK.get();
+        var boundMachine = Machines.Blocks.BOUND_MACHINE.get();
         allMachines.add(boundMachine);
         pickaxe.add(boundMachine);
         ironTool.add(boundMachine);
 
         var unboundTag = tag(MachineConstants.UNBOUND_MACHINE_BLOCK);
-        var unboundMachine = Machines.UNBOUND_MACHINE_BLOCK.get();
+        var unboundMachine = Machines.Blocks.UNBOUND_MACHINE.get();
         allMachines.add(unboundMachine);
         unboundTag.add(unboundMachine);
         pickaxe.add(unboundMachine);

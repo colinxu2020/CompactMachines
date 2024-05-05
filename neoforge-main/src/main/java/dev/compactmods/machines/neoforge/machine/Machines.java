@@ -1,8 +1,9 @@
 package dev.compactmods.machines.neoforge.machine;
 
-import com.google.common.base.Predicates;
-import com.mojang.serialization.Codec;
+import dev.compactmods.machines.api.item.component.MachineComponents;
 import dev.compactmods.machines.api.machine.MachineConstants;
+import dev.compactmods.machines.api.room.RoomComponents;
+import dev.compactmods.machines.api.room.RoomTemplate;
 import dev.compactmods.machines.neoforge.Registries;
 import dev.compactmods.machines.neoforge.machine.block.BoundCompactMachineBlock;
 import dev.compactmods.machines.neoforge.machine.block.UnboundCompactMachineBlock;
@@ -10,17 +11,11 @@ import dev.compactmods.machines.neoforge.machine.block.BoundCompactMachineBlockE
 import dev.compactmods.machines.neoforge.machine.block.UnboundCompactMachineEntity;
 import dev.compactmods.machines.neoforge.machine.item.BoundCompactMachineItem;
 import dev.compactmods.machines.neoforge.machine.item.UnboundCompactMachineItem;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.GlobalPos;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.nbt.IntTag;
-import net.minecraft.nbt.NumericTag;
-import net.minecraft.nbt.StreamTagVisitor;
-import net.minecraft.nbt.Tag;
-import net.minecraft.nbt.TagType;
-import net.minecraft.nbt.TagVisitor;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.neoforged.neoforge.attachment.AttachmentType;
@@ -31,8 +26,6 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.DataOutput;
-import java.io.IOException;
 import java.util.function.Supplier;
 
 @SuppressWarnings("removal")
@@ -45,42 +38,79 @@ public interface Machines {
 
     Supplier<Item.Properties> MACHINE_ITEM_PROPS = Item.Properties::new;
 
-    DeferredBlock<UnboundCompactMachineBlock> UNBOUND_MACHINE_BLOCK = Registries.BLOCKS.register("new_machine", () ->
-            new UnboundCompactMachineBlock(MACHINE_BLOCK_PROPS));
+    interface Blocks {
+        DeferredBlock<UnboundCompactMachineBlock> UNBOUND_MACHINE = Registries.BLOCKS.register("new_machine", () ->
+                new UnboundCompactMachineBlock(MACHINE_BLOCK_PROPS));
 
-    DeferredBlock<BoundCompactMachineBlock> MACHINE_BLOCK = Registries.BLOCKS.register("machine", () ->
-            new BoundCompactMachineBlock(MACHINE_BLOCK_PROPS));
+        DeferredBlock<BoundCompactMachineBlock> BOUND_MACHINE = Registries.BLOCKS.register("machine", () ->
+                new BoundCompactMachineBlock(MACHINE_BLOCK_PROPS));
 
-    DeferredItem<BoundCompactMachineItem> BOUND_MACHINE_BLOCK_ITEM = Registries.ITEMS.register("machine",
-            () -> new BoundCompactMachineItem(MACHINE_ITEM_PROPS.get()));
+        static void prepare(){}
+    }
 
-    DeferredItem<UnboundCompactMachineItem> UNBOUND_MACHINE_BLOCK_ITEM = Registries.ITEMS.register("new_machine",
-            () -> new UnboundCompactMachineItem(MACHINE_ITEM_PROPS.get()));
+    interface Items {
+        DeferredItem<BoundCompactMachineItem> BOUND_MACHINE = Registries.ITEMS.register("machine",
+                () -> new BoundCompactMachineItem(MACHINE_ITEM_PROPS.get()));
 
-    DeferredHolder<BlockEntityType<?>, BlockEntityType<UnboundCompactMachineEntity>> UNBOUND_MACHINE_ENTITY = Registries.BLOCK_ENTITIES.register(MachineConstants.UNBOUND_MACHINE_ENTITY.getPath(), () ->
-            BlockEntityType.Builder.of(UnboundCompactMachineEntity::new, UNBOUND_MACHINE_BLOCK.get())
-                    .build(null));
+        DeferredItem<UnboundCompactMachineItem> UNBOUND_MACHINE = Registries.ITEMS.register("new_machine",
+                () -> new UnboundCompactMachineItem(MACHINE_ITEM_PROPS.get()));
 
-    DeferredHolder<BlockEntityType<?>,BlockEntityType<BoundCompactMachineBlockEntity>> MACHINE_ENTITY = Registries.BLOCK_ENTITIES.register(MachineConstants.BOUND_MACHINE_ENTITY.getPath(), () ->
-            BlockEntityType.Builder.of(BoundCompactMachineBlockEntity::new, MACHINE_BLOCK.get())
-                    .build(null));
+        static void prepare(){}
+    }
 
-    Supplier<AttachmentType<Integer>> MACHINE_COLOR = Registries.ATTACHMENT_TYPES.register("machine_color", () -> AttachmentType
-            .builder(() -> 0xFFFFFFFF)
-            .serialize(new IAttachmentSerializer<IntTag, Integer>() {
-                @Override
-                public Integer read(IAttachmentHolder holder, IntTag tag) {
-                    return tag.getAsInt();
-                }
+    interface BlockEntities {
 
-                @Override
-                public @Nullable IntTag write(Integer attachment) {
-                    return IntTag.valueOf(attachment);
-                }
-            })
-            .build());
+        DeferredHolder<BlockEntityType<?>, BlockEntityType<UnboundCompactMachineEntity>> UNBOUND_MACHINE = Registries.BLOCK_ENTITIES.register(MachineConstants.UNBOUND_MACHINE_ENTITY.getPath(), () ->
+                BlockEntityType.Builder.of(UnboundCompactMachineEntity::new, Blocks.UNBOUND_MACHINE.get())
+                        .build(null));
+
+        DeferredHolder<BlockEntityType<?>, BlockEntityType<BoundCompactMachineBlockEntity>> MACHINE = Registries.BLOCK_ENTITIES.register(MachineConstants.BOUND_MACHINE_ENTITY.getPath(), () ->
+                BlockEntityType.Builder.of(BoundCompactMachineBlockEntity::new, Blocks.BOUND_MACHINE.get())
+                        .build(null));
+
+        static void prepare(){}
+    }
+
+    interface DataComponents {
+        DeferredHolder<DataComponentType<?>, DataComponentType<String>> BOUND_ROOM_CODE = Registries.DATA_COMPONENTS
+                .registerComponentType("room_code", MachineComponents.BOUND_ROOM_CODE);
+
+        DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> MACHINE_COLOR = Registries.DATA_COMPONENTS
+                .registerComponentType("machine_color", MachineComponents.MACHINE_COLOR);
+
+        DeferredHolder<DataComponentType<?>, DataComponentType<ResourceLocation>> ROOM_TEMPLATE_ID = Registries.DATA_COMPONENTS
+                .registerComponentType("room_template_id", MachineComponents.ROOM_TEMPLATE_ID);
+
+        DeferredHolder<DataComponentType<?>, DataComponentType<RoomTemplate>> ROOM_TEMPLATE = Registries.DATA_COMPONENTS
+                .registerComponentType("room_template", RoomComponents.ROOM_TEMPLATE);
+
+        static void prepare(){}
+    }
+
+    interface Attachments {
+        Supplier<AttachmentType<Integer>> MACHINE_COLOR = Registries.ATTACHMENT_TYPES.register("machine_color", () -> AttachmentType
+                .builder(() -> 0xFFFFFFFF)
+                .serialize(new IAttachmentSerializer<IntTag, Integer>() {
+                    @Override
+                    public Integer read(IAttachmentHolder holder, IntTag tag, HolderLookup.Provider provider) {
+                        return tag.getAsInt();
+                    }
+
+                    @Override
+                    public @Nullable IntTag write(Integer attachment, HolderLookup.Provider provider) {
+                        return IntTag.valueOf(attachment);
+                    }
+                })
+                .build());
+
+        static void prepare(){}
+    }
 
     static void prepare() {
-
+        Blocks.prepare();
+        Items.prepare();
+        BlockEntities.prepare();
+        DataComponents.prepare();
+        Attachments.prepare();
     }
 }

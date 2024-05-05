@@ -11,7 +11,7 @@ public class MachineColors {
 
     public static final ItemColor ITEM = (stack, pTintIndex) -> {
         if (!stack.is(MachineConstants.MACHINE_ITEM)) return DEFAULT;
-        return pTintIndex == 0 ? stack.getData(Machines.MACHINE_COLOR) : DEFAULT;
+        return pTintIndex == 0 ? stack.getOrDefault(Machines.DataComponents.MACHINE_COLOR, DEFAULT) : DEFAULT;
     };
 
     public static final BlockColor BLOCK = (state, level, pos, tintIndex) -> {
@@ -20,7 +20,7 @@ public class MachineColors {
 
         var be = level.getBlockEntity(pos);
         if (be != null)
-            return tintIndex == 0 ? be.getData(Machines.MACHINE_COLOR) : DEFAULT;
+            return tintIndex == 0 ? be.getData(Machines.Attachments.MACHINE_COLOR) : DEFAULT;
 
         return DEFAULT;
     };

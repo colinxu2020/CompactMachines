@@ -4,39 +4,34 @@ import dev.compactmods.machines.api.Constants;
 import dev.compactmods.machines.neoforge.room.RoomHelper;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.neoforged.neoforge.network.handling.IPlayPayloadHandler;
-import org.jetbrains.annotations.NotNull;
+import net.neoforged.neoforge.network.handling.IPayloadHandler;
 
 public record PlayerRequestedTeleportPacket(GlobalPos machine, String room) implements CustomPacketPayload {
 
-    public static final ResourceLocation ID = new ResourceLocation(Constants.MOD_ID, "player_teleport");
+    public static final Type<PlayerRequestedTeleportPacket> TYPE = new Type<>(new ResourceLocation(Constants.MOD_ID, "player_teleport"));
 
-    public static final FriendlyByteBuf.Reader<PlayerRequestedTeleportPacket> READER = (buf) -> {
-        final var gp = buf.readJsonWithCodec(GlobalPos.CODEC);
-        final var roomCode = buf.readUtf();
-        return new PlayerRequestedTeleportPacket(gp, roomCode);
-    };
-    public static final IPlayPayloadHandler<PlayerRequestedTeleportPacket> HANDLER = (pkt, ctx) -> {
-        ctx.workHandler().submitAsync(() -> {
-            ctx.player().ifPresent(player -> {
-                if(player instanceof ServerPlayer sp) {
-                    RoomHelper.teleportPlayerIntoMachine(player.level(), sp, pkt.machine, pkt.room);
-                }
-            });
+    public static final StreamCodec<FriendlyByteBuf, PlayerRequestedTeleportPacket> STREAM_CODEC = StreamCodec.composite(
+            GlobalPos.STREAM_CODEC, PlayerRequestedTeleportPacket::machine,
+            ByteBufCodecs.STRING_UTF8, PlayerRequestedTeleportPacket::room,
+            PlayerRequestedTeleportPacket::new
+    );
+
+    public static final IPayloadHandler<PlayerRequestedTeleportPacket> HANDLER = (pkt, ctx) -> {
+        ctx.enqueueWork(() -> {
+            final var player = ctx.player();
+            if (player instanceof ServerPlayer sp) {
+                RoomHelper.teleportPlayerIntoMachine(player.level(), sp, pkt.machine, pkt.room);
+            }
         });
     };
 
     @Override
-    public void write(FriendlyByteBuf buf) {
-        buf.writeJsonWithCodec(GlobalPos.CODEC, machine);
-        buf.writeUtf(room);
-    }
-
-    @Override
-    public @NotNull ResourceLocation id() {
-        return ID;
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 }

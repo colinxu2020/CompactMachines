@@ -3,16 +3,12 @@ import java.util.*
 
 val versionMain: String = System.getenv("VERSION") ?: "0.0.0"
 
-var coreApi: Project;
-if (rootProject.name == "Compact Machines Core")
-    coreApi = project(":core-api")
-else
-    coreApi = project(":core:core-api")
+var coreApi: Project = project(":core-api")
 
 plugins {
     id("java-library")
     id("maven-publish")
-    alias(neoforged.plugins.vanilla)
+    alias(neoforged.plugins.userdev)
 }
 
 base {
@@ -27,7 +23,7 @@ java {
 
 dependencies {
     compileOnly(coreApi)
-    api(mojang.minecraft)
+    api(neoforged.neoforge)
 }
 
 tasks.withType<Jar> {

@@ -53,7 +53,7 @@ public class RoomUpgradeScreen extends AbstractContainerScreen<RoomUpgradeMenu> 
                 .size(8, 12)
                 .message(Component.literal("Close"))
                 .onPress(button -> {
-                    PacketDistributor.SERVER.noArg().send(new PlayerRequestedRoomUIPacket(menu.roomCode));
+                    PacketDistributor.sendToServer(new PlayerRequestedRoomUIPacket(menu.roomCode));
                 })
                 .build();
 
@@ -91,13 +91,13 @@ public class RoomUpgradeScreen extends AbstractContainerScreen<RoomUpgradeMenu> 
     }
 
     @Override
-    protected void renderSlotContents(@NotNull GuiGraphics guiGraphics, @NotNull ItemStack itemstack, @NotNull Slot slot, int slotX, int slotY, @Nullable String countString) {
+    protected void renderSlotContents(GuiGraphics guiGraphics, ItemStack itemstack, Slot slot, @Nullable String countString) {
         if (slot instanceof ConditionalGhostSlot && !itemstack.is(RoomUpgrade.ITEM_TAG)) {
             renderGhostSlot(guiGraphics, itemstack, slot, countString);
             return;
         }
 
-        super.renderSlotContents(guiGraphics, itemstack, slot, slotX, slotY, countString);
+        super.renderSlotContents(guiGraphics, itemstack, slot, countString);
     }
 
     private void renderGhostSlot(@NotNull GuiGraphics graphics, @NotNull ItemStack itemstack, @NotNull Slot slot, @Nullable String countString) {

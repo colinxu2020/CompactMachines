@@ -8,11 +8,10 @@ import dev.compactmods.machines.api.room.RoomApi;
 import dev.compactmods.machines.api.room.RoomTemplate;
 import dev.compactmods.machines.LoggingUtil;
 import dev.compactmods.machines.api.command.CommandTranslations;
-import dev.compactmods.machines.neoforge.machine.MachineCreator;
+import dev.compactmods.machines.neoforge.machine.MachineItemCreator;
 import dev.compactmods.machines.api.room.RoomTranslations;
 import dev.compactmods.machines.neoforge.command.argument.Suggestors;
 import dev.compactmods.machines.neoforge.config.ServerConfig;
-import dev.compactmods.machines.neoforge.machine.item.UnboundCompactMachineItem;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -114,7 +113,7 @@ public class CMGiveMachineSubcommand {
                 .get(templateId);
 
         if(template != null) {
-            final var item = UnboundCompactMachineItem.forTemplate(templateId, template);
+            final var item = MachineItemCreator.forNewRoom(templateId, template);
             if (!player.addItem(item)) {
                 src.sendFailure(CommandTranslations.CANNOT_GIVE_MACHINE.get());
             } else {
@@ -127,7 +126,7 @@ public class CMGiveMachineSubcommand {
 
     private static void createAndGiveExistingRoom(String roomCode, ServerPlayer player, CommandSourceStack src) {
         RoomApi.registrar().get(roomCode).ifPresentOrElse(room -> {
-            ItemStack newItem = MachineCreator.boundToRoom(room.code(), room.defaultMachineColor());
+            ItemStack newItem = MachineItemCreator.boundToRoom(room.code(), room.defaultMachineColor());
             if (!player.addItem(newItem)) {
                 src.sendFailure(CommandTranslations.CANNOT_GIVE_MACHINE.get());
             } else {

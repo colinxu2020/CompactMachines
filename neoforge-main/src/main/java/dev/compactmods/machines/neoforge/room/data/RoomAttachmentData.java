@@ -2,6 +2,7 @@ package dev.compactmods.machines.neoforge.room.data;
 
 import dev.compactmods.machines.LoggingUtil;
 import dev.compactmods.machines.api.dimension.CompactDimension;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.nbt.NbtIo;
@@ -34,27 +35,27 @@ public class RoomAttachmentData extends AttachmentHolder {
 
         final var file = getDataFile(dir.toFile(), roomCode);
         final var data = new RoomAttachmentData(roomCode, file);
-        data.load();
+        data.load(server.registryAccess());
         return data;
     }
 
-    private void load() {
+    private void load(HolderLookup.Provider provider) {
         try(var is = new FileInputStream(file)) {
             final var tag = NbtIo.readCompressed(is, NbtAccounter.unlimitedHeap());
             if(tag.contains("attachments")) {
-                this.deserializeAttachments(tag.getCompound("attachments"));
+                this.deserializeAttachments(provider, tag.getCompound("attachments"));
             }
         } catch (IOException e) {
             LoggingUtil.modLog().error(e);
         }
     }
 
-    public void save() {
+    public void save(HolderLookup.Provider provider) {
         CompoundTag fullTag = new CompoundTag();
         fullTag.putString("version", "1.0");
 
         if(this.hasAttachments()) {
-            var ad = this.serializeAttachments();
+            var ad = this.serializeAttachments(provider);
             if(ad != null)
                 fullTag.put("attachments", ad);
         }

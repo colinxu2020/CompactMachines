@@ -1,16 +1,12 @@
 package dev.compactmods.machines.neoforge.room;
 
-import dev.compactmods.machines.api.Translations;
-import dev.compactmods.machines.api.machine.MachineTranslations;
 import dev.compactmods.machines.api.room.RoomApi;
 import dev.compactmods.machines.api.room.RoomInstance;
-import dev.compactmods.machines.api.room.RoomTranslations;
 import dev.compactmods.machines.api.room.history.RoomEntryPoint;
 import dev.compactmods.machines.LoggingUtil;
 import dev.compactmods.machines.api.dimension.CompactDimension;
 import dev.compactmods.machines.api.dimension.MissingDimensionException;
 import dev.compactmods.machines.neoforge.dimension.SimpleTeleporter;
-import dev.compactmods.machines.neoforge.room.capability.RoomCapability;
 import dev.compactmods.machines.neoforge.shrinking.Shrinking;
 import dev.compactmods.machines.neoforge.util.ForgePlayerUtil;
 import dev.compactmods.machines.player.PlayerEntryPointHistory;
@@ -18,16 +14,9 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.attachment.AttachmentHolder;
-import net.neoforged.neoforge.attachment.AttachmentUtils;
-import net.neoforged.neoforge.capabilities.BlockCapability;
-import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.capabilities.CapabilityHooks;
-import net.neoforged.neoforge.capabilities.CapabilityRegistry;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;

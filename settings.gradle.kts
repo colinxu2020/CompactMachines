@@ -1,24 +1,18 @@
+rootProject.name = "Compact Machines 20.6"
+
 dependencyResolutionManagement {
     versionCatalogs.create("neoforged") {
-        version("neogradle", "7.0.119")
-        version("neoform", "7.0.119")
-
-        plugin("common", "net.neoforged.gradle.common")
-            .versionRef("neogradle")
-
-        plugin("vanilla", "net.neoforged.gradle.neoform")
-            .versionRef("neoform")
+        version("neogradle", "7.0.120")
+        version("neoforge", "20.6.18-beta")
 
         plugin("userdev", "net.neoforged.gradle.userdev")
             .versionRef("neogradle")
+
+        library("neoforge", "net.neoforged", "neoforge")
+            .versionRef("neoforge")
     }
 
     versionCatalogs.create("mojang") {
-        library("minecraft", "net.minecraft", "neoform_joined")
-            .versionRef("neoform");
-
-        version("neoform", "1.20.6-20240429.153634")
-        version("neoforge", "20.6.18-beta")
         version("minecraft", "1.20.6")
     }
 
@@ -29,7 +23,6 @@ dependencyResolutionManagement {
         library("jnanoid", "com.aventrix.jnanoid", "jnanoid")
                 .versionRef("jnanoid")
 
-        version("minecraft", "1.20.6")
         version("feather", "[0.1.8, 2.0)")
         version("jnanoid", "[2.0.0, 3)")
 
@@ -52,7 +45,6 @@ pluginManagement {
         id("idea")
         id("eclipse")
         id("maven-publish")
-        id("java-library")
     }
 
     repositories {
@@ -62,9 +54,9 @@ pluginManagement {
 
         // maven("https://maven.architectury.dev/")
 
-        maven("https://maven.parchmentmc.org") {
-            name = "ParchmentMC"
-        }
+//        maven("https://maven.parchmentmc.org") {
+//            name = "ParchmentMC"
+//        }
 
         maven("https://maven.neoforged.net/releases") {
             name = "NeoForged"
@@ -76,16 +68,10 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version ("0.8.0")
 }
 
-include(":core:core")
-include(":core:core-api")
-include(":core:room-api")
-include(":core:room-upgrade-api")
-
-project(":core:core").projectDir = file("./core/core")
-project(":core:core-api").projectDir = file("./core/core-api")
-project(":core:room-api").projectDir = file("./core/room-api")
-project(":core:room-upgrade-api").projectDir = file("./core/room-upgrade-api")
+include(":core-api")
+include(":room-api")
+include(":room-upgrade-api")
 
 include("neoforge-main")
-//include("neoforge-datagen")
+include("neoforge-datagen")
 

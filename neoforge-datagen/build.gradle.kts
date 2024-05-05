@@ -3,19 +3,18 @@ plugins {
     id("eclipse")
     id("idea")
     id("maven-publish")
-    id("net.neoforged.gradle.userdev") version ("7.0.93")
+    alias(neoforged.plugins.userdev)
 }
 
 val mod_id: String by extra
 val mainProject: Project = project(":neoforge-main")
 evaluationDependsOn(mainProject.path)
 
-val core = project(":core:core")
-val coreApi = project(":core:core-api")
-val roomApi = project(":core:room-api")
-val roomUpgradeApi = project(":core:room-upgrade-api")
+val coreApi = project(":core-api")
+val roomApi = project(":room-api")
+val roomUpgradeApi = project(":room-upgrade-api")
 
-val coreProjects = listOf(core, coreApi, roomApi, roomUpgradeApi)
+val coreProjects = listOf(coreApi, roomApi, roomUpgradeApi)
 
 coreProjects.forEach {
     project.evaluationDependsOn(it.path)
@@ -27,7 +26,7 @@ base {
 }
 
 java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 }
 
 minecraft {
@@ -37,7 +36,6 @@ minecraft {
 runs {
     // applies to all the run configs below
     configureEach {
-        // Recommended logging data for a userdev environment
         systemProperty("forge.logging.markers", "") // 'SCAN,REGISTRIES,REGISTRYDUMP'
 
         // Recommended logging level for the console
@@ -72,7 +70,7 @@ repositories {
 }
 
 dependencies {
-    implementation(libraries.neoforge.get())
+    implementation(neoforged.neoforge)
     compileOnly(mainProject)
     coreProjects.forEach {
         compileOnly(it)

@@ -10,13 +10,14 @@ import dev.compactmods.machines.room.RoomApiInstance;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.level.LevelEvent;
 import net.neoforged.neoforge.event.server.ServerAboutToStartEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 
-@Mod.EventBusSubscriber(modid = Constants.MOD_ID)
+@EventBusSubscriber(modid = Constants.MOD_ID)
 public class ServerEventHandler {
 
     @SubscribeEvent
@@ -62,7 +63,7 @@ public class ServerEventHandler {
 
     @SubscribeEvent
     public static void onServerStopping(final ServerStoppingEvent evt) {
-        RoomAttachmentDataManager.instance().ifPresent(RoomAttachmentDataManager::save);
+        RoomAttachmentDataManager.instance().ifPresent(manager -> manager.save(evt.getServer().registryAccess()));
     }
 
     @SubscribeEvent

@@ -5,6 +5,10 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 
 public record RoomDimensions(int width, int depth, int height) {
     private static final Codec<RoomDimensions> FULL_CODEC = RecordCodecBuilder.create(inst -> inst.group(
@@ -14,6 +18,8 @@ public record RoomDimensions(int width, int depth, int height) {
     ).apply(inst, RoomDimensions::new));
 
     public static final Codec<RoomDimensions> CODEC = Codec.of(FULL_CODEC, Decoder.INSTANCE);
+
+    public static final StreamCodec<ByteBuf, RoomDimensions> STREAM_CODEC = ByteBufCodecs.fromCodec(CODEC);
 
     public RoomDimensions(int cubicSize) {
         this(Math.min(cubicSize, 45), Math.min(cubicSize, 45), Math.min(cubicSize, 45));
@@ -34,19 +40,15 @@ public record RoomDimensions(int width, int depth, int height) {
 
         @Override
         public <T> DataResult<Pair<RoomDimensions, T>> decode(DynamicOps<T> dynamicOps, T t) {
-            final var asNum = dynamicOps.withParser(Codec.intRange(3, 45))
-                    .apply(t)
-                    .get();
+            final var asNum = dynamicOps.withParser(Codec.intRange(3, 45)).apply(t);
+            if (asNum.isSuccess())
+                return asNum.result()
+                        .map(singleSize -> DataResult.success(Pair.of(RoomDimensions.cubic(singleSize), t))).orElseThrow();
 
-            if (asNum.left().isPresent())
-                return DataResult.success(Pair.of(RoomDimensions.cubic(asNum.left().get()), t));
-
-            final var asObj = dynamicOps.withParser(FULL_CODEC)
-                    .apply(t)
-                    .get();
-
-            if (asObj.left().isPresent())
-                return DataResult.success(Pair.of(asObj.left().get(), t));
+            final var asObj = dynamicOps.withParser(FULL_CODEC).apply(t);
+            if (asObj.isSuccess())
+                return asObj.result()
+                        .map(dims -> DataResult.success(Pair.of(dims, t))).orElseThrow();
 
             return DataResult.error(() -> "Dimensions must either be a single integer between 3-45, or specify width/depth/height.");
         }

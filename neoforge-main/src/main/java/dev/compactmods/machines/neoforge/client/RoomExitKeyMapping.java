@@ -34,6 +34,6 @@ public class RoomExitKeyMapping {
     public static void handle() {
         final var level = Minecraft.getInstance().level;
         if(level != null && level.dimension().equals(CompactDimension.LEVEL_KEY))
-            PacketDistributor.SERVER.noArg().send(new PlayerRequestedLeavePacket());
+            PacketDistributor.sendToServer(new PlayerRequestedLeavePacket());
     }
 }

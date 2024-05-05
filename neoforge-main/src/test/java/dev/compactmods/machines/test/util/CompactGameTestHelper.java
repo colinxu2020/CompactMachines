@@ -3,42 +3,46 @@ package dev.compactmods.machines.test.util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.gametest.framework.GameTestInfo;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
-public final class TestUtil {
+public final class CompactGameTestHelper extends GameTestHelper {
 
-    public static AABB localBounds(GameTestHelper testHelper) {
-        var bounds = testHelper.getBounds();
-        return bounds.move(BlockPos.ZERO.subtract(testHelper.absolutePos(BlockPos.ZERO)));
+    public CompactGameTestHelper(GameTestInfo testInfo) {
+        super(testInfo);
     }
 
-    public static void loadStructureIntoTestArea(GameTestHelper test, ResourceLocation structure, BlockPos relLocation) {
-        final var structures = test.getLevel().getStructureManager();
+    public AABB localBounds() {
+        var bounds = getBounds();
+        return bounds.move(BlockPos.ZERO.subtract(absolutePos(BlockPos.ZERO)));
+    }
+
+    public void loadStructureIntoTestArea(ResourceLocation structure, BlockPos relLocation) {
+        final var structures = this.getLevel().getStructureManager();
         final var template = structures.get(structure);
         if(template.isEmpty())
             return;
 
-        var placeAt = test.absolutePos(relLocation);
+        var placeAt = absolutePos(relLocation);
         template.get().placeInWorld(
-                test.getLevel(),
+                getLevel(),
                 placeAt,
                 placeAt,
                 new StructurePlaceSettings(),
-                test.getLevel().getRandom(),
+                getLevel().getRandom(),
                 Block.UPDATE_ALL);
     }
 
-    public static void useHeldItemOnBlockAt(ServerLevel level, Player player, InteractionHand hand, BlockPos position, Direction side) {
+    public void useHeldItemOnBlockAt(ServerLevel level, Player player, InteractionHand hand, BlockPos position, Direction side) {
         final var hitResult = new BlockHitResult(Vec3.atCenterOf(position), side, position, false);
 
         var item = player.getItemInHand(hand);
@@ -47,13 +51,6 @@ public final class TestUtil {
         var ctx = new UseOnContext(level, player, hand, item, hitResult);
 
         item.useOn(ctx);
-    }
-
-    public static void useItemOnBlockAt(GameTestHelper test, Player player, BlockPos position) {
-        BlockState blockstate = test.getBlockState(position);
-        final var worldPosition = test.absolutePos(position);
-
-        blockstate.use(test.getLevel(), player, InteractionHand.MAIN_HAND, new BlockHitResult(Vec3.atCenterOf(worldPosition), Direction.NORTH, worldPosition, true));
     }
 
 }

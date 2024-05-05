@@ -10,7 +10,7 @@ import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
@@ -45,7 +45,7 @@ public class DatapackRegisteredStuff extends DatapackBuiltinEntriesProvider {
         super(packOutput, registries, BUILDER, Set.of(Constants.MOD_ID));
     }
 
-    private static void generateBiomes(BootstapContext<Biome> ctx) {
+    private static void generateBiomes(BootstrapContext<Biome> ctx) {
         var spawnBuilder = new MobSpawnSettings.Builder();
         BiomeDefaultFeatures.plainsSpawns(spawnBuilder);
         var spawns = spawnBuilder.build();
@@ -68,7 +68,7 @@ public class DatapackRegisteredStuff extends DatapackBuiltinEntriesProvider {
         ctx.register(ResourceKey.create(Registries.BIOME, COMPACT_BIOME), compactBiome);
     }
 
-    private static void generateDimensionTypes(BootstapContext<DimensionType> ctx) {
+    private static void generateDimensionTypes(BootstrapContext<DimensionType> ctx) {
         ctx.register(CompactDimension.DIM_TYPE_KEY, new DimensionTypeBuilder()
                 .bedWorks(false)
                 .respawnAnchorWorks(false)
@@ -79,7 +79,7 @@ public class DatapackRegisteredStuff extends DatapackBuiltinEntriesProvider {
                 .build());
     }
 
-    private static void generateDimensions(BootstapContext<LevelStem> ctx) {
+    private static void generateDimensions(BootstrapContext<LevelStem> ctx) {
         final var biomes = ctx.lookup(Registries.BIOME);
         final var dimTypes = ctx.lookup(Registries.DIMENSION_TYPE);
 
@@ -96,7 +96,7 @@ public class DatapackRegisteredStuff extends DatapackBuiltinEntriesProvider {
         ctx.register(ResourceKey.create(Registries.LEVEL_STEM, CompactDimension.LEVEL_KEY.location()), stem);
     }
 
-    private static void addRoomTemplates(BootstapContext<RoomTemplate> ctx) {
+    private static void addRoomTemplates(BootstrapContext<RoomTemplate> ctx) {
         roomTemplate(ctx, "tiny",       new RoomTemplate(3, FastColor.ARGB32.color(255, 201, 91, 19)));
         roomTemplate(ctx, "small",      new RoomTemplate(5, FastColor.ARGB32.color(255, 212, 210, 210)));
         roomTemplate(ctx, "normal",     new RoomTemplate(7, FastColor.ARGB32.color(255, 251, 242, 54)));
@@ -105,7 +105,7 @@ public class DatapackRegisteredStuff extends DatapackBuiltinEntriesProvider {
         roomTemplate(ctx, "colossal",   new RoomTemplate(13, FastColor.ARGB32.color(255, 66, 63, 66)));
     }
 
-    private static void roomTemplate(BootstapContext<RoomTemplate> ctx, String name, RoomTemplate template) {
+    private static void roomTemplate(BootstrapContext<RoomTemplate> ctx, String name, RoomTemplate template) {
         ctx.register(ResourceKey.create(RoomTemplate.REGISTRY_KEY, new ResourceLocation(Constants.MOD_ID, name)), template);
     }
 }

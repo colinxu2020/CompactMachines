@@ -55,72 +55,72 @@ public class DimensionForcer {
         return new LevelStem(dimTypes.getOrThrow(CompactDimension.DIM_TYPE_KEY), new FlatLevelSource(flatSettings));
     }
 
-    public static void forceLoadCMDim(MinecraftServer server) {
-        // get everything we need to create the dimensionStem and the level
-        final ServerLevel overworld = server.getLevel(Level.OVERWORLD);
-
-        // dimensionStem keys have a 1:1 relationship with level keys, they have the same IDs as well
-        final ResourceKey<LevelStem> dimensionKey = ResourceKey.create(Registries.LEVEL_STEM, CompactDimension.LEVEL_KEY.location());
-        final LevelStem dimensionStem = makeStem(server.registryAccess());
-
-        // the int in create() here is radius of chunks to watch, 11 is what the server uses when it initializes worlds
-        final ChunkProgressListener chunkProgressListener = server.progressListenerFactory.create(11);
-        final Executor executor = server.executor;
-        final LevelStorageSource.LevelStorageAccess anvilConverter = server.storageSource;
-        final WorldData worldData = server.getWorldData();
-        final WorldOptions worldGenSettings = worldData.worldGenOptions();
-        final DerivedLevelData derivedLevelData = new DerivedLevelData(worldData, worldData.overworldData());
-
-        // now we have everything we need to create the dimensionStem and the level
-        // this is the same order server init creates levels:
-        // the dimensions are already registered when levels are created, we'll do that first
-        // then instantiate level, add border listener, add to map, fire world load event
-
-        // register the actual dimensionStem
-        LayeredRegistryAccess<RegistryLayer> registries = server.registries();
-        RegistryAccess.ImmutableRegistryAccess composite = (RegistryAccess.ImmutableRegistryAccess)registries.compositeAccess();
-
-        Map<ResourceKey<? extends Registry<?>>, Registry<?>> regmap = new HashMap<>(composite.registries);
-        ResourceKey<? extends Registry<?>> key = ResourceKey.create(ResourceKey.createRegistryKey(new ResourceLocation("root")),new ResourceLocation("dimension"));
-        MappedRegistry<LevelStem> oldRegistry = (MappedRegistry<LevelStem>) regmap.get(key);
-        Lifecycle oldLifecycle = oldRegistry.registryLifecycle();
-
-        final MappedRegistry<LevelStem> newRegistry = new MappedRegistry<>(Registries.LEVEL_STEM, oldLifecycle, false);
-        for (var entry : oldRegistry.entrySet()) {
-            final ResourceKey<LevelStem> oldKey = entry.getKey();
-            final ResourceKey<Level> oldLevelKey = ResourceKey.create(Registries.DIMENSION, oldKey.location());
-            final LevelStem dim = entry.getValue();
-            if (dim != null && oldLevelKey != CompactDimension.LEVEL_KEY) {
-                Registry.register(newRegistry, oldKey, dim);
-            }
-        }
-
-        Registry.register(newRegistry, dimensionKey, dimensionStem);
-        regmap.replace(key, newRegistry);
-
-        Map<? extends ResourceKey<? extends Registry<?>>, ? extends Registry<?>> newmap = regmap;
-        composite.registries = newmap;
-
-        // create the world instance
-        final ServerLevel newWorld = new ServerLevel(
-                server,
-                executor,
-                anvilConverter,
-                derivedLevelData,
-                CompactDimension.LEVEL_KEY,
-                dimensionStem,
-                chunkProgressListener,
-                false,
-                net.minecraft.world.level.biome.BiomeManager.obfuscateSeed(worldGenSettings.seed()),
-                ImmutableList.of(),
-                false,
-                null // @todo 1.20, what is this?
-        );
-
-        // register level
-        server.forgeGetWorldMap().put(CompactDimension.LEVEL_KEY, newWorld);
-
-        // update forge's world cache so the new level can be ticked
-        server.markWorldsDirty();
-    }
+//    public static void forceLoadCMDim(MinecraftServer server) {
+//        // get everything we need to create the dimensionStem and the level
+//        final ServerLevel overworld = server.getLevel(Level.OVERWORLD);
+//
+//        // dimensionStem keys have a 1:1 relationship with level keys, they have the same IDs as well
+//        final ResourceKey<LevelStem> dimensionKey = ResourceKey.create(Registries.LEVEL_STEM, CompactDimension.LEVEL_KEY.location());
+//        final LevelStem dimensionStem = makeStem(server.registryAccess());
+//
+//        // the int in create() here is radius of chunks to watch, 11 is what the server uses when it initializes worlds
+//        final ChunkProgressListener chunkProgressListener = server.progressListenerFactory.create(11);
+//        final Executor executor = server.executor;
+//        final LevelStorageSource.LevelStorageAccess anvilConverter = server.storageSource;
+//        final WorldData worldData = server.getWorldData();
+//        final WorldOptions worldGenSettings = worldData.worldGenOptions();
+//        final DerivedLevelData derivedLevelData = new DerivedLevelData(worldData, worldData.overworldData());
+//
+//        // now we have everything we need to create the dimensionStem and the level
+//        // this is the same order server init creates levels:
+//        // the dimensions are already registered when levels are created, we'll do that first
+//        // then instantiate level, add border listener, add to map, fire world load event
+//
+//        // register the actual dimensionStem
+//        LayeredRegistryAccess<RegistryLayer> registries = server.registries();
+//        RegistryAccess.ImmutableRegistryAccess composite = (RegistryAccess.ImmutableRegistryAccess)registries.compositeAccess();
+//
+//        Map<ResourceKey<? extends Registry<?>>, Registry<?>> regmap = new HashMap<>(composite.registries);
+//        ResourceKey<? extends Registry<?>> key = ResourceKey.create(ResourceKey.createRegistryKey(new ResourceLocation("root")),new ResourceLocation("dimension"));
+//        MappedRegistry<LevelStem> oldRegistry = (MappedRegistry<LevelStem>) regmap.get(key);
+//        Lifecycle oldLifecycle = oldRegistry.registryLifecycle();
+//
+//        final MappedRegistry<LevelStem> newRegistry = new MappedRegistry<>(Registries.LEVEL_STEM, oldLifecycle, false);
+//        for (var entry : oldRegistry.entrySet()) {
+//            final ResourceKey<LevelStem> oldKey = entry.getKey();
+//            final ResourceKey<Level> oldLevelKey = ResourceKey.create(Registries.DIMENSION, oldKey.location());
+//            final LevelStem dim = entry.getValue();
+//            if (dim != null && oldLevelKey != CompactDimension.LEVEL_KEY) {
+//                Registry.register(newRegistry, oldKey, dim);
+//            }
+//        }
+//
+//        Registry.register(newRegistry, dimensionKey, dimensionStem);
+//        regmap.replace(key, newRegistry);
+//
+//        Map<? extends ResourceKey<? extends Registry<?>>, ? extends Registry<?>> newmap = regmap;
+//        composite.registries = newmap;
+//
+//        // create the world instance
+//        final ServerLevel newWorld = new ServerLevel(
+//                server,
+//                executor,
+//                anvilConverter,
+//                derivedLevelData,
+//                CompactDimension.LEVEL_KEY,
+//                dimensionStem,
+//                chunkProgressListener,
+//                false,
+//                net.minecraft.world.level.biome.BiomeManager.obfuscateSeed(worldGenSettings.seed()),
+//                ImmutableList.of(),
+//                false,
+//                null // @todo 1.20, what is this?
+//        );
+//
+//        // register level
+//        server.forgeGetWorldMap().put(CompactDimension.LEVEL_KEY, newWorld);
+//
+//        // update forge's world cache so the new level can be ticked
+//        server.markWorldsDirty();
+//    }
 }

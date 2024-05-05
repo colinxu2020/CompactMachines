@@ -4,10 +4,9 @@ import dev.compactmods.machines.api.machine.block.IUnboundCompactMachineBlockEnt
 import dev.compactmods.machines.api.room.RoomTemplate;
 import dev.compactmods.machines.neoforge.machine.Machines;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
@@ -20,28 +19,28 @@ public class UnboundCompactMachineEntity extends BlockEntity implements IUnbound
     private @Nullable ResourceLocation templateId;
 
     public UnboundCompactMachineEntity(BlockPos pos, BlockState state) {
-        super(Machines.UNBOUND_MACHINE_ENTITY.get(), pos, state);
+        super(Machines.BlockEntities.UNBOUND_MACHINE.get(), pos, state);
         this.templateId = null;
     }
 
     @Override
-    public void load(@NotNull CompoundTag nbt) {
-        super.load(nbt);
+    public void loadAdditional(@NotNull CompoundTag nbt, HolderLookup.Provider holders) {
+        super.loadAdditional(nbt, holders);
         if (nbt.contains(NBT_TEMPLATE_ID))
             this.templateId = new ResourceLocation(nbt.getString(NBT_TEMPLATE_ID));
     }
 
     @Override
-    protected void saveAdditional(@NotNull CompoundTag nbt) {
-        super.saveAdditional(nbt);
+    protected void saveAdditional(@NotNull CompoundTag nbt, HolderLookup.Provider holders) {
+        super.saveAdditional(nbt, holders);
         if (templateId != null)
             nbt.putString(NBT_TEMPLATE_ID, templateId.toString());
     }
 
     @Override
-    public CompoundTag getUpdateTag() {
-        CompoundTag data = super.getUpdateTag();
-        saveAdditional(data);
+    public CompoundTag getUpdateTag(HolderLookup.Provider holders) {
+        CompoundTag data = super.getUpdateTag(holders);
+        saveAdditional(data, holders);
 
         if (templateId != null)
             data.putString(NBT_TEMPLATE_ID, templateId.toString());
@@ -50,8 +49,8 @@ public class UnboundCompactMachineEntity extends BlockEntity implements IUnbound
     }
 
     @Override
-    public void handleUpdateTag(CompoundTag tag) {
-        super.handleUpdateTag(tag);
+    public void handleUpdateTag(CompoundTag tag, HolderLookup.Provider lookupProvider) {
+        super.handleUpdateTag(tag, lookupProvider);
 
         if (tag.contains(NBT_TEMPLATE_ID))
             templateId = new ResourceLocation(tag.getString(NBT_TEMPLATE_ID));
@@ -69,10 +68,7 @@ public class UnboundCompactMachineEntity extends BlockEntity implements IUnbound
 
     public Optional<RoomTemplate> template() {
         assert level != null;
-        var t = level.registryAccess()
-                .registryOrThrow(RoomTemplate.REGISTRY_KEY)
-                .get(templateId);
-
+        var t = this.components().getOrDefault(Machines.DataComponents.ROOM_TEMPLATE.get(), RoomTemplate.INVALID_TEMPLATE);
         return Optional.ofNullable(t);
     }
 }

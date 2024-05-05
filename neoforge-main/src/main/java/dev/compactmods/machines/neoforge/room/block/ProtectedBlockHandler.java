@@ -2,10 +2,11 @@ package dev.compactmods.machines.neoforge.room.block;
 
 import dev.compactmods.machines.api.Constants;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
-@Mod.EventBusSubscriber(modid = Constants.MOD_ID)
+@EventBusSubscriber(modid = Constants.MOD_ID)
 public class ProtectedBlockHandler {
 
     @SubscribeEvent
