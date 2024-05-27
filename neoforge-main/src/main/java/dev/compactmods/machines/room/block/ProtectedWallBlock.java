@@ -18,7 +18,7 @@ public abstract class ProtectedWallBlock extends Block {
 
     @Override
     public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
-        if(!canPlayerBreak(level, player, pos))
+        if(!canPlayerBreak(player))
             return false;
 
         level.gameEvent(player, GameEvent.BLOCK_DESTROY, pos);
@@ -40,7 +40,7 @@ public abstract class ProtectedWallBlock extends Block {
         return false;
     }
 
-    public boolean canPlayerBreak(Level level, Player player, BlockPos pos) {
+    public boolean canPlayerBreak(Player player) {
         if(!player.isCreative()) return false;
         if(!player.isShiftKeyDown()) return false;
 

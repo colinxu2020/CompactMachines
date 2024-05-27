@@ -1,5 +1,6 @@
 package dev.compactmods.machines.machine.item;
 
+import dev.compactmods.machines.api.Constants;
 import dev.compactmods.machines.api.machine.MachineTranslations;
 import dev.compactmods.machines.CompactMachines;
 import dev.compactmods.machines.machine.Machines;
@@ -17,7 +18,7 @@ public class BoundCompactMachineItem extends BlockItem {
 
     public static final String NBT_ROOM_DIMENSIONS = "room_dimensions";
 
-    private static final String FALLBACK_ID = Util.makeDescriptionId("block", CompactMachines.rl("bound_machine_fallback"));
+    private static final String FALLBACK_ID = Util.makeDescriptionId("block", Constants.modRL("bound_machine_fallback"));
 
     public BoundCompactMachineItem(Properties builder) {
         super(Machines.Blocks.BOUND_MACHINE.get(), builder);

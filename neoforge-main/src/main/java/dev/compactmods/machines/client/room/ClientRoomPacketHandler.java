@@ -1,4 +1,4 @@
-package dev.compactmods.machines.room.client;
+package dev.compactmods.machines.client.room;
 
 import dev.compactmods.machines.room.ui.preview.MachineRoomScreen;
 import net.minecraft.client.Minecraft;

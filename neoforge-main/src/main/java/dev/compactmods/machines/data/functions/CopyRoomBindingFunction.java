@@ -1,4 +1,4 @@
-package dev.compactmods.machines.functions;
+package dev.compactmods.machines.data.functions;
 
 import com.mojang.serialization.MapCodec;
 import dev.compactmods.machines.api.machine.MachineConstants;

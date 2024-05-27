@@ -5,6 +5,7 @@ import dev.compactmods.machines.api.machine.MachineConstants;
 import dev.compactmods.machines.api.room.RoomComponents;
 import dev.compactmods.machines.api.room.RoomTemplate;
 import dev.compactmods.machines.CMRegistries;
+import dev.compactmods.machines.client.machine.MachinesClient;
 import dev.compactmods.machines.machine.block.BoundCompactMachineBlock;
 import dev.compactmods.machines.machine.block.BoundCompactMachineBlockEntity;
 import dev.compactmods.machines.machine.block.UnboundCompactMachineBlock;
@@ -18,6 +19,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.attachment.IAttachmentSerializer;
@@ -111,5 +114,9 @@ public interface Machines {
         BlockEntities.prepare();
         DataComponents.prepare();
         Attachments.prepare();
+    }
+
+    static void registerEvents(IEventBus modBus) {
+        
     }
 }

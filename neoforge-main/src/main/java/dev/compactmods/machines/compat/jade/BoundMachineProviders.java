@@ -19,7 +19,7 @@ import snownee.jade.api.config.IPluginConfig;
 
 public class BoundMachineProviders {
 
-    public static final ResourceLocation UID = CompactMachines.rl("bound_machine");
+    public static final ResourceLocation UID = Constants.modRL("bound_machine");
 
     public static final IBlockComponentProvider COMPONENT_PROVIDER = new IBlockComponentProvider() {
         @Override

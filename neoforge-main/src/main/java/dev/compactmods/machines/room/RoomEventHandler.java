@@ -1,33 +1,55 @@
 package dev.compactmods.machines.room;
 
-import dev.compactmods.machines.api.Constants;
+import dev.compactmods.machines.LoggingUtil;
 import dev.compactmods.machines.api.Translations;
 import dev.compactmods.machines.api.dimension.CompactDimension;
+import dev.compactmods.machines.api.dimension.MissingDimensionException;
 import dev.compactmods.machines.api.room.RoomApi;
-import dev.compactmods.machines.room.data.RoomAttachmentDataManager;
+import dev.compactmods.machines.data.room.RoomAttachmentDataManager;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.EntityTeleportEvent;
 import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
 import net.neoforged.neoforge.event.level.LevelEvent;
+import net.neoforged.neoforge.event.server.ServerStartingEvent;
+import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 
-@EventBusSubscriber(modid = Constants.MOD_ID)
 public class RoomEventHandler {
 
-    @SubscribeEvent
-    public static void onWorldSaved(final LevelEvent.Save level) {
+    public static void serverStarting(final ServerStartingEvent evt) {
+        final var modLog = LoggingUtil.modLog();
+
+        try {
+            modLog.debug("Setting up room API and data...");
+            MinecraftServer server = evt.getServer();
+
+            // Set up room API
+            RoomApi.INSTANCE = RoomApiInstance.forServer(server);
+
+            // Set up room data attachments for Neo
+            RoomAttachmentDataManager.instance(server);
+
+            modLog.debug("Completed setting up room API and data.");
+        } catch (MissingDimensionException e) {
+            modLog.fatal("Failed to set up room API instance; dimension error.", e);
+        }
+    }
+
+    public static void serverStopping(final ServerStoppingEvent evt) {
+        RoomAttachmentDataManager.instance().ifPresent(manager -> manager.save(evt.getServer().registryAccess()));
+    }
+
+    public static void levelSaved(final LevelEvent.Save level) {
         if (level.getLevel() instanceof Level l && CompactDimension.isLevelCompact(l)) {
             RoomAttachmentDataManager.instance().ifPresent(manager -> manager.save(l.registryAccess()));
         }
     }
 
-    @SubscribeEvent
     public static void entityJoined(final EntityJoinLevelEvent evt) {
         Entity ent = evt.getEntity();
 
@@ -55,8 +77,7 @@ public class RoomEventHandler {
         }
     }
 
-    @SubscribeEvent
-    public static void onCheckSpawn(final FinalizeSpawnEvent evt) {
+    public static void checkSpawn(final FinalizeSpawnEvent evt) {
         Vec3 target = new Vec3(evt.getX(), evt.getY(), evt.getZ());
 
         Entity ent = evt.getEntity();
@@ -68,8 +89,7 @@ public class RoomEventHandler {
             evt.setSpawnCancelled(true);
     }
 
-    @SubscribeEvent
-    public static void onEntityTeleport(final EntityTeleportEvent evt) {
+    public static void entityTeleport(final EntityTeleportEvent evt) {
         // Allow teleport commands, we don't want to trap people anywhere
         if (evt instanceof EntityTeleportEvent.TeleportCommand) return;
         if (!evt.getEntity().level().dimension().equals(CompactDimension.LEVEL_KEY)) return;

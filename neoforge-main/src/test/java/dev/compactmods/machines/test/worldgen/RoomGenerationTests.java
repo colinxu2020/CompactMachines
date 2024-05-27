@@ -1,17 +1,20 @@
 package dev.compactmods.machines.test.worldgen;
 
+import dev.compactmods.machines.CMRegistries;
 import dev.compactmods.machines.api.room.CompactRoomGenerator;
+import dev.compactmods.machines.api.room.RoomApi;
 import dev.compactmods.machines.api.room.RoomTemplate;
 import dev.compactmods.machines.api.Constants;
 import dev.compactmods.machines.api.util.BlockSpaceUtil;
-import dev.compactmods.machines.machine.BuiltInRoomTemplate;
 import dev.compactmods.machines.test.util.CompactGameTestHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestGenerator;
-import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.gametest.framework.TestFunction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.CommonColors;
+import net.minecraft.util.FastColor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.phys.AABB;
@@ -33,24 +36,30 @@ public class RoomGenerationTests {
     public static Collection<TestFunction> roomTests() {
         List<TestFunction> funcs = new ArrayList<>();
 
-        for (var template : BuiltInRoomTemplate.values()) {
-            var func = new TestFunction(
-                    "room_generation",
-                    "builtin_roomgen_" + template.id().getPath(),
-                    Constants.MOD_ID + ":empty_15x15",
-                    Rotation.NONE,
-                    200,
-                    0,
-                    true,
-                    testHelper -> makeTemplateTest(new CompactGameTestHelper(testHelper.testInfo), template.template())
-            );
-            funcs.add(func);
-        }
+        makeAndAddRoomTemplateTest(funcs, Constants.modRL("3_cubed"), new RoomTemplate(3, CommonColors.WHITE));
+        makeAndAddRoomTemplateTest(funcs, Constants.modRL("5_cubed"), new RoomTemplate(5, CommonColors.WHITE));
+        makeAndAddRoomTemplateTest(funcs, Constants.modRL("7_cubed"), new RoomTemplate(7, CommonColors.WHITE));
+        makeAndAddRoomTemplateTest(funcs, Constants.modRL("9_cubed"), new RoomTemplate(9, CommonColors.WHITE));
+        makeAndAddRoomTemplateTest(funcs, Constants.modRL("11_cubed"), new RoomTemplate(11, CommonColors.WHITE));
+        makeAndAddRoomTemplateTest(funcs, Constants.modRL("13_cubed"), new RoomTemplate(13, CommonColors.WHITE));
 
         return funcs;
     }
 
-    private static void makeTemplateTest(CompactGameTestHelper testHelper, RoomTemplate template) {
+    private static void makeAndAddRoomTemplateTest(List<TestFunction> funcs, ResourceLocation id, RoomTemplate template) {
+        funcs.add(new TestFunction(
+            "room_generation",
+            "builtin_roomgen_" + id.getPath(),
+            Constants.MOD_ID + ":empty_15x15",
+            Rotation.NONE,
+            200,
+            0,
+            true,
+            testHelper -> templateTest(new CompactGameTestHelper(testHelper.testInfo), template)
+        ));
+    }
+
+    private static void templateTest(CompactGameTestHelper testHelper, RoomTemplate template) {
         final AABB localBounds = testHelper.localBounds();
         final AABB worldBounds = testHelper.getBounds();
         final BlockPos testCenter = BlockPos.containing(localBounds.getCenter());

@@ -1,6 +1,6 @@
 package dev.compactmods.machines.room.ui.upgrades;
 
-import dev.compactmods.machines.CompactMachines;
+import dev.compactmods.machines.api.Constants;
 import dev.compactmods.machines.client.render.ConditionalGhostSlot;
 import dev.compactmods.machines.client.render.NineSliceRenderer;
 import dev.compactmods.machines.client.widget.ImageButtonBuilder;
@@ -23,8 +23,12 @@ import org.jetbrains.annotations.Nullable;
 public class RoomUpgradeScreen extends AbstractContainerScreen<RoomUpgradeMenu> {
     private final Inventory inventory;
 
-    private static ResourceLocation CONTAINER_BACKGROUND = CompactMachines.rl("textures/gui/psd_screen_9slice.png");
-    WidgetSprites BACK_BTN_SPRITES = new WidgetSprites(new ResourceLocation("recipe_book/page_backward"), new ResourceLocation("recipe_book/page_backward_highlighted"));
+    private static ResourceLocation CONTAINER_BACKGROUND = Constants.modRL("textures/gui/psd_screen_9slice.png");
+
+    WidgetSprites BACK_BTN_SPRITES = new WidgetSprites(
+        new ResourceLocation("recipe_book/page_backward"),
+        new ResourceLocation("recipe_book/page_backward_highlighted")
+    );
 
     private final NineSliceRenderer backgroundRenderer;
 
@@ -35,7 +39,7 @@ public class RoomUpgradeScreen extends AbstractContainerScreen<RoomUpgradeMenu> 
         this.inventoryLabelY = 26 + 32;
         this.imageHeight = 114 + 18 + 20;
 
-        this.backgroundRenderer = NineSliceRenderer.builder(CompactMachines.rl("textures/gui/psd_screen_9slice.png"))
+        this.backgroundRenderer = NineSliceRenderer.builder(Constants.modRL("textures/gui/psd_screen_9slice.png"))
                 .area(0, 0, imageWidth, imageHeight)
                 .uv(32, 32)
                 .sliceSize(4, 4)

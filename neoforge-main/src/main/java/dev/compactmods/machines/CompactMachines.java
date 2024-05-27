@@ -1,25 +1,32 @@
 package dev.compactmods.machines;
 
 import dev.compactmods.machines.api.Constants;
+import dev.compactmods.machines.client.CompactMachinesClient;
 import dev.compactmods.machines.command.Commands;
-import dev.compactmods.machines.client.ClientConfig;
+import dev.compactmods.machines.client.config.ClientConfig;
 import dev.compactmods.machines.client.creative.CreativeTabs;
+import dev.compactmods.machines.compat.InterModCompat;
 import dev.compactmods.machines.config.CommonConfig;
 import dev.compactmods.machines.config.ServerConfig;
-import dev.compactmods.machines.functions.LootFunctions;
+import dev.compactmods.machines.data.functions.LootFunctions;
 import dev.compactmods.machines.dimension.Dimension;
+import dev.compactmods.machines.dimension.WorldBorderFixer;
 import dev.compactmods.machines.machine.Machines;
+import dev.compactmods.machines.network.CMNetworks;
+import dev.compactmods.machines.network.RoomNetworkHandler;
 import dev.compactmods.machines.room.Rooms;
-import dev.compactmods.machines.room.upgrade.RoomUpgradeEventHandlers;
+import dev.compactmods.machines.room.block.ProtectedBlockEventHandler;
 import dev.compactmods.machines.room.upgrade.RoomUpgrades;
 import dev.compactmods.machines.shrinking.Shrinking;
 import dev.compactmods.machines.villager.Villagers;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.common.NeoForge;
 
 @Mod(Constants.MOD_ID)
 public class CompactMachines {
@@ -27,39 +34,48 @@ public class CompactMachines {
     public static final int BRAND_MACHINE_COLOR = FastColor.ARGB32.color(255, 248, 246, 76);
 
     @SuppressWarnings("unused")
-    public CompactMachines(IEventBus modBus) {
-        // Package initialization here, this kick-starts the rest of the DR code (classloading)
-        Machines.prepare();
-        Shrinking.prepare();
-        Rooms.prepare();
-
-        RoomUpgrades.prepare();
-        RoomUpgrades.registerGameEvents(modBus);
-
-        Dimension.prepare();
-//  todo upgrade system      MachineRoomUpgrades.prepare();
-        Commands.prepare();
-        LootFunctions.prepare();
-
-        Villagers.prepare();
-        CreativeTabs.prepare();
+    public CompactMachines(IEventBus modBus, ModContainer modContainer) {
+        initConfigs(modContainer);
+        prepare();
+        registerEvents(modBus);
 
         CMRegistries.setup(modBus);
+    }
 
-        // Configuration
-        ModLoadingContext mlCtx = ModLoadingContext.get();
-
-        final var modContainer = mlCtx.getActiveContainer();
+    private static void initConfigs(ModContainer modContainer) {
         modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.CONFIG);
         modContainer.registerConfig(ModConfig.Type.COMMON, CommonConfig.CONFIG);
         modContainer.registerConfig(ModConfig.Type.SERVER, ServerConfig.CONFIG);
-
-
     }
 
-    public static ResourceLocation rl(String id) {
-        return ResourceLocation.isValidPath(id) ?
-            new ResourceLocation(Constants.MOD_ID, id) :
-                new ResourceLocation(Constants.MOD_ID, "invalid");
+    private static void prepare() {
+        Machines.prepare();
+        Shrinking.prepare();
+        Rooms.prepare();
+        RoomUpgrades.prepare();
+        Dimension.prepare();
+        Commands.prepare();
+        LootFunctions.prepare();
+        Villagers.prepare();
+
+        if(FMLEnvironment.dist.isClient()) {
+            CreativeTabs.prepare();
+        }
+    }
+
+    private static void registerEvents(IEventBus modBus) {
+        Rooms.registerEvents(modBus);
+        RoomUpgrades.registerEvents(modBus);
+        WorldBorderFixer.registerEvents();
+
+        modBus.addListener(Commands::onCommandsRegister);
+        modBus.addListener(CMNetworks::onPacketRegistration);
+        modBus.addListener(InterModCompat::enqueueCompatMessages);
+
+        NeoForge.EVENT_BUS.addListener(ProtectedBlockEventHandler::leftClickBlock);
+
+        if(FMLEnvironment.dist.isClient()) {
+            CompactMachinesClient.registerEvents(modBus);
+        }
     }
 }

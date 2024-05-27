@@ -1,4 +1,4 @@
-package dev.compactmods.machines.machine.client;
+package dev.compactmods.machines.client.machine;
 
 import dev.compactmods.machines.api.machine.MachineConstants;
 import dev.compactmods.machines.machine.Machines;

@@ -1,4 +1,4 @@
-package dev.compactmods.machines.functions;
+package dev.compactmods.machines.data.functions;
 
 import dev.compactmods.machines.CMRegistries;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;

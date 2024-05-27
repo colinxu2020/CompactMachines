@@ -1,7 +1,6 @@
-package dev.compactmods.machines.client;
+package dev.compactmods.machines.client.render;
 
 import com.mojang.authlib.GameProfile;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;

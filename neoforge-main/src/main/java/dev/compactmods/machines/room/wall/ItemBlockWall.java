@@ -1,4 +1,4 @@
-package dev.compactmods.machines.wall;
+package dev.compactmods.machines.room.wall;
 
 import dev.compactmods.machines.api.Translations;
 import dev.compactmods.machines.api.WallConstants;

@@ -1,4 +1,4 @@
-package dev.compactmods.machines.room.data;
+package dev.compactmods.machines.data.room;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.server.MinecraftServer;

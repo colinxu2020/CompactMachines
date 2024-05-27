@@ -3,7 +3,7 @@ package dev.compactmods.machines.room.ui.upgrades;
 import dev.compactmods.machines.api.Constants;
 import dev.compactmods.machines.api.room.RoomInstance;
 import dev.compactmods.machines.client.render.ConditionalGhostSlot;
-import dev.compactmods.machines.room.data.RoomAttachmentDataManager;
+import dev.compactmods.machines.data.room.RoomAttachmentDataManager;
 import dev.compactmods.machines.room.Rooms;
 import dev.compactmods.machines.room.upgrade.NeoforgeRoomUpgradeInventory;
 import net.minecraft.network.FriendlyByteBuf;

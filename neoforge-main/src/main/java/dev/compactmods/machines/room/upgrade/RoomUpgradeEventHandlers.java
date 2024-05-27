@@ -4,7 +4,7 @@ import dev.compactmods.machines.api.dimension.CompactDimension;
 import dev.compactmods.machines.api.room.RoomApi;
 import dev.compactmods.machines.api.room.upgrade.events.UpgradeTickedEventListener;
 import dev.compactmods.machines.room.Rooms;
-import dev.compactmods.machines.room.data.RoomAttachmentDataManager;
+import dev.compactmods.machines.data.room.RoomAttachmentDataManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.Item;

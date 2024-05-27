@@ -1,4 +1,4 @@
-package dev.compactmods.machines.client;
+package dev.compactmods.machines.client.config;
 
 import net.neoforged.neoforge.common.ModConfigSpec;
 

@@ -22,7 +22,7 @@ public interface RoomUpgrades {
 
   static void prepare() {}
 
-  static void registerGameEvents(IEventBus modBus) {
+  static void registerEvents(IEventBus modBus) {
     NeoForge.EVENT_BUS.addListener(RoomUpgradeEventHandlers::onLevelTick);
     NeoForge.EVENT_BUS.addListener(RoomUpgradeEventHandlers::onTooltips);
   }

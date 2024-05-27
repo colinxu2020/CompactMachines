@@ -10,19 +10,15 @@ import dev.compactmods.machines.command.subcommand.CMRoomsSubcommand;
 import dev.compactmods.machines.command.subcommand.CMTeleportSubcommand;
 import dev.compactmods.machines.command.subcommand.CMUnbindSubcommand;
 import dev.compactmods.machines.command.subcommand.SpawnSubcommand;
-import dev.compactmods.machines.room.Rooms;
 import dev.compactmods.machines.room.upgrade.RoomUpgrades;
 import dev.compactmods.machines.room.upgrade.example.TreeCutterUpgrade;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 
 import java.util.List;
 
-@EventBusSubscriber(modid = Constants.MOD_ID)
 public class Commands {
 
     // TODO: /cm create <size:RoomSize> <owner:Player> <giveMachine:true|false>
@@ -39,7 +35,6 @@ public class Commands {
         return CM_COMMAND_ROOT;
     }
 
-    @SubscribeEvent
     public static void onCommandsRegister(final RegisterCommandsEvent event) {
         Commands.CM_COMMAND_ROOT.then(CMTeleportSubcommand.make());
         Commands.CM_COMMAND_ROOT.then(CMEjectSubcommand.make());

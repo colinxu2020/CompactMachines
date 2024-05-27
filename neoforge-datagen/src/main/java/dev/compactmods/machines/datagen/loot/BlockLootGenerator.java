@@ -1,6 +1,6 @@
 package dev.compactmods.machines.datagen.loot;
 
-import dev.compactmods.machines.functions.CopyRoomBindingFunction;
+import dev.compactmods.machines.data.functions.CopyRoomBindingFunction;
 import dev.compactmods.machines.machine.Machines;
 import dev.compactmods.machines.room.Rooms;
 import net.minecraft.data.loot.BlockLootSubProvider;

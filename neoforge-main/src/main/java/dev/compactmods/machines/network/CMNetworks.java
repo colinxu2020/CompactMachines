@@ -1,17 +1,12 @@
 package dev.compactmods.machines.network;
 
-import dev.compactmods.machines.api.Constants;
 import dev.compactmods.machines.network.machine.MachineColorSyncPacket;
 import net.minecraft.network.codec.StreamCodec;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
-@EventBusSubscriber(modid = Constants.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class CMNetworks {
 
-    @SubscribeEvent
     public static void onPacketRegistration(final RegisterPayloadHandlersEvent payloads) {
         final PayloadRegistrar main = payloads.registrar("6.0.0");
 

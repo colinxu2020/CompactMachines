@@ -1,7 +1,7 @@
 package dev.compactmods.machines.network;
 
 import dev.compactmods.machines.api.Constants;
-import dev.compactmods.machines.room.client.ClientRoomPacketHandler;
+import dev.compactmods.machines.client.room.ClientRoomPacketHandler;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;

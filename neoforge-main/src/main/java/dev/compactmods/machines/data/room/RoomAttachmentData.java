@@ -1,4 +1,4 @@
-package dev.compactmods.machines.room.data;
+package dev.compactmods.machines.data.room;
 
 import dev.compactmods.machines.LoggingUtil;
 import dev.compactmods.machines.api.dimension.CompactDimension;

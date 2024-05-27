@@ -1,15 +1,17 @@
 package dev.compactmods.machines.room;
 
 import com.google.common.base.Predicates;
+import dev.compactmods.machines.LoggingUtil;
 import dev.compactmods.machines.api.room.history.RoomEntryPoint;
 import dev.compactmods.machines.api.room.upgrade.components.RoomUpgradeList;
 import dev.compactmods.machines.CMRegistries;
+import dev.compactmods.machines.network.RoomNetworkHandler;
 import dev.compactmods.machines.room.block.SolidWallBlock;
 import dev.compactmods.machines.room.ui.preview.MachineRoomMenu;
 import dev.compactmods.machines.room.ui.upgrades.RoomUpgradeMenu;
 import dev.compactmods.machines.room.upgrade.NeoforgeRoomUpgradeInventory;
-import dev.compactmods.machines.wall.BreakableWallBlock;
-import dev.compactmods.machines.wall.ItemBlockWall;
+import dev.compactmods.machines.room.wall.BreakableWallBlock;
+import dev.compactmods.machines.room.wall.ItemBlockWall;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.world.inventory.MenuType;
@@ -17,7 +19,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.attachment.AttachmentType;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -97,5 +102,20 @@ public interface Rooms {
 	 Items.prepare();
 	 Menus.prepare();
 	 DataAttachments.prepare();
+  }
+
+  static void registerEvents(IEventBus modBus) {
+	 modBus.addListener(FMLCommonSetupEvent.class, commonSetup -> {
+		var logger = LoggingUtil.modLog();
+		logger.trace("Initializing network handler.");
+		RoomNetworkHandler.setupMessages();
+	 });
+
+	 NeoForge.EVENT_BUS.addListener(RoomEventHandler::checkSpawn);
+	 NeoForge.EVENT_BUS.addListener(RoomEventHandler::entityJoined);
+	 NeoForge.EVENT_BUS.addListener(RoomEventHandler::entityTeleport);
+	 NeoForge.EVENT_BUS.addListener(RoomEventHandler::levelSaved);
+	 NeoForge.EVENT_BUS.addListener(RoomEventHandler::serverStarting);
+	 NeoForge.EVENT_BUS.addListener(RoomEventHandler::serverStopping);
   }
 }

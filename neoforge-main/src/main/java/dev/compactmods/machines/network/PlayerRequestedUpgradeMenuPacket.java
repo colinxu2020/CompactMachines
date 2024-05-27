@@ -1,5 +1,6 @@
 package dev.compactmods.machines.network;
 
+import dev.compactmods.machines.api.Constants;
 import dev.compactmods.machines.api.room.RoomApi;
 import dev.compactmods.machines.CompactMachines;
 import dev.compactmods.machines.room.ui.upgrades.RoomUpgradeMenu;
@@ -11,7 +12,7 @@ import net.neoforged.neoforge.network.handling.IPayloadHandler;
 
 public record PlayerRequestedUpgradeMenuPacket(String roomCode) implements CustomPacketPayload {
 
-    public static final Type<PlayerRequestedUpgradeMenuPacket> TYPE = new Type<>(CompactMachines.rl("player_wants_to_open_room_upgrade_menu"));
+    public static final Type<PlayerRequestedUpgradeMenuPacket> TYPE = new Type<>(Constants.modRL("player_wants_to_open_room_upgrade_menu"));
 
     public static final IPayloadHandler<PlayerRequestedUpgradeMenuPacket> HANDLER = (pkt, ctx) -> {
         final var player = ctx.player();

@@ -29,7 +29,7 @@ public class StructureGenTests {
         CompactRoomGenerator.generateRoom(testHelper.getLevel(), roomDims, Blocks.WHITE_STAINED_GLASS.defaultBlockState());
 
         CompactRoomGenerator.populateStructure(testHelper.getLevel(),
-                CompactMachines.rl("gold_1x1"),
+                Constants.modRL("gold_1x1"),
                 roomDims.deflate(1), RoomStructureInfo.RoomStructurePlacement.CENTERED);
 
         testHelper.succeed();
@@ -46,7 +46,7 @@ public class StructureGenTests {
         CompactRoomGenerator.generateRoom(testHelper.getLevel(), roomDims, Blocks.WHITE_STAINED_GLASS.defaultBlockState());
 
         CompactRoomGenerator.populateStructure(testHelper.getLevel(),
-                CompactMachines.rl("gold_1x1"),
+                Constants.modRL("gold_1x1"),
                 roomDims.deflate(1), RoomStructureInfo.RoomStructurePlacement.CENTERED_CEILING);
 
         testHelper.succeed();
@@ -63,7 +63,7 @@ public class StructureGenTests {
         CompactRoomGenerator.generateRoom(testHelper.getLevel(), roomDims, Blocks.WHITE_STAINED_GLASS.defaultBlockState());
 
         CompactRoomGenerator.populateStructure(testHelper.getLevel(),
-                CompactMachines.rl("gold_1x1"),
+                Constants.modRL("gold_1x1"),
                 roomDims.deflate(1), RoomStructureInfo.RoomStructurePlacement.CENTERED_FLOOR);
 
         testHelper.succeed();

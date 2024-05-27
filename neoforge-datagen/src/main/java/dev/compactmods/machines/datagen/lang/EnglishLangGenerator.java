@@ -7,7 +7,7 @@ import dev.compactmods.machines.api.command.CommandTranslations;
 import dev.compactmods.machines.api.machine.MachineTranslations;
 import dev.compactmods.machines.api.room.RoomTranslations;
 import dev.compactmods.machines.CompactMachines;
-import dev.compactmods.machines.client.RoomExitKeyMapping;
+import dev.compactmods.machines.client.keybinds.room.RoomExitKeyMapping;
 import dev.compactmods.machines.client.creative.CreativeTabs;
 import dev.compactmods.machines.room.Rooms;
 import dev.compactmods.machines.shrinking.Shrinking;
@@ -53,7 +53,6 @@ public class EnglishLangGenerator extends BaseLangGenerator {
         add(Translations.IDs.HINT_HOLD_SHIFT, "Hold shift for details.");
 
         addCreativeTab(CreativeTabs.MAIN_RL, "Compact Machines");
-        addCreativeTab(CreativeTabs.LINKED_MACHINES_RL, "Compact Machines - Linked Machines");
 
         add("biome." + Constants.MOD_ID + ".machine", "Compact Machine");
 
@@ -87,7 +86,7 @@ public class EnglishLangGenerator extends BaseLangGenerator {
         addItem(Shrinking.PERSONAL_SHRINKING_DEVICE, "Personal Shrinking Device");
         addItem(Shrinking.SHRINKING_MODULE, "Atom Shrinking Module");
         addItem(Shrinking.ENLARGING_MODULE, "Atom Enlarging Module");
-        add(Util.makeDescriptionId("block", CompactMachines.rl("bound_machine_fallback")), machineTranslation);
+        add(Util.makeDescriptionId("block", Constants.modRL("bound_machine_fallback")), machineTranslation);
     }
 
     protected void advancements() {
