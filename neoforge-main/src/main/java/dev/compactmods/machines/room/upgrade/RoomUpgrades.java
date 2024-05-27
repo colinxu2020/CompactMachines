@@ -6,6 +6,8 @@ import dev.compactmods.machines.api.room.upgrade.SimpleRoomUpgradeType;
 import dev.compactmods.machines.api.room.upgrade.components.RoomUpgradeList;
 import dev.compactmods.machines.room.upgrade.example.TreeCutterUpgrade;
 import net.minecraft.core.component.DataComponentType;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
 public interface RoomUpgrades {
@@ -19,4 +21,9 @@ public interface RoomUpgrades {
       .register("tree_cutter", () -> new SimpleRoomUpgradeType<>(TreeCutterUpgrade.CODEC));
 
   static void prepare() {}
+
+  static void registerGameEvents(IEventBus modBus) {
+    NeoForge.EVENT_BUS.addListener(RoomUpgradeEventHandlers::onLevelTick);
+    NeoForge.EVENT_BUS.addListener(RoomUpgradeEventHandlers::onTooltips);
+  }
 }

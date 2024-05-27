@@ -1,8 +1,12 @@
 package dev.compactmods.machines.api.util;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3d;
+
+import java.util.stream.Stream;
 
 public abstract class AABBHelper {
 
@@ -28,8 +32,22 @@ public abstract class AABBHelper {
         return new Vec3(aabb.minX, aabb.minY, aabb.minZ);
     }
 
+    public static ChunkPos minCornerChunk(AABB aabb) {
+        var mn = BlockPos.containing(aabb.minX, aabb.minY, aabb.minZ);
+        return new ChunkPos(mn);
+    }
+
     public static Vec3 maxCorner(AABB aabb) {
         return new Vec3(aabb.maxX, aabb.maxY, aabb.maxZ);
+    }
+
+    public static ChunkPos maxCornerChunk(AABB aabb) {
+        var mx = BlockPos.containing(aabb.maxX, aabb.maxY, aabb.maxZ);
+        return new ChunkPos(mx);
+    }
+
+    public static Stream<ChunkPos> chunkPositions(AABB aabb) {
+        return ChunkPos.rangeClosed(minCornerChunk(aabb), maxCornerChunk(aabb));
     }
 
     public static AABB normalize(AABB source) {

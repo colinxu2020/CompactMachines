@@ -4,9 +4,11 @@ import dev.compactmods.machines.api.room.RoomInstance;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 
+/**
+ * Marker interface for all room upgrade events.
+ */
 @FunctionalInterface
-public interface UpgradeTickedEventListener extends RoomUpgradeEvent {
+public interface RoomUpgradeEvent {
 
-    @Override
-    void handle(ServerLevel level, RoomInstance room, ItemStack upgrade);
+   void handle(ServerLevel level, RoomInstance room, ItemStack upgrade);
 }

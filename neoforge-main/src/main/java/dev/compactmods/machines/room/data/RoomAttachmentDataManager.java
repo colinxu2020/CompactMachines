@@ -44,4 +44,8 @@ public class RoomAttachmentDataManager {
     public void save(HolderLookup.Provider provider) {
         cache.forEach((key, data) -> data.save(provider));
     }
+
+    public boolean hasData(String code) {
+        return cache.containsKey(code);
+    }
 }

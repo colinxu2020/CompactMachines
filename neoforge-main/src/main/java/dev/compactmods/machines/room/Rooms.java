@@ -12,7 +12,6 @@ import dev.compactmods.machines.wall.BreakableWallBlock;
 import dev.compactmods.machines.wall.ItemBlockWall;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
-import net.minecraft.core.component.DataComponentType;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
@@ -24,6 +23,7 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 
+import java.util.List;
 import java.util.function.Supplier;
 
 public interface Rooms {
@@ -82,6 +82,11 @@ public interface Rooms {
 		  .builder(() -> GlobalPos.of(Level.OVERWORLD, BlockPos.ZERO))
 		  .serialize(GlobalPos.CODEC, Predicates.alwaysFalse())
 		  .build());
+
+	 Supplier<AttachmentType<RoomUpgradeList>> PERMANENT_UPGRADES = CMRegistries.ATTACHMENT_TYPES.register("permanent_upgrades", () -> AttachmentType
+		 .builder(() -> new RoomUpgradeList(List.of()))
+		 .serialize(RoomUpgradeList.CODEC)
+		 .build());
 
 	 static void prepare() {
 	 }

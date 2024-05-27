@@ -10,7 +10,7 @@ import dev.compactmods.machines.functions.LootFunctions;
 import dev.compactmods.machines.dimension.Dimension;
 import dev.compactmods.machines.machine.Machines;
 import dev.compactmods.machines.room.Rooms;
-import dev.compactmods.machines.room.upgrade.RoomUpgradeEventListener;
+import dev.compactmods.machines.room.upgrade.RoomUpgradeEventHandlers;
 import dev.compactmods.machines.room.upgrade.RoomUpgrades;
 import dev.compactmods.machines.shrinking.Shrinking;
 import dev.compactmods.machines.villager.Villagers;
@@ -20,7 +20,6 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
-import net.neoforged.neoforge.common.NeoForge;
 
 @Mod(Constants.MOD_ID)
 public class CompactMachines {
@@ -33,7 +32,10 @@ public class CompactMachines {
         Machines.prepare();
         Shrinking.prepare();
         Rooms.prepare();
+
         RoomUpgrades.prepare();
+        RoomUpgrades.registerGameEvents(modBus);
+
         Dimension.prepare();
 //  todo upgrade system      MachineRoomUpgrades.prepare();
         Commands.prepare();
@@ -52,7 +54,7 @@ public class CompactMachines {
         modContainer.registerConfig(ModConfig.Type.COMMON, CommonConfig.CONFIG);
         modContainer.registerConfig(ModConfig.Type.SERVER, ServerConfig.CONFIG);
 
-        RoomUpgradeEventListener.registerGameEvents(modBus);
+
     }
 
     public static ResourceLocation rl(String id) {

@@ -5,10 +5,11 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 
 @FunctionalInterface
-public interface UpgradeAppliedEventListener {
+public interface UpgradeAppliedEventListener extends RoomUpgradeEvent {
 
     /**
      * Called when an upgrade is first applied to a room.
      */
-    void onAdded(ServerLevel level, RoomInstance room, ItemStack upgradeItem);
+    @Override
+    void handle(ServerLevel level, RoomInstance room, ItemStack upgrade);
 }

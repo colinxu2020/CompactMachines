@@ -5,10 +5,11 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 
 @FunctionalInterface
-public interface UpgradeRemovedEventListener {
+public interface UpgradeRemovedEventListener extends RoomUpgradeEvent {
 
     /**
      * Called when an update is removed from a room.
      */
-    void onRemoved(ServerLevel level, RoomInstance room, ItemStack upgradeItem);
+    @Override
+    void handle(ServerLevel level, RoomInstance room, ItemStack upgrade);
 }
