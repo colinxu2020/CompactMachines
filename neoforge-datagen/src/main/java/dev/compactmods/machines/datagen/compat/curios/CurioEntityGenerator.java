@@ -29,6 +29,6 @@ public class CurioEntityGenerator extends JsonCodecProvider<CurioEntityGenerator
     @Override
     protected void gather() {
         var psdDef = new CurioEntityDefinition(List.of("player"), List.of("psd"));
-        unconditional(new ResourceLocation(Constants.MOD_ID, "psd"), psdDef);
+        unconditional(Constants.modRL("psd"), psdDef);
     }
 }

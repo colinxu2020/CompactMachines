@@ -3,7 +3,7 @@ package dev.compactmods.machines.test.worldgen;
 import dev.compactmods.machines.api.Constants;
 import dev.compactmods.machines.api.room.CompactRoomGenerator;
 import dev.compactmods.machines.api.room.RoomStructureInfo;
-import dev.compactmods.machines.neoforge.CompactMachines;
+import dev.compactmods.machines.CompactMachines;
 import dev.compactmods.machines.test.util.CompactGameTestHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTest;

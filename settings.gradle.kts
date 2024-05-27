@@ -2,8 +2,8 @@ rootProject.name = "Compact Machines 20.6"
 
 dependencyResolutionManagement {
     versionCatalogs.create("neoforged") {
-        version("neogradle", "7.0.120")
-        version("neoforge", "20.6.18-beta")
+        version("neogradle", "7.0.135")
+        version("neoforge", "20.6.84-beta")
 
         plugin("userdev", "net.neoforged.gradle.userdev")
             .versionRef("neogradle")
@@ -70,7 +70,6 @@ plugins {
 
 include(":core-api")
 include(":room-api")
-include(":room-upgrade-api")
 
 include("neoforge-main")
 include("neoforge-datagen")

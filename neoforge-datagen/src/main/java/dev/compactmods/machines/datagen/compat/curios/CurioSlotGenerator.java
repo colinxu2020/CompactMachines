@@ -29,7 +29,7 @@ public class CurioSlotGenerator extends JsonCodecProvider<CurioSlotGenerator.Cur
 
     @Override
     protected void gather() {
-        var cmPSDSlot = new CurioSlot(1, "SET", new ResourceLocation("compactmachines", "slot/empty_psd"));
-        unconditional(new ResourceLocation(Constants.MOD_ID, "psd"), cmPSDSlot);
+        var cmPSDSlot = new CurioSlot(1, "SET", Constants.modRL("slot/empty_psd"));
+        unconditional(Constants.modRL("psd"), cmPSDSlot);
     }
 }

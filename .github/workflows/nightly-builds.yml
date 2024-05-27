@@ -26,7 +26,7 @@ jobs:
         with:
           fetch-depth: 150
           fetch-tags: true
-          submodules: true
+
       - name: Version
         id: version
         uses: paulhatch/semantic-version@v5.4.0

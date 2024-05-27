@@ -1,22 +1,17 @@
 package dev.compactmods.machines.datagen;
 
 import dev.compactmods.machines.api.Constants;
-import dev.compactmods.machines.api.WallConstants;
 import dev.compactmods.machines.api.room.RoomTemplate;
 import dev.compactmods.machines.machine.BuiltInRoomTemplate;
-import dev.compactmods.machines.neoforge.CompactMachines;
-import dev.compactmods.machines.neoforge.dimension.Dimension;
-import dev.compactmods.machines.neoforge.machine.MachineItemCreator;
-import dev.compactmods.machines.neoforge.machine.item.UnboundCompactMachineItem;
-import dev.compactmods.machines.neoforge.room.Rooms;
-import dev.compactmods.machines.neoforge.shrinking.Shrinking;
+import dev.compactmods.machines.machine.MachineItemCreator;
+import dev.compactmods.machines.room.Rooms;
+import dev.compactmods.machines.shrinking.Shrinking;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
-import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -33,7 +28,7 @@ public class RecipeGenerator extends RecipeProvider {
 
     @Override
     protected void buildRecipes(RecipeOutput recipeOutput) {
-        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, Rooms.ITEM_BREAKABLE_WALL.get(), 8)
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, Rooms.Items.BREAKABLE_WALL.get(), 8)
                 .pattern("DDD")
                 .pattern("D D")
                 .pattern("DDD")
@@ -98,14 +93,14 @@ public class RecipeGenerator extends RecipeProvider {
                 .pattern("WWW")
                 .pattern("EPS")
                 .pattern("WWW")
-                .define('W', Rooms.ITEM_BREAKABLE_WALL)
+                .define('W', Rooms.Items.BREAKABLE_WALL)
                 .define('E', Shrinking.ENLARGING_MODULE)
                 .define('S', Shrinking.SHRINKING_MODULE)
                 .define('P', catalyst);
 
-        recipe.unlockedBy("has_recipe", has(Rooms.ITEM_BREAKABLE_WALL.get()));
+        recipe.unlockedBy("has_recipe", has(Rooms.Items.BREAKABLE_WALL));
 
-        final var recipeId = new ResourceLocation(Constants.MOD_ID, "new_machine_" + temId.getPath());
+        final var recipeId = Constants.modRL("new_machine_" + temId.getPath());
         recipe.save(consumer, recipeId);
     }
 }

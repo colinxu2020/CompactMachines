@@ -1,8 +1,8 @@
 package dev.compactmods.machines.datagen;
 
 import dev.compactmods.machines.api.Constants;
-import dev.compactmods.machines.neoforge.machine.Machines;
-import dev.compactmods.machines.neoforge.room.Rooms;
+import dev.compactmods.machines.machine.Machines;
+import dev.compactmods.machines.room.Rooms;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.client.model.generators.BlockModelProvider;
 import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
@@ -20,8 +20,8 @@ public class StateGenerator extends BlockStateProvider {
         BlockModelProvider models = models();
 
         var wall = models.cubeAll("block/wall", modLoc("block/wall"));
-        simpleBlock(Rooms.BLOCK_SOLID_WALL.get(), wall);
-        simpleBlock(Rooms.BLOCK_BREAKABLE_WALL.get(), wall);
+        simpleBlock(Rooms.Blocks.SOLID_WALL.get(), wall);
+        simpleBlock(Rooms.Blocks.BREAKABLE_WALL.get(), wall);
 
         // New machine block
         final var m = models

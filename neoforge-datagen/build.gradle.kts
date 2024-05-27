@@ -12,9 +12,8 @@ evaluationDependsOn(mainProject.path)
 
 val coreApi = project(":core-api")
 val roomApi = project(":room-api")
-val roomUpgradeApi = project(":room-upgrade-api")
 
-val coreProjects = listOf(coreApi, roomApi, roomUpgradeApi)
+val coreProjects = listOf(coreApi, roomApi)
 
 coreProjects.forEach {
     project.evaluationDependsOn(it.path)

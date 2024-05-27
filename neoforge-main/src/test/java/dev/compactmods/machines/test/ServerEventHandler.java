@@ -2,7 +2,6 @@ package dev.compactmods.machines.test;
 
 import com.google.common.collect.ImmutableSet;
 import dev.compactmods.machines.api.Constants;
-import dev.compactmods.machines.test.util.DimensionForcer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.FolderRepositorySource;
@@ -11,7 +10,6 @@ import net.minecraft.world.level.validation.DirectoryValidator;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import org.apache.logging.log4j.LogManager;

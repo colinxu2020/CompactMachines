@@ -1,8 +1,8 @@
 package dev.compactmods.machines.datagen;
 
 import dev.compactmods.machines.api.Constants;
-import dev.compactmods.machines.neoforge.machine.Machines;
-import dev.compactmods.machines.neoforge.shrinking.Shrinking;
+import dev.compactmods.machines.machine.Machines;
+import dev.compactmods.machines.shrinking.Shrinking;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;

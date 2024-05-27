@@ -13,9 +13,8 @@ val isRelease: Boolean = (System.getenv("RELEASE") ?: "false").equals("true", tr
 
 val coreApi = project(":core-api")
 val roomApi = project(":room-api")
-val roomUpgradeApi = project(":room-upgrade-api")
 
-val coreProjects = listOf(coreApi, roomApi, roomUpgradeApi)
+val coreProjects = listOf(coreApi, roomApi)
 
 plugins {
     java
@@ -37,6 +36,7 @@ base {
 }
 
 java {
+    // toolchain.vendor.set(JvmVendorSpec.JETBRAINS)
     toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 }
 
@@ -83,7 +83,7 @@ runs {
 
         if(!System.getenv().containsKey("CI")) {
             // JetBrains Runtime Hotswap
-            // jvmArgument("-XX:+AllowEnhancedClassRedefinition")
+            jvmArgument("-XX:+AllowEnhancedClassRedefinition")
         }
 
         modSource(sourceSets.main.get())
@@ -157,7 +157,7 @@ dependencies {
         implementation(libraries.jnanoid)
         jarJar(libraries.jnanoid)
 
-        listOf(coreApi, roomApi, roomUpgradeApi).forEach {
+        listOf(coreApi, roomApi).forEach {
             compileOnly(it)
             testCompileOnly(it)
         }

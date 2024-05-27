@@ -10,15 +10,15 @@ import net.minecraft.world.level.block.Block;
 
 public interface MachineConstants {
 
-    ResourceLocation BOUND_MACHINE_BLOCK_ID = new ResourceLocation(Constants.MOD_ID, "machine");
-    ResourceLocation BOUND_MACHINE_ENTITY = new ResourceLocation(Constants.MOD_ID, "machine");
+    ResourceLocation BOUND_MACHINE_BLOCK_ID = Constants.modRL( "machine");
+    ResourceLocation BOUND_MACHINE_ENTITY = Constants.modRL( "machine");
     ResourceKey<Block> BOUND_MACHINE_BLOCK_RESKEY = KeyHelper.blockResKey("machine");
     ResourceKey<Item> BOUND_MACHINE_ITEM_RESKEY = KeyHelper.itemResKey("machine");
 
 
-    ResourceLocation UNBOUND_MACHINE_BLOCK_ID = new ResourceLocation(Constants.MOD_ID, "new_machine");
-    ResourceLocation UNBOUND_MACHINE_ITEM_ID = new ResourceLocation(Constants.MOD_ID, "new_machine");
-    ResourceLocation UNBOUND_MACHINE_ENTITY = new ResourceLocation(Constants.MOD_ID, "new_machine");
+    ResourceLocation UNBOUND_MACHINE_BLOCK_ID = Constants.modRL( "new_machine");
+    ResourceLocation UNBOUND_MACHINE_ITEM_ID = Constants.modRL( "new_machine");
+    ResourceLocation UNBOUND_MACHINE_ENTITY = Constants.modRL( "new_machine");
 
     ResourceKey<Block> UNBOUND_MACHINE_BLOCK_RESKEY = KeyHelper.blockResKey("new_machine");
     ResourceKey<Item> UNBOUND_MACHINE_ITEM_RESKEY = KeyHelper.itemResKey("new_machine");

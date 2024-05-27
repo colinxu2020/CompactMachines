@@ -1,7 +1,7 @@
 package dev.compactmods.machines.datagen.tags;
 
 import dev.compactmods.machines.api.Constants;
-import dev.compactmods.machines.neoforge.villager.Villagers;
+import dev.compactmods.machines.villager.Villagers;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.PoiTypeTagsProvider;

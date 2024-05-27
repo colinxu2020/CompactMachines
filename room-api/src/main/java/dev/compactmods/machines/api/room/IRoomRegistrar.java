@@ -19,7 +19,7 @@ public interface IRoomRegistrar {
     }
 
     default RoomInstance createNew(RoomTemplate template, UUID owner, Consumer<IRoomBuilder> override) {
-        final Consumer<IRoomBuilder> preOverride = builder -> builder.defaultMachineColor(template.color())
+        final Consumer<IRoomBuilder> preOverride = builder -> builder.defaultMachineColor(template.defaultMachineColor())
                 .owner(owner)
                 .boundaries(getNextBoundaries(template));
 

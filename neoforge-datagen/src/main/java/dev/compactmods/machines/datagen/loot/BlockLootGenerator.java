@@ -1,8 +1,8 @@
 package dev.compactmods.machines.datagen.loot;
 
-import dev.compactmods.machines.neoforge.data.functions.CopyRoomBindingFunction;
-import dev.compactmods.machines.neoforge.machine.Machines;
-import dev.compactmods.machines.neoforge.room.Rooms;
+import dev.compactmods.machines.functions.CopyRoomBindingFunction;
+import dev.compactmods.machines.machine.Machines;
+import dev.compactmods.machines.room.Rooms;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
@@ -23,17 +23,17 @@ public class BlockLootGenerator extends BlockLootSubProvider {
 
     @Override
     protected Iterable<Block> getKnownBlocks() {
-        return Set.of(Rooms.BLOCK_BREAKABLE_WALL.get(), Machines.Blocks.BOUND_MACHINE.get());
+        return Set.of(Rooms.Blocks.BREAKABLE_WALL.get(), Machines.Blocks.BOUND_MACHINE.get());
     }
 
     @Override
     protected void generate() {
-        this.add(Rooms.BLOCK_BREAKABLE_WALL.get(), LootTable.lootTable().withPool(LootPool
+        this.add(Rooms.Blocks.BREAKABLE_WALL.get(), LootTable.lootTable().withPool(LootPool
                 .lootPool()
-                .name(Rooms.BLOCK_BREAKABLE_WALL.getId().toString())
+                .name(Rooms.Blocks.BREAKABLE_WALL.getId().toString())
                 .setRolls(ConstantValue.exactly(1))
                 .when(ExplosionCondition.survivesExplosion())
-                .add(LootItem.lootTableItem(Rooms.ITEM_BREAKABLE_WALL.get()))));
+                .add(LootItem.lootTableItem(Rooms.Items.BREAKABLE_WALL.get()))));
 
         var drop = LootItem.lootTableItem(Machines.Items.BOUND_MACHINE.get());
 

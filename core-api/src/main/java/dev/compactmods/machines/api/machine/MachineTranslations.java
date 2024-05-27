@@ -1,6 +1,7 @@
 package dev.compactmods.machines.api.machine;
 
 import dev.compactmods.machines.api.Constants;
+import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -14,6 +15,9 @@ import java.util.function.Supplier;
 public interface MachineTranslations {
 
     Function<BlockPos, Component> NOT_A_MACHINE_BLOCK = (pos) -> Component.empty();
+
+    Function<String, Component> SIZE = (roomSize) -> Component.translatableWithFallback(MachineTranslations.IDs.SIZE, "Size: %s", roomSize)
+            .withStyle(ChatFormatting.YELLOW);
 
     interface IDs {
         String OWNER = Util.makeDescriptionId("machine", Constants.modRL("machine.owner"));

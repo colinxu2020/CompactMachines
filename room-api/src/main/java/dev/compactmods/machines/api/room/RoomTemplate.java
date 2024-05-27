@@ -3,6 +3,7 @@ package dev.compactmods.machines.api.room;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.compactmods.machines.api.Constants;
+import dev.compactmods.machines.api.machine.MachineColor;
 import dev.compactmods.machines.api.machine.MachineTranslations;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Registry;
@@ -17,7 +18,6 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipProvider;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.network.codec.NeoForgeStreamCodecs;
 
 import java.util.Collections;
 import java.util.List;
@@ -28,10 +28,10 @@ import java.util.function.Consumer;
  * at any point, so persistent data must be stored outside these instances.
  *
  * @param internalDimensions    The internal dimensions of the room when it is created.
- * @param color                 The color of the machine blocks created for this template.
+ * @param defaultMachineColor                 The color of the machine blocks created for this template.
  * @param structures            Information used to fill a newly-created room with structures.
  */
-public record RoomTemplate(RoomDimensions internalDimensions, int color, List<RoomStructureInfo> structures)
+public record RoomTemplate(RoomDimensions internalDimensions, MachineColor defaultMachineColor, List<RoomStructureInfo> structures)
     implements TooltipProvider {
 
     public static final ResourceKey<Registry<RoomTemplate>> REGISTRY_KEY = ResourceKey.createRegistryKey(Constants.modRL("room_templates"));
@@ -42,19 +42,23 @@ public record RoomTemplate(RoomDimensions internalDimensions, int color, List<Ro
 
     public static Codec<RoomTemplate> CODEC = RecordCodecBuilder.create(i -> i.group(
             RoomDimensions.CODEC.fieldOf("dimensions").forGetter(RoomTemplate::internalDimensions),
-            Codec.INT.fieldOf("color").forGetter(RoomTemplate::color),
+            MachineColor.CODEC.fieldOf("color").forGetter(RoomTemplate::defaultMachineColor),
             RoomStructureInfo.CODEC.listOf().optionalFieldOf("structures", Collections.emptyList())
                     .forGetter(RoomTemplate::structures)
     ).apply(i, RoomTemplate::new));
 
     public static final StreamCodec<? super RegistryFriendlyByteBuf, RoomTemplate> STREAM_CODEC = StreamCodec.composite(
             RoomDimensions.STREAM_CODEC, RoomTemplate::internalDimensions,
-            ByteBufCodecs.INT, RoomTemplate::color,
+            MachineColor.STREAM_CODEC, RoomTemplate::defaultMachineColor,
             RoomStructureInfo.STREAM_CODEC.apply(ByteBufCodecs.list()), RoomTemplate::structures,
             RoomTemplate::new
     );
 
-    public RoomTemplate(int cubicSizeInternal, int color) {
+    public RoomTemplate(int cubicSizeInternal, int colorARGB) {
+        this(RoomDimensions.cubic(cubicSizeInternal), MachineColor.fromARGB(colorARGB), Collections.emptyList());
+    }
+
+    public RoomTemplate(int cubicSizeInternal, MachineColor color) {
         this(RoomDimensions.cubic(cubicSizeInternal), color, Collections.emptyList());
     }
 
@@ -72,7 +76,8 @@ public record RoomTemplate(RoomDimensions internalDimensions, int color, List<Ro
     @Override
     public void addToTooltip(Item.TooltipContext ctx, Consumer<Component> tooltips, TooltipFlag flags) {
         final var roomDimensions = internalDimensions();
-        tooltips.accept(Component.translatableWithFallback(MachineTranslations.IDs.SIZE, "Size: %s", roomDimensions).withStyle(ChatFormatting.YELLOW));
+
+        tooltips.accept(MachineTranslations.SIZE.apply(roomDimensions.toString()));
 
         if (!structures().isEmpty()) {
             tooltips.accept(Component.literal("Generates " + structures().size() + " structures after creation.").withStyle(ChatFormatting.DARK_GRAY));

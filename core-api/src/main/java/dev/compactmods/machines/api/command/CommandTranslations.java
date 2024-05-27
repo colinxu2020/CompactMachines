@@ -26,8 +26,8 @@ public interface CommandTranslations {
         /**
          * Used for displaying the number of registered rooms via summary commands.
          */
-        String ROOM_COUNT = Util.makeDescriptionId("commands.rooms", new ResourceLocation(MOD_ID, "room_reg_count"));
+        String ROOM_COUNT = Util.makeDescriptionId("commands.rooms", Constants.modRL("room_reg_count"));
 
-        String SPAWN_CHANGED_SUCCESSFULLY = Util.makeDescriptionId("commands.rooms", new ResourceLocation(MOD_ID, "spawn_changed_successfully"));
+        String SPAWN_CHANGED_SUCCESSFULLY = Util.makeDescriptionId("commands.rooms", Constants.modRL("spawn_changed_successfully"));
     }
 }

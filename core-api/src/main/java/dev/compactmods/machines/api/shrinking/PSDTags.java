@@ -10,5 +10,5 @@ public interface PSDTags {
     /**
      * Marks an item as a personal shrinking device.
      */
-    TagKey<Item> ITEM = TagKey.create(Registries.ITEM, new ResourceLocation(Constants.MOD_ID, "shrinking_device"));
+    TagKey<Item> ITEM = TagKey.create(Registries.ITEM, Constants.modRL("shrinking_device"));
 }

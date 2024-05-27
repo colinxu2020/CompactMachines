@@ -6,11 +6,11 @@ import dev.compactmods.machines.api.advancement.Advancements;
 import dev.compactmods.machines.api.command.CommandTranslations;
 import dev.compactmods.machines.api.machine.MachineTranslations;
 import dev.compactmods.machines.api.room.RoomTranslations;
-import dev.compactmods.machines.neoforge.CompactMachines;
-import dev.compactmods.machines.neoforge.client.RoomExitKeyMapping;
-import dev.compactmods.machines.neoforge.client.creative.CreativeTabs;
-import dev.compactmods.machines.neoforge.room.Rooms;
-import dev.compactmods.machines.neoforge.shrinking.Shrinking;
+import dev.compactmods.machines.CompactMachines;
+import dev.compactmods.machines.client.RoomExitKeyMapping;
+import dev.compactmods.machines.client.creative.CreativeTabs;
+import dev.compactmods.machines.room.Rooms;
+import dev.compactmods.machines.shrinking.Shrinking;
 import net.minecraft.Util;
 import net.minecraft.data.DataGenerator;
 
@@ -81,8 +81,8 @@ public class EnglishLangGenerator extends BaseLangGenerator {
         add("machine.compactmachines.giant", "%s (%s)".formatted(machineTranslation, "Giant"));
         add("machine.compactmachines.colossal", "%s (%s)".formatted(machineTranslation, "Colossal"));
 
-        addBlock(Rooms.BLOCK_BREAKABLE_WALL, "Compact Machine Wall");
-        addBlock(Rooms.BLOCK_SOLID_WALL, "Solid Compact Machine Wall");
+        addBlock(Rooms.Blocks.BREAKABLE_WALL, "Compact Machine Wall");
+        addBlock(Rooms.Blocks.SOLID_WALL, "Solid Compact Machine Wall");
 
         addItem(Shrinking.PERSONAL_SHRINKING_DEVICE, "Personal Shrinking Device");
         addItem(Shrinking.SHRINKING_MODULE, "Atom Shrinking Module");
