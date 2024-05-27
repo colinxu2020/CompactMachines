@@ -1,6 +1,6 @@
 package dev.compactmods.machines.room.ui.preview;
 
-import dev.compactmods.machines.api.Constants;
+import dev.compactmods.machines.api.CompactMachinesApi;
 import dev.compactmods.machines.api.room.RoomInstance;
 import dev.compactmods.machines.room.Rooms;
 import net.minecraft.core.GlobalPos;
@@ -45,7 +45,7 @@ public class MachineRoomMenu extends AbstractContainerMenu {
         return new MenuProvider() {
             @Override
             public Component getDisplayName() {
-                return Component.translatable(Constants.MOD_ID + ".ui.room");
+                return Component.translatable(CompactMachinesApi.MOD_ID + ".ui.room");
             }
 
             @Nullable

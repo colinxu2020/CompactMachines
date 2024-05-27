@@ -1,14 +1,12 @@
 package dev.compactmods.machines.player;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.DynamicOps;
-import com.mojang.serialization.Keyable;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.compactmods.feather.MemoryGraph;
 import dev.compactmods.feather.edge.impl.EmptyEdge;
 import dev.compactmods.feather.node.Node;
 import dev.compactmods.feather.traversal.GraphNodeTransformationFunction;
-import dev.compactmods.machines.api.Constants;
+import dev.compactmods.machines.api.CompactMachinesApi;
 import dev.compactmods.machines.api.dimension.CompactDimension;
 import dev.compactmods.machines.api.dimension.MissingDimensionException;
 import dev.compactmods.machines.api.room.RoomApi;
@@ -20,7 +18,6 @@ import net.minecraft.core.UUIDUtil;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.saveddata.SavedData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -39,7 +36,7 @@ import java.util.stream.Stream;
 // TODO: Global access via PlayerHistoryApi, similar to RoomApi
 public class PlayerEntryPointHistory extends CodecBackedSavedData<PlayerEntryPointHistory> {
 
-    public static final String DATA_NAME = Constants.MOD_ID + "_player_history";
+    public static final String DATA_NAME = CompactMachinesApi.MOD_ID + "_player_history";
 
     private static final Logger LOGS = LogManager.getLogger();
 

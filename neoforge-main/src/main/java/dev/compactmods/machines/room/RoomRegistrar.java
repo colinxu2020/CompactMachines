@@ -7,7 +7,7 @@ import dev.compactmods.machines.api.room.RoomInstance;
 import dev.compactmods.machines.api.room.RoomTemplate;
 import dev.compactmods.machines.api.room.registration.IRoomBuilder;
 import dev.compactmods.feather.MemoryGraph;
-import dev.compactmods.machines.api.Constants;
+import dev.compactmods.machines.api.CompactMachinesApi;
 import dev.compactmods.machines.api.dimension.CompactDimension;
 import dev.compactmods.machines.api.dimension.MissingDimensionException;
 import dev.compactmods.machines.api.util.AABBAligner;
@@ -32,7 +32,7 @@ public class RoomRegistrar extends CodecBackedSavedData<RoomRegistrar> implement
 
     public static final Logger LOGS = LogManager.getLogger();
 
-    public static final String DATA_NAME = Constants.MOD_ID + "_rooms";
+    public static final String DATA_NAME = CompactMachinesApi.MOD_ID + "_rooms";
 
     public static final Codec<RoomRegistrar> CODEC = RoomRegistrationNode.CODEC.listOf()
             .fieldOf("rooms")

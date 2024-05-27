@@ -1,6 +1,6 @@
 package dev.compactmods.machines;
 
-import dev.compactmods.machines.api.Constants;
+import dev.compactmods.machines.api.CompactMachinesApi;
 import dev.compactmods.machines.client.CompactMachinesClient;
 import dev.compactmods.machines.command.Commands;
 import dev.compactmods.machines.client.config.ClientConfig;
@@ -13,7 +13,6 @@ import dev.compactmods.machines.dimension.Dimension;
 import dev.compactmods.machines.dimension.WorldBorderFixer;
 import dev.compactmods.machines.machine.Machines;
 import dev.compactmods.machines.network.CMNetworks;
-import dev.compactmods.machines.network.RoomNetworkHandler;
 import dev.compactmods.machines.room.Rooms;
 import dev.compactmods.machines.room.block.ProtectedBlockEventHandler;
 import dev.compactmods.machines.room.upgrade.RoomUpgrades;
@@ -24,11 +23,10 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
 
-@Mod(Constants.MOD_ID)
+@Mod(CompactMachinesApi.MOD_ID)
 public class CompactMachines {
 
     public static final int BRAND_MACHINE_COLOR = FastColor.ARGB32.color(255, 248, 246, 76);
@@ -68,10 +66,10 @@ public class CompactMachines {
         RoomUpgrades.registerEvents(modBus);
         WorldBorderFixer.registerEvents();
 
-        modBus.addListener(Commands::onCommandsRegister);
         modBus.addListener(CMNetworks::onPacketRegistration);
         modBus.addListener(InterModCompat::enqueueCompatMessages);
 
+        NeoForge.EVENT_BUS.addListener(Commands::onCommandsRegister);
         NeoForge.EVENT_BUS.addListener(ProtectedBlockEventHandler::leftClickBlock);
 
         if(FMLEnvironment.dist.isClient()) {

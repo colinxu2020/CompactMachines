@@ -1,6 +1,6 @@
 package dev.compactmods.machines.compat.jade;
 
-import dev.compactmods.machines.api.Constants;
+import dev.compactmods.machines.api.CompactMachinesApi;
 import dev.compactmods.machines.machine.block.BoundCompactMachineBlock;
 import dev.compactmods.machines.machine.block.BoundCompactMachineBlockEntity;
 import snownee.jade.api.IWailaClientRegistration;
@@ -18,7 +18,7 @@ public class CMJadePlugin implements IWailaPlugin {
 
     @Override
     public void registerClient(IWailaClientRegistration registration) {
-        registration.addConfig(Constants.modRL("show_owner"), false);
+        registration.addConfig(CompactMachinesApi.modRL("show_owner"), false);
 
         registration.registerBlockComponent(BoundMachineProviders.COMPONENT_PROVIDER, BoundCompactMachineBlock.class);
     }

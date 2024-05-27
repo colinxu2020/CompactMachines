@@ -1,6 +1,6 @@
 package dev.compactmods.machines.datagen.tags;
 
-import dev.compactmods.machines.api.Constants;
+import dev.compactmods.machines.api.CompactMachinesApi;
 import dev.compactmods.machines.villager.Villagers;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
@@ -14,7 +14,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class PointOfInterestTagGenerator extends PoiTypeTagsProvider {
     public PointOfInterestTagGenerator(PackOutput packOut, CompletableFuture<HolderLookup.Provider> lookup, ExistingFileHelper existingFiles) {
-        super(packOut, lookup, Constants.MOD_ID, existingFiles);
+        super(packOut, lookup, CompactMachinesApi.MOD_ID, existingFiles);
     }
 
     @Override

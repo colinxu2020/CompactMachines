@@ -1,6 +1,6 @@
 package dev.compactmods.machines.compat.jei;
 
-import dev.compactmods.machines.api.Constants;
+import dev.compactmods.machines.api.CompactMachinesApi;
 import dev.compactmods.machines.machine.MachineItemCreator;
 import dev.compactmods.machines.api.room.RoomApi;
 import dev.compactmods.machines.CompactMachines;
@@ -20,7 +20,7 @@ import net.neoforged.neoforge.server.ServerLifecycleHooks;
 public class CompactMachinesJeiPlugin implements IModPlugin {
     @Override
     public ResourceLocation getPluginUid() {
-        return Constants.modRL("main");
+        return CompactMachinesApi.modRL("main");
     }
 
     @Override

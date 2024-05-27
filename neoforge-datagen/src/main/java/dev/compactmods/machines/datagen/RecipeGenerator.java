@@ -1,6 +1,6 @@
 package dev.compactmods.machines.datagen;
 
-import dev.compactmods.machines.api.Constants;
+import dev.compactmods.machines.api.CompactMachinesApi;
 import dev.compactmods.machines.api.room.RoomTemplate;
 import dev.compactmods.machines.machine.MachineItemCreator;
 import dev.compactmods.machines.room.Rooms;
@@ -76,22 +76,22 @@ public class RecipeGenerator extends RecipeProvider {
    }
 
    private void addMachineRecipes(RecipeOutput consumer) {
-	  registerMachineRecipe(consumer, Constants.modRL("tiny"),
+	  registerMachineRecipe(consumer, CompactMachinesApi.modRL("tiny"),
 		  new RoomTemplate(3, FastColor.ARGB32.color(255, 201, 91, 19)), Tags.Items.INGOTS_COPPER);
 
-	  registerMachineRecipe(consumer, Constants.modRL("small"),
+	  registerMachineRecipe(consumer, CompactMachinesApi.modRL("small"),
 		  new RoomTemplate(5, FastColor.ARGB32.color(255, 212, 210, 210)), Tags.Items.INGOTS_IRON);
 
-	  registerMachineRecipe(consumer, Constants.modRL("normal"),
+	  registerMachineRecipe(consumer, CompactMachinesApi.modRL("normal"),
 		  new RoomTemplate(7, FastColor.ARGB32.color(255, 251, 242, 54)), Tags.Items.INGOTS_GOLD);
 
-	  registerMachineRecipe(consumer, Constants.modRL("large"),
+	  registerMachineRecipe(consumer, CompactMachinesApi.modRL("large"),
 		  new RoomTemplate(9, FastColor.ARGB32.color(255, 33, 27, 46)), Tags.Items.GEMS_DIAMOND);
 
-	  registerMachineRecipe(consumer, Constants.modRL("giant"),
+	  registerMachineRecipe(consumer, CompactMachinesApi.modRL("giant"),
 		  new RoomTemplate(11, FastColor.ARGB32.color(255, 67, 214, 205)), Tags.Items.OBSIDIANS);
 
-	  registerMachineRecipe(consumer, Constants.modRL("colossal"),
+	  registerMachineRecipe(consumer, CompactMachinesApi.modRL("colossal"),
 		  new RoomTemplate(13, FastColor.ARGB32.color(255, 66, 63, 66)), Tags.Items.INGOTS_NETHERITE);
    }
 
@@ -107,7 +107,7 @@ public class RecipeGenerator extends RecipeProvider {
 
 	  recipe.unlockedBy("has_recipe", has(Rooms.Items.BREAKABLE_WALL));
 
-	  final var recipeId = Constants.modRL("new_machine_" + temId.getPath());
+	  final var recipeId = CompactMachinesApi.modRL("new_machine_" + temId.getPath());
 	  recipe.save(consumer, recipeId);
    }
 }

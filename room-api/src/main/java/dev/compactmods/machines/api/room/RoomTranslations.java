@@ -1,6 +1,6 @@
 package dev.compactmods.machines.api.room;
 
-import dev.compactmods.machines.api.Constants;
+import dev.compactmods.machines.api.CompactMachinesApi;
 import dev.compactmods.machines.api.room.function.PlayerAndRoomCodeFunction;
 import dev.compactmods.machines.api.util.AABBHelper;
 import net.minecraft.ChatFormatting;
@@ -39,20 +39,20 @@ public interface RoomTranslations {
             .withStyle(ChatFormatting.GREEN);
 
     interface IDs {
-        String ROOM_SPAWNPOINT_SET = Util.makeDescriptionId("rooms", Constants.modRL("spawnpoint_set"));
+        String ROOM_SPAWNPOINT_SET = Util.makeDescriptionId("rooms", CompactMachinesApi.modRL("spawnpoint_set"));
 
-        String PLAYER_ROOM_INFO = Util.makeDescriptionId("rooms", Constants.modRL("player_room_info"));
+        String PLAYER_ROOM_INFO = Util.makeDescriptionId("rooms", CompactMachinesApi.modRL("player_room_info"));
 
-        String MACHINE_ROOM_INFO = Util.makeDescriptionId("machine", Constants.modRL("machine_room_info"));
+        String MACHINE_ROOM_INFO = Util.makeDescriptionId("machine", CompactMachinesApi.modRL("machine_room_info"));
 
         interface Errors {
-            String UNKNOWN_ROOM_BY_CODE = Util.makeDescriptionId("rooms.errors", Constants.modRL("room_not_found"));
+            String UNKNOWN_ROOM_BY_CODE = Util.makeDescriptionId("rooms.errors", CompactMachinesApi.modRL("room_not_found"));
 
-            String CANNOT_ENTER_ROOM = Util.makeDescriptionId("rooms.errors", Constants.modRL("cannot_enter"));
+            String CANNOT_ENTER_ROOM = Util.makeDescriptionId("rooms.errors", CompactMachinesApi.modRL("cannot_enter"));
 
-            String UNKNOWN_ROOM_BY_PLAYER_CHUNK = Util.makeDescriptionId("rooms.errors", Constants.modRL("unknown_room_chunk"));
+            String UNKNOWN_ROOM_BY_PLAYER_CHUNK = Util.makeDescriptionId("rooms.errors", CompactMachinesApi.modRL("unknown_room_chunk"));
 
-            String PLAYER_NOT_IN_COMPACT_DIM = Util.makeDescriptionId("rooms.errors", Constants.modRL("player_not_in_compact_dimension"));
+            String PLAYER_NOT_IN_COMPACT_DIM = Util.makeDescriptionId("rooms.errors", CompactMachinesApi.modRL("player_not_in_compact_dimension"));
         }
     }
 }

@@ -1,6 +1,6 @@
 package dev.compactmods.machines.room.ui.upgrades;
 
-import dev.compactmods.machines.api.Constants;
+import dev.compactmods.machines.api.CompactMachinesApi;
 import dev.compactmods.machines.api.room.RoomInstance;
 import dev.compactmods.machines.client.render.ConditionalGhostSlot;
 import dev.compactmods.machines.data.room.RoomAttachmentDataManager;
@@ -69,7 +69,7 @@ public class RoomUpgradeMenu extends AbstractContainerMenu {
         return new MenuProvider() {
             @Override
             public @NotNull Component getDisplayName() {
-                return Component.translatable(Constants.MOD_ID + ".ui.room_upgrades");
+                return Component.translatable(CompactMachinesApi.MOD_ID + ".ui.room_upgrades");
             }
 
             @Override

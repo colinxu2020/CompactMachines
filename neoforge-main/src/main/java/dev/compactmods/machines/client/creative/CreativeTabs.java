@@ -1,7 +1,7 @@
 package dev.compactmods.machines.client.creative;
 
 import dev.compactmods.machines.api.room.RoomTemplate;
-import dev.compactmods.machines.api.Constants;
+import dev.compactmods.machines.api.CompactMachinesApi;
 import dev.compactmods.machines.machine.MachineItemCreator;
 import dev.compactmods.machines.room.Rooms;
 import dev.compactmods.machines.shrinking.Shrinking;
@@ -13,7 +13,7 @@ import static dev.compactmods.machines.CMRegistries.TABS;
 
 public interface CreativeTabs {
 
-    ResourceLocation MAIN_RL = Constants.modRL("main");
+    ResourceLocation MAIN_RL = CompactMachinesApi.modRL("main");
 
     static void prepare() {
         TABS.register(MAIN_RL.getPath(), () -> CreativeModeTab.builder()

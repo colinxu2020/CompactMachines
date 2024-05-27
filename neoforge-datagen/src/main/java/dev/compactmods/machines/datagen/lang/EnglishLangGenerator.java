@@ -1,12 +1,11 @@
 package dev.compactmods.machines.datagen.lang;
 
-import dev.compactmods.machines.api.Constants;
+import dev.compactmods.machines.api.CompactMachinesApi;
 import dev.compactmods.machines.api.Translations;
 import dev.compactmods.machines.api.advancement.Advancements;
 import dev.compactmods.machines.api.command.CommandTranslations;
 import dev.compactmods.machines.api.machine.MachineTranslations;
 import dev.compactmods.machines.api.room.RoomTranslations;
-import dev.compactmods.machines.CompactMachines;
 import dev.compactmods.machines.client.keybinds.room.RoomExitKeyMapping;
 import dev.compactmods.machines.client.creative.CreativeTabs;
 import dev.compactmods.machines.room.Rooms;
@@ -46,15 +45,15 @@ public class EnglishLangGenerator extends BaseLangGenerator {
         commands();
         advancements();
 
-        add(Constants.MOD_ID + ".direction.side", "Side: %s");
-        add(Constants.MOD_ID + ".connected_block", "Connected: %s");
+        add(CompactMachinesApi.MOD_ID + ".direction.side", "Side: %s");
+        add(CompactMachinesApi.MOD_ID + ".connected_block", "Connected: %s");
 
         add(Translations.IDs.UNBREAKABLE_BLOCK, "Warning! Unbreakable for non-creative players!");
         add(Translations.IDs.HINT_HOLD_SHIFT, "Hold shift for details.");
 
         addCreativeTab(CreativeTabs.MAIN_RL, "Compact Machines");
 
-        add("biome." + Constants.MOD_ID + ".machine", "Compact Machine");
+        add("biome." + CompactMachinesApi.MOD_ID + ".machine", "Compact Machine");
 
         add("jei.compactmachines.machines", "Machines are used to make pocket dimensions. Craft a machine and place it in world, then use a Personal Shrinking Device to go inside.");
         add("jei.compactmachines.shrinking_device", "Use the Personal Shrinking Device (PSD) on a machine in order to enter a compact space.");
@@ -86,7 +85,7 @@ public class EnglishLangGenerator extends BaseLangGenerator {
         addItem(Shrinking.PERSONAL_SHRINKING_DEVICE, "Personal Shrinking Device");
         addItem(Shrinking.SHRINKING_MODULE, "Atom Shrinking Module");
         addItem(Shrinking.ENLARGING_MODULE, "Atom Enlarging Module");
-        add(Util.makeDescriptionId("block", Constants.modRL("bound_machine_fallback")), machineTranslation);
+        add(Util.makeDescriptionId("block", CompactMachinesApi.modRL("bound_machine_fallback")), machineTranslation);
     }
 
     protected void advancements() {

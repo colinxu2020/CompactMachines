@@ -3,9 +3,7 @@ package dev.compactmods.machines.test.data;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
-import dev.compactmods.machines.api.Constants;
-import dev.compactmods.machines.api.codec.CodecExtensions;
-import dev.compactmods.machines.api.room.history.PlayerRoomHistoryEntry;
+import dev.compactmods.machines.api.CompactMachinesApi;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -15,14 +13,13 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
-import org.jline.terminal.spi.JansiSupport;
 
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 @PrefixGameTestTemplate(false)
-@GameTestHolder(Constants.MOD_ID)
+@GameTestHolder(CompactMachinesApi.MOD_ID)
 public class CodecTests {
 
     private static final String BATCH = "CODECS";

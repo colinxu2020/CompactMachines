@@ -1,6 +1,6 @@
 package dev.compactmods.machines.network;
 
-import dev.compactmods.machines.api.Constants;
+import dev.compactmods.machines.api.CompactMachinesApi;
 import dev.compactmods.machines.room.RoomHelper;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
@@ -8,7 +8,7 @@ import net.neoforged.neoforge.network.handling.IPayloadHandler;
 
 public record PlayerRequestedLeavePacket() implements CustomPacketPayload {
 
-    public static final Type<PlayerRequestedLeavePacket> TYPE = new Type<>(Constants.modRL("player_requested_to_leave_room"));
+    public static final Type<PlayerRequestedLeavePacket> TYPE = new Type<>(CompactMachinesApi.modRL("player_requested_to_leave_room"));
 
     public static final IPayloadHandler<PlayerRequestedLeavePacket> HANDLER = (pkt, ctx) -> {
         final var player = ctx.player();

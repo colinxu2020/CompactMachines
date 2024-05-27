@@ -2,9 +2,8 @@ package dev.compactmods.machines.network;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.compactmods.machines.api.Constants;
+import dev.compactmods.machines.api.CompactMachinesApi;
 import dev.compactmods.machines.api.room.RoomApi;
-import dev.compactmods.machines.CompactMachines;
 import dev.compactmods.machines.room.Rooms;
 import dev.compactmods.machines.room.ui.preview.MachineRoomMenu;
 import net.minecraft.core.GlobalPos;
@@ -17,7 +16,7 @@ import net.neoforged.neoforge.network.handling.IPayloadHandler;
 import java.util.Optional;
 
 public record PlayerRequestedRoomUIPacket(String roomCode) implements CustomPacketPayload {
-    public static final Type<PlayerRequestedRoomUIPacket> TYPE = new Type<>(Constants.modRL("player_wants_to_open_room_ui"));
+    public static final Type<PlayerRequestedRoomUIPacket> TYPE = new Type<>(CompactMachinesApi.modRL("player_wants_to_open_room_ui"));
 
     public static final Codec<PlayerRequestedRoomUIPacket> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             Codec.STRING.fieldOf("roomCode").forGetter(PlayerRequestedRoomUIPacket::roomCode)

@@ -1,10 +1,9 @@
 package dev.compactmods.machines.compat.jade;
 
 import com.mojang.authlib.GameProfile;
-import dev.compactmods.machines.api.Constants;
+import dev.compactmods.machines.api.CompactMachinesApi;
 import dev.compactmods.machines.api.machine.MachineTranslations;
 import dev.compactmods.machines.api.room.RoomApi;
-import dev.compactmods.machines.CompactMachines;
 import dev.compactmods.machines.machine.block.BoundCompactMachineBlockEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
@@ -19,14 +18,14 @@ import snownee.jade.api.config.IPluginConfig;
 
 public class BoundMachineProviders {
 
-    public static final ResourceLocation UID = Constants.modRL("bound_machine");
+    public static final ResourceLocation UID = CompactMachinesApi.modRL("bound_machine");
 
     public static final IBlockComponentProvider COMPONENT_PROVIDER = new IBlockComponentProvider() {
         @Override
         public void appendTooltip(ITooltip tooltip, BlockAccessor blockAccessor, IPluginConfig config) {
             final var serverData = blockAccessor.getServerData();
 
-            if (config.get(Constants.modRL("show_owner")) && serverData.contains("owner")) {
+            if (config.get(CompactMachinesApi.modRL("show_owner")) && serverData.contains("owner")) {
                 final var owner = blockAccessor.getLevel().getPlayerByUUID(serverData.getUUID("owner"));
                 if (owner != null) {
                     GameProfile ownerProfile = owner.getGameProfile();

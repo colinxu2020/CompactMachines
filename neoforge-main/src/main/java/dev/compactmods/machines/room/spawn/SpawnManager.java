@@ -3,7 +3,7 @@ package dev.compactmods.machines.room.spawn;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mojang.serialization.codecs.UnboundedMapCodec;
-import dev.compactmods.machines.api.Constants;
+import dev.compactmods.machines.api.CompactMachinesApi;
 import dev.compactmods.machines.api.dimension.CompactDimension;
 import dev.compactmods.machines.api.dimension.MissingDimensionException;
 import dev.compactmods.machines.api.room.spatial.IRoomBoundaries;
@@ -60,7 +60,7 @@ public class SpawnManager extends CodecBackedSavedData<SpawnManager> implements 
 
 
     public static SpawnManager forRoom(MinecraftServer server, String roomCode, IRoomBoundaries roomBounds) throws MissingDimensionException {
-        String roomFilename = Constants.MOD_ID + "_room_" + roomCode;
+        String roomFilename = CompactMachinesApi.MOD_ID + "_room_" + roomCode;
         var manager = CompactDimension.forServer(server)
                 .getDataStorage()
                 .computeIfAbsent(new CodecWrappedSavedData<>(CODEC, () -> new SpawnManager(roomCode, roomBounds)).sd(), roomFilename);

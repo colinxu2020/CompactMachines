@@ -1,7 +1,8 @@
 package dev.compactmods.machines;
 
+import dev.compactmods.machines.api.room.RoomApi;
 import dev.compactmods.machines.api.room.RoomTemplate;
-import dev.compactmods.machines.api.Constants;
+import dev.compactmods.machines.api.CompactMachinesApi;
 import dev.compactmods.machines.api.room.upgrade.RoomUpgradeType;
 import dev.compactmods.machines.shrinking.Shrinking;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
@@ -21,60 +22,44 @@ import net.neoforged.neoforge.registries.DataPackRegistryEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
-import static dev.compactmods.machines.api.Constants.MOD_ID;
+import java.util.stream.Stream;
 
 public interface CMRegistries {
 
    // Machines, Walls, Shrinking
-   DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(MOD_ID);
-   DeferredRegister.Items ITEMS = DeferredRegister.createItems(MOD_ID);
+   DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(CompactMachinesApi.MOD_ID);
+   DeferredRegister.Items ITEMS = DeferredRegister.createItems(CompactMachinesApi.MOD_ID);
 
-   DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(BuiltInRegistries.CREATIVE_MODE_TAB, MOD_ID);
+   DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(BuiltInRegistries.CREATIVE_MODE_TAB, CompactMachinesApi.MOD_ID);
 
-   DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, MOD_ID);
+   DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, CompactMachinesApi.MOD_ID);
 
    // UIRegistration
-   DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(BuiltInRegistries.MENU, MOD_ID);
+   DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(BuiltInRegistries.MENU, CompactMachinesApi.MOD_ID);
 
    // Commands
-   DeferredRegister<ArgumentTypeInfo<?, ?>> COMMAND_ARGUMENT_TYPES = DeferredRegister.create(BuiltInRegistries.COMMAND_ARGUMENT_TYPE, MOD_ID);
+   DeferredRegister<ArgumentTypeInfo<?, ?>> COMMAND_ARGUMENT_TYPES = DeferredRegister.create(BuiltInRegistries.COMMAND_ARGUMENT_TYPE, CompactMachinesApi.MOD_ID);
 
    // LootFunctions
-   DeferredRegister<LootItemFunctionType<?>> LOOT_FUNCS = DeferredRegister.create(BuiltInRegistries.LOOT_FUNCTION_TYPE, MOD_ID);
+   DeferredRegister<LootItemFunctionType<?>> LOOT_FUNCTIONS = DeferredRegister.create(BuiltInRegistries.LOOT_FUNCTION_TYPE, CompactMachinesApi.MOD_ID);
 
    // Villagers
-   DeferredRegister<VillagerProfession> VILLAGERS = DeferredRegister.create(BuiltInRegistries.VILLAGER_PROFESSION, Constants.MOD_ID);
+   DeferredRegister<VillagerProfession> VILLAGERS = DeferredRegister.create(BuiltInRegistries.VILLAGER_PROFESSION, CompactMachinesApi.MOD_ID);
 
-   DeferredRegister<PoiType> POINTS_OF_INTEREST = DeferredRegister.create(BuiltInRegistries.POINT_OF_INTEREST_TYPE, Constants.MOD_ID);
+   DeferredRegister<PoiType> POINTS_OF_INTEREST = DeferredRegister.create(BuiltInRegistries.POINT_OF_INTEREST_TYPE, CompactMachinesApi.MOD_ID);
 
-   DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, MOD_ID);
+   DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, CompactMachinesApi.MOD_ID);
 
-   DeferredRegister.DataComponents DATA_COMPONENTS = DeferredRegister.createDataComponents(MOD_ID);
-
-   DeferredRegister<RoomUpgradeType<?>> ROOM_UPGRADE_TYPES = DeferredRegister.create(RoomUpgradeType.REG_KEY, MOD_ID);
+   DeferredRegister.DataComponents DATA_COMPONENTS = DeferredRegister.createDataComponents(CompactMachinesApi.MOD_ID);
 
    static Item basicItem() {
 	  return new Item(new Item.Properties());
    }
 
    static void setup(IEventBus modBus) {
-	  BLOCKS.register(modBus);
-	  ITEMS.register(modBus);
-	  BLOCK_ENTITIES.register(modBus);
-	  CONTAINERS.register(modBus);
-	  COMMAND_ARGUMENT_TYPES.register(modBus);
-	  LOOT_FUNCS.register(modBus);
-	  VILLAGERS.register(modBus);
-	  // Villagers.TRADES.register(bus);
-	  POINTS_OF_INTEREST.register(modBus);
-	  TABS.register(modBus);
-	  ATTACHMENT_TYPES.register(modBus);
-	  DATA_COMPONENTS.register(modBus);
-	  ROOM_UPGRADE_TYPES.register(modBus);
-
-	  ROOM_UPGRADE_TYPES.makeRegistry(builder -> {
-		 builder.sync(true);
-	  });
+	  Stream.of(BLOCKS, ITEMS, BLOCK_ENTITIES, CONTAINERS, COMMAND_ARGUMENT_TYPES, LOOT_FUNCTIONS,
+		  VILLAGERS, POINTS_OF_INTEREST, TABS, ATTACHMENT_TYPES, DATA_COMPONENTS
+	  ).forEach(r -> r.register(modBus));
 
 	  modBus.addListener((DataPackRegistryEvent.NewRegistry newRegistries) -> {
 		 newRegistries.dataPackRegistry(RoomTemplate.REGISTRY_KEY, RoomTemplate.CODEC, RoomTemplate.CODEC);

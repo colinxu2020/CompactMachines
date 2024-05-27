@@ -1,6 +1,6 @@
 package dev.compactmods.machines.datagen;
 
-import dev.compactmods.machines.api.Constants;
+import dev.compactmods.machines.api.CompactMachinesApi;
 import dev.compactmods.machines.datagen.compat.curios.CurioEntityGenerator;
 import dev.compactmods.machines.datagen.compat.curios.CurioSlotGenerator;
 import dev.compactmods.machines.datagen.lang.EnglishLangGenerator;
@@ -12,13 +12,12 @@ import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 import java.util.Collections;
 import java.util.List;
 
-@EventBusSubscriber(modid = Constants.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = CompactMachinesApi.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class DataGeneration {
 
     @SubscribeEvent

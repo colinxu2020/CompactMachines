@@ -1,7 +1,7 @@
 package dev.compactmods.machines.datagen;
 
 import dev.compactmods.machines.api.room.RoomTemplate;
-import dev.compactmods.machines.api.Constants;
+import dev.compactmods.machines.api.CompactMachinesApi;
 import dev.compactmods.machines.api.dimension.CompactDimension;
 import dev.compactmods.machines.datagen.util.DimensionTypeBuilder;
 import dev.compactmods.machines.dimension.Dimension;
@@ -32,7 +32,7 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 public class DatapackRegisteredStuff extends DatapackBuiltinEntriesProvider {
-  private static final ResourceLocation COMPACT_BIOME = Constants.modRL("machine");
+  private static final ResourceLocation COMPACT_BIOME = CompactMachinesApi.modRL("machine");
   private static final int DIMENSION_HEIGHT = 48;
 
   private static final RegistrySetBuilder BUILDER = new RegistrySetBuilder()
@@ -42,7 +42,7 @@ public class DatapackRegisteredStuff extends DatapackBuiltinEntriesProvider {
 		.add(RoomTemplate.REGISTRY_KEY, DatapackRegisteredStuff::addRoomTemplates);
 
   DatapackRegisteredStuff(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> registries) {
-	 super(packOutput, registries, BUILDER, Set.of(Constants.MOD_ID));
+	 super(packOutput, registries, BUILDER, Set.of(CompactMachinesApi.MOD_ID));
   }
 
   private static void generateBiomes(BootstrapContext<Biome> ctx) {
@@ -106,6 +106,6 @@ public class DatapackRegisteredStuff extends DatapackBuiltinEntriesProvider {
   }
 
   private static void roomTemplate(BootstrapContext<RoomTemplate> ctx, String name, RoomTemplate template) {
-	 ctx.register(ResourceKey.create(RoomTemplate.REGISTRY_KEY, Constants.modRL(name)), template);
+	 ctx.register(ResourceKey.create(RoomTemplate.REGISTRY_KEY, CompactMachinesApi.modRL(name)), template);
   }
 }

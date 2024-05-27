@@ -1,6 +1,6 @@
 package dev.compactmods.machines.test;
 
-import dev.compactmods.machines.api.Constants;
+import dev.compactmods.machines.api.CompactMachinesApi;
 import dev.compactmods.machines.util.MathUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
@@ -14,7 +14,7 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import java.util.HashMap;
 
 @PrefixGameTestTemplate(false)
-@GameTestHolder(Constants.MOD_ID)
+@GameTestHolder(CompactMachinesApi.MOD_ID)
 public class MathUtilTests {
 
     private static final String BATCH = "MathUtil";

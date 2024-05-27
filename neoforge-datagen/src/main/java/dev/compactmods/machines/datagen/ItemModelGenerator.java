@@ -1,6 +1,6 @@
 package dev.compactmods.machines.datagen;
 
-import dev.compactmods.machines.api.Constants;
+import dev.compactmods.machines.api.CompactMachinesApi;
 import dev.compactmods.machines.machine.Machines;
 import dev.compactmods.machines.shrinking.Shrinking;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -16,7 +16,7 @@ import java.util.function.Supplier;
 public class ItemModelGenerator extends ItemModelProvider {
 
     public ItemModelGenerator(PackOutput packOutput, ExistingFileHelper existingFileHelper) {
-        super(packOutput, Constants.MOD_ID, existingFileHelper);
+        super(packOutput, CompactMachinesApi.MOD_ID, existingFileHelper);
     }
 
     @Override

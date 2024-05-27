@@ -2,10 +2,9 @@ package dev.compactmods.machines.datagen.compat.curios;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.compactmods.machines.api.Constants;
+import dev.compactmods.machines.api.CompactMachinesApi;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.common.data.JsonCodecProvider;
@@ -23,12 +22,12 @@ public class CurioEntityGenerator extends JsonCodecProvider<CurioEntityGenerator
     }
 
     public CurioEntityGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, ExistingFileHelper existingFileHelper) {
-        super(output, PackOutput.Target.DATA_PACK, "curios/entities", PackType.SERVER_DATA, CurioEntityDefinition.CODEC, lookupProvider, Constants.MOD_ID, existingFileHelper);
+        super(output, PackOutput.Target.DATA_PACK, "curios/entities", PackType.SERVER_DATA, CurioEntityDefinition.CODEC, lookupProvider, CompactMachinesApi.MOD_ID, existingFileHelper);
     }
 
     @Override
     protected void gather() {
         var psdDef = new CurioEntityDefinition(List.of("player"), List.of("psd"));
-        unconditional(Constants.modRL("psd"), psdDef);
+        unconditional(CompactMachinesApi.modRL("psd"), psdDef);
     }
 }

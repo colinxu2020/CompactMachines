@@ -1,8 +1,9 @@
 package dev.compactmods.machines.api;
 
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
-public interface Constants {
+public interface CompactMachinesApi {
     String MOD_ID = "compactmachines";
 
     static ResourceLocation modRL(String path) {

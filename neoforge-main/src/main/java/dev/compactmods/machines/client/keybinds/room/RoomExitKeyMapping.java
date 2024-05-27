@@ -1,20 +1,19 @@
 package dev.compactmods.machines.client.keybinds.room;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import dev.compactmods.machines.api.Constants;
+import dev.compactmods.machines.api.CompactMachinesApi;
 import dev.compactmods.machines.api.dimension.CompactDimension;
 import dev.compactmods.machines.network.PlayerRequestedLeavePacket;
 import net.minecraft.Util;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.settings.IKeyConflictContext;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 public class RoomExitKeyMapping {
 
-   public static final String CATEGORY = Util.makeDescriptionId("key.category", Constants.modRL("general"));
-   public static final String NAME = Util.makeDescriptionId("key.mapping", Constants.modRL("exit_room"));
+   public static final String CATEGORY = Util.makeDescriptionId("key.category", CompactMachinesApi.modRL("general"));
+   public static final String NAME = Util.makeDescriptionId("key.mapping", CompactMachinesApi.modRL("exit_room"));
 
    public static final IKeyConflictContext CONFLICT_CONTEXT = new IKeyConflictContext() {
 	  @Override

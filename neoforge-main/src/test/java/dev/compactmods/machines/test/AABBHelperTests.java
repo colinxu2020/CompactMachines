@@ -2,7 +2,7 @@ package dev.compactmods.machines.test;
 
 
 import com.google.common.math.DoubleMath;
-import dev.compactmods.machines.api.Constants;
+import dev.compactmods.machines.api.CompactMachinesApi;
 import dev.compactmods.machines.api.util.AABBAligner;
 import dev.compactmods.machines.api.util.AABBHelper;
 import dev.compactmods.machines.util.RandomSourceUtil;
@@ -22,7 +22,7 @@ import java.util.Collection;
 import java.util.stream.Stream;
 
 @PrefixGameTestTemplate(false)
-@GameTestHolder(Constants.MOD_ID)
+@GameTestHolder(CompactMachinesApi.MOD_ID)
 public class AABBHelperTests {
     private static final String BATCH = "aabb-helper";
 
@@ -89,7 +89,7 @@ public class AABBHelperTests {
                 ).map(randomOffset -> new TestFunction(
                         BATCH,
                         "normalize_boundaries_%s".formatted(randomOffset.hashCode()),
-                        Constants.MOD_ID + ":empty_1x1",
+                        CompactMachinesApi.MOD_ID + ":empty_1x1",
                         Rotation.NONE,
                         5,
                         0,
