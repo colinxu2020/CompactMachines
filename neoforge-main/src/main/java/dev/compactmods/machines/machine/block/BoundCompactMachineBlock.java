@@ -1,10 +1,9 @@
 package dev.compactmods.machines.machine.block;
 
 import dev.compactmods.machines.LoggingUtil;
-import dev.compactmods.machines.machine.MachineItemCreator;
 import dev.compactmods.machines.api.room.RoomApi;
 import dev.compactmods.machines.api.shrinking.PSDTags;
-import dev.compactmods.machines.machine.EnumMachinePlayersBreakHandling;
+import dev.compactmods.machines.machine.config.EnumMachinePlayersBreakHandling;
 import dev.compactmods.machines.config.ServerConfig;
 import dev.compactmods.machines.machine.Machines;
 import dev.compactmods.machines.room.RoomHelper;
@@ -45,15 +44,15 @@ public class BoundCompactMachineBlock extends CompactMachineBlock implements Ent
     public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player) {
         try {
             if (level.getBlockEntity(pos) instanceof BoundCompactMachineBlockEntity be) {
-                return MachineItemCreator.boundToRoom(be.connectedRoom(), be.getData(Machines.Attachments.MACHINE_COLOR));
+                return Machines.Items.boundToRoom(be.connectedRoom(), be.getData(Machines.Attachments.MACHINE_COLOR));
             }
 
-            return MachineItemCreator.unbound();
+            return Machines.Items.unbound();
         }
 
         catch(Exception ex) {
             LoggingUtil.modLog().warn("Warning: tried to pick block on a bound machine that does not have a room bound.", ex);
-            return MachineItemCreator.unbound();
+            return Machines.Items.unbound();
         }
     }
 

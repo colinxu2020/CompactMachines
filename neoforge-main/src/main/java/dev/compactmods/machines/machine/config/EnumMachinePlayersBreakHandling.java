@@ -1,4 +1,4 @@
-package dev.compactmods.machines.machine;
+package dev.compactmods.machines.machine.config;
 
 public enum EnumMachinePlayersBreakHandling {
     UNBREAKABLE("unbreakable", "Nobody can break while players are inside."),

@@ -2,7 +2,7 @@ package dev.compactmods.machines.datagen;
 
 import dev.compactmods.machines.api.CompactMachinesApi;
 import dev.compactmods.machines.api.room.RoomTemplate;
-import dev.compactmods.machines.machine.MachineItemCreator;
+import dev.compactmods.machines.machine.Machines;
 import dev.compactmods.machines.room.Rooms;
 import dev.compactmods.machines.shrinking.Shrinking;
 import net.minecraft.core.HolderLookup;
@@ -96,7 +96,7 @@ public class RecipeGenerator extends RecipeProvider {
    }
 
    protected void registerMachineRecipe(RecipeOutput consumer, ResourceLocation temId, RoomTemplate template, TagKey<Item> catalyst) {
-	  final var recipe = ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MachineItemCreator.forNewRoom(temId, template))
+	  final var recipe = ShapedRecipeBuilder.shaped(RecipeCategory.MISC, Machines.Items.forNewRoom(temId, template))
 		  .pattern("WWW")
 		  .pattern("EPS")
 		  .pattern("WWW")

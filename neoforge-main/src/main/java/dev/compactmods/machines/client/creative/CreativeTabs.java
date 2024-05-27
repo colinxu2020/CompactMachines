@@ -2,7 +2,7 @@ package dev.compactmods.machines.client.creative;
 
 import dev.compactmods.machines.api.room.RoomTemplate;
 import dev.compactmods.machines.api.CompactMachinesApi;
-import dev.compactmods.machines.machine.MachineItemCreator;
+import dev.compactmods.machines.machine.Machines;
 import dev.compactmods.machines.room.Rooms;
 import dev.compactmods.machines.shrinking.Shrinking;
 import net.minecraft.network.chat.Component;
@@ -17,7 +17,7 @@ public interface CreativeTabs {
 
     static void prepare() {
         TABS.register(MAIN_RL.getPath(), () -> CreativeModeTab.builder()
-            .icon(MachineItemCreator::unbound)
+            .icon(Machines.Items::unbound)
             .title(Component.translatableWithFallback("itemGroup.compactmachines.main", "Compact Machines"))
             .displayItems(CreativeTabs::fillItems)
             .build());
@@ -32,7 +32,7 @@ public interface CreativeTabs {
 
         final var lookup = params.holders().lookupOrThrow(RoomTemplate.REGISTRY_KEY);
         final var machines = lookup.listElements()
-            .map(k -> MachineItemCreator.forNewRoom(k.key().location(), k.value()))
+            .map(k -> Machines.Items.forNewRoom(k.key().location(), k.value()))
             .toList();
 
         output.acceptAll(machines, CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);

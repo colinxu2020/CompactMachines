@@ -4,7 +4,6 @@ import dev.compactmods.machines.api.room.RoomApi;
 import dev.compactmods.machines.api.room.RoomTemplate;
 import dev.compactmods.machines.LoggingUtil;
 import dev.compactmods.machines.api.dimension.MissingDimensionException;
-import dev.compactmods.machines.machine.MachineItemCreator;
 import dev.compactmods.machines.api.room.history.RoomEntryPoint;
 import dev.compactmods.machines.api.shrinking.PSDTags;
 import dev.compactmods.machines.machine.Machines;
@@ -41,7 +40,7 @@ public class UnboundCompactMachineBlock extends CompactMachineBlock implements E
             final var temp = be.template().orElse(RoomTemplate.INVALID_TEMPLATE);
 
             if (id != null && !temp.equals(RoomTemplate.INVALID_TEMPLATE)) {
-                var item = MachineItemCreator.forNewRoom(id, temp);
+                var item = Machines.Items.forNewRoom(id, temp);
                 be.getExistingData(Machines.Attachments.MACHINE_COLOR).ifPresent(color -> {
                     item.set(Machines.DataComponents.MACHINE_COLOR, color);
                 });
@@ -50,7 +49,7 @@ public class UnboundCompactMachineBlock extends CompactMachineBlock implements E
             }
         }
 
-        return MachineItemCreator.unbound();
+        return Machines.Items.unbound();
     }
 
     @Override

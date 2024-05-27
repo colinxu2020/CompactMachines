@@ -1,7 +1,7 @@
 package dev.compactmods.machines.config;
 
 import com.electronwill.nightconfig.core.EnumGetMethod;
-import dev.compactmods.machines.machine.EnumMachinePlayersBreakHandling;
+import dev.compactmods.machines.machine.config.EnumMachinePlayersBreakHandling;
 import net.minecraft.commands.Commands;
 import net.neoforged.neoforge.common.ModConfigSpec;
 

@@ -1,7 +1,6 @@
 package dev.compactmods.machines.compat.jei;
 
 import dev.compactmods.machines.api.CompactMachinesApi;
-import dev.compactmods.machines.machine.MachineItemCreator;
 import dev.compactmods.machines.api.room.RoomApi;
 import dev.compactmods.machines.CompactMachines;
 import dev.compactmods.machines.machine.Machines;
@@ -28,7 +27,7 @@ public class CompactMachinesJeiPlugin implements IModPlugin {
         final var ingManager = registration.getIngredientManager();
 
         registration.addIngredientInfo(
-                MachineItemCreator.unboundColored(CompactMachines.BRAND_MACHINE_COLOR),
+                Machines.Items.unboundColored(CompactMachines.BRAND_MACHINE_COLOR),
                 VanillaTypes.ITEM_STACK,
                 Component.translatable("jei.compactmachines.machines"));
 
@@ -36,7 +35,7 @@ public class CompactMachinesJeiPlugin implements IModPlugin {
         RoomApi.getTemplates(ServerLifecycleHooks.getCurrentServer())
                 .entrySet()
                 .stream()
-                .map(t -> MachineItemCreator.forNewRoom(t.getKey().location(), t.getValue()))
+                .map(t -> Machines.Items.forNewRoom(t.getKey().location(), t.getValue()))
                 .forEach(t -> registration.addIngredientInfo(t, VanillaTypes.ITEM_STACK, Component.translatable("jei.compactmachines.machines")));
 
         registration.addIngredientInfo(
