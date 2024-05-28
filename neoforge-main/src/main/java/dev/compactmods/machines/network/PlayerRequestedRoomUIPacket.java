@@ -1,7 +1,5 @@
 package dev.compactmods.machines.network;
 
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.compactmods.machines.api.CompactMachinesApi;
 import dev.compactmods.machines.api.room.RoomApi;
 import dev.compactmods.machines.room.Rooms;
@@ -18,10 +16,6 @@ import java.util.Optional;
 public record PlayerRequestedRoomUIPacket(String roomCode) implements CustomPacketPayload {
     public static final Type<PlayerRequestedRoomUIPacket> TYPE = new Type<>(CompactMachinesApi.modRL("player_wants_to_open_room_ui"));
 
-    public static final Codec<PlayerRequestedRoomUIPacket> CODEC = RecordCodecBuilder.create(inst -> inst.group(
-            Codec.STRING.fieldOf("roomCode").forGetter(PlayerRequestedRoomUIPacket::roomCode)
-    ).apply(inst, PlayerRequestedRoomUIPacket::new));
-
     public static final StreamCodec<FriendlyByteBuf, PlayerRequestedRoomUIPacket> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.STRING_UTF8, PlayerRequestedRoomUIPacket::roomCode,
             PlayerRequestedRoomUIPacket::new
@@ -31,9 +25,10 @@ public record PlayerRequestedRoomUIPacket(String roomCode) implements CustomPack
         final var player = ctx.player();
         RoomApi.room(pkt.roomCode).ifPresent(inst -> {
             final var server = player.getServer();
-            final var pos = player.getData(Rooms.DataAttachments.OPEN_MACHINE_POS);
             player.openMenu(MachineRoomMenu.provider(server, inst), buf -> {
+                final var pos = player.getData(Rooms.DataAttachments.OPEN_MACHINE_POS);
                 buf.writeJsonWithCodec(GlobalPos.CODEC, pos);
+
                 buf.writeUtf(pkt.roomCode);
                 buf.writeOptional(Optional.<String>empty(), FriendlyByteBuf::writeUtf);
             });

@@ -2,11 +2,13 @@ package dev.compactmods.machines.machine.item;
 
 import dev.compactmods.machines.api.Translations;
 import dev.compactmods.machines.api.machine.MachineTranslations;
+import dev.compactmods.machines.api.room.RoomTemplate;
 import dev.compactmods.machines.machine.Machines;
 import net.minecraft.Util;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.CommonColors;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -33,6 +35,14 @@ public class UnboundCompactMachineItem extends BlockItem {
     @Override
     public String getDescriptionId(ItemStack stack) {
         return Util.makeDescriptionId("machine", getTemplateId(stack));
+    }
+
+    @Override
+    public ItemStack getDefaultInstance() {
+        var stack = new ItemStack(this);
+        stack.set(Machines.DataComponents.ROOM_TEMPLATE_ID, RoomTemplate.NO_TEMPLATE);
+        stack.set(Machines.DataComponents.MACHINE_COLOR, CommonColors.WHITE);
+        return stack;
     }
 
     private ResourceLocation getTemplateId(ItemStack stack) {

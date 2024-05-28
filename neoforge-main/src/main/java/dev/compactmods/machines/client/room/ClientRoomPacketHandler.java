@@ -1,5 +1,6 @@
 package dev.compactmods.machines.client.room;
 
+import dev.compactmods.machines.room.Rooms;
 import dev.compactmods.machines.room.ui.preview.MachineRoomScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
@@ -18,12 +19,8 @@ public class ClientRoomPacketHandler {
     public static void handleRoomSync(String roomCode, UUID owner) {
         final var mc = Minecraft.getInstance();
 
-        // FIXME - Set client-side room data
-//        mc.player.getCapability(RoomHelper.CURRENT_ROOM_META).ifPresent(meta -> {
-//            if(owner.equals(Util.NIL_UUID))
-//                meta.clearCurrent();
-//            else
-//                meta.setCurrent(new ClientRoomMetadata(roomCode, owner));
-//        });
+        // FIXME - Current Room Owner
+        mc.player.setData(Rooms.DataAttachments.CURRENT_ROOM_CODE, roomCode);
+        // mc.player.setData(Rooms.DataAttachments)
     }
 }

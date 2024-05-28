@@ -1,11 +1,16 @@
 package dev.compactmods.machines.client.room;
 
+import dev.compactmods.machines.api.CompactMachinesApi;
 import dev.compactmods.machines.client.keybinds.room.RoomExitKeyMapping;
+import dev.compactmods.machines.client.keybinds.room.RoomUpgradeUIMapping;
 import dev.compactmods.machines.room.Rooms;
+import dev.compactmods.machines.room.ui.overlay.RoomMetadataDebugOverlay;
 import dev.compactmods.machines.room.ui.upgrades.RoomUpgradeScreen;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 
 public class RoomClientEvents {
 
@@ -15,9 +20,18 @@ public class RoomClientEvents {
 
     public static void onKeybindRegistration(final RegisterKeyMappingsEvent evt) {
         evt.register(RoomExitKeyMapping.MAPPING);
+        evt.register(RoomUpgradeUIMapping.MAPPING);
+    }
+
+    public static void handleKeybinds(final ClientTickEvent.Post clientTick) {
+        if (RoomExitKeyMapping.MAPPING.consumeClick())
+            RoomExitKeyMapping.handle();
+
+        if(RoomUpgradeUIMapping.MAPPING.consumeClick())
+            RoomUpgradeUIMapping.handle();
     }
 
     public static void onOverlayRegistration(final RegisterGuiLayersEvent layers) {
-        // FIXME overlays.registerAbove(VanillaGuiOverlay.DEBUG_SCREEN.id(), new ResourceLocation(Constants.MOD_ID, "room_meta_debug"), new RoomMetadataDebugOverlay());
+        layers.registerAbove(VanillaGuiLayers.DEBUG_OVERLAY, CompactMachinesApi.modRL("room_meta_debug"), new RoomMetadataDebugOverlay());
     }
 }

@@ -18,7 +18,7 @@ public class CMNetworks {
 
         main.playToServer(PlayerRequestedRoomUIPacket.TYPE, PlayerRequestedRoomUIPacket.STREAM_CODEC, PlayerRequestedRoomUIPacket.HANDLER);
 
-        main.playToServer(PlayerRequestedUpgradeMenuPacket.TYPE, PlayerRequestedUpgradeMenuPacket.STREAM_CODEC, PlayerRequestedUpgradeMenuPacket.HANDLER);
+        main.playToServer(PlayerRequestedUpgradeUIPacket.TYPE, PlayerRequestedUpgradeUIPacket.STREAM_CODEC, PlayerRequestedUpgradeUIPacket.HANDLER);
 
         main.playToClient(MachineColorSyncPacket.TYPE, MachineColorSyncPacket.STREAM_CODEC, MachineColorSyncPacket.HANDLER);
     }

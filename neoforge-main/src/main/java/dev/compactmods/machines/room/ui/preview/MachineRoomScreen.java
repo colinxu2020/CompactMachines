@@ -4,7 +4,7 @@ import dev.compactmods.machines.api.CompactMachinesApi;
 import dev.compactmods.machines.client.render.NineSliceRenderer;
 import dev.compactmods.machines.client.widget.ImageButtonBuilder;
 import dev.compactmods.machines.network.PlayerRequestedTeleportPacket;
-import dev.compactmods.machines.network.PlayerRequestedUpgradeMenuPacket;
+import dev.compactmods.machines.network.PlayerRequestedUpgradeUIPacket;
 import dev.compactmods.machines.shrinking.Shrinking;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
@@ -65,7 +65,7 @@ public class MachineRoomScreen extends AbstractContainerScreen<MachineRoomMenu> 
                 .size(12, 12)
                 .location(leftPos + imageWidth - 24, topPos + 212)
                 .onPress(btn -> {
-                    PacketDistributor.sendToServer(new PlayerRequestedUpgradeMenuPacket(menu.getRoom()));
+                    PacketDistributor.sendToServer(new PlayerRequestedUpgradeUIPacket(menu.getRoom(), false));
                 }).build();
 
         addRenderableWidget(upgradeScreenBtn);

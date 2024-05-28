@@ -51,7 +51,8 @@ public class RoomUpgradeScreen extends AbstractContainerScreen<RoomUpgradeMenu> 
     protected void init() {
         super.init();
 
-        var backButton = ImageButtonBuilder.button(BACK_BTN_SPRITES)
+        if(menu.showBackButton) {
+            var backButton = ImageButtonBuilder.button(BACK_BTN_SPRITES)
                 .location(leftPos - 12, topPos + 2)
                 .size(8, 12)
                 .message(Component.literal("Close"))
@@ -60,7 +61,8 @@ public class RoomUpgradeScreen extends AbstractContainerScreen<RoomUpgradeMenu> 
                 })
                 .build();
 
-        addRenderableWidget(backButton);
+            addRenderableWidget(backButton);
+        }
     }
 
     @Override

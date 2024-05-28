@@ -19,6 +19,8 @@ import org.jetbrains.annotations.NotNull;
 public class RoomUpgradeMenu extends AbstractContainerMenu {
     private final Inventory playerInv;
     public final String roomCode;
+    public boolean showBackButton = true;
+    private boolean standalone = false;
 
     protected RoomUpgradeMenu(int winId, Inventory playerInv, String roomCode, NeoforgeRoomUpgradeInventory upgradeInv) {
         super(Rooms.Menus.ROOM_UPGRADES.get(), winId);
@@ -90,8 +92,15 @@ public class RoomUpgradeMenu extends AbstractContainerMenu {
     }
 
     public static RoomUpgradeMenu createClientMenu(int id, Inventory playerInv, FriendlyByteBuf extraData) {
+        final var isIsolated = extraData.readBoolean();
         final var code = extraData.readUtf();
 
-        return new RoomUpgradeMenu(id, playerInv, code, NeoforgeRoomUpgradeInventory.EMPTY);
+        var menu = new RoomUpgradeMenu(id, playerInv, code, NeoforgeRoomUpgradeInventory.EMPTY);
+        menu.setIsolated(isIsolated);
+        return menu;
+    }
+
+    private void setIsolated(boolean isolated) {
+        this.showBackButton = !isolated;
     }
 }

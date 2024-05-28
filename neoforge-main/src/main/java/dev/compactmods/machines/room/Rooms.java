@@ -1,6 +1,7 @@
 package dev.compactmods.machines.room;
 
 import com.google.common.base.Predicates;
+import com.mojang.serialization.Codec;
 import dev.compactmods.machines.LoggingUtil;
 import dev.compactmods.machines.api.room.history.RoomEntryPoint;
 import dev.compactmods.machines.api.room.upgrade.components.RoomUpgradeList;
@@ -92,6 +93,11 @@ public interface Rooms {
 		 .builder(() -> new RoomUpgradeList(List.of()))
 		 .serialize(RoomUpgradeList.CODEC)
 		 .build());
+
+	 Supplier<AttachmentType<String>> CURRENT_ROOM_CODE = CMRegistries.ATTACHMENT_TYPES.register("current_room_code", () -> AttachmentType
+		 .<String>builder(() -> null)
+		 .serialize(Codec.STRING)
+		 .build()) ;
 
 	 static void prepare() {
 	 }

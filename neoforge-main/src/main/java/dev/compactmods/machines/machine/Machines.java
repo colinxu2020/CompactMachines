@@ -64,16 +64,12 @@ public interface Machines {
 	  static void prepare() {
 	  }
 
-	  Holder<Item> UNBOUND_HOLDER = BuiltInRegistries.ITEM.getHolderOrThrow(MachineConstants.UNBOUND_MACHINE_ITEM_RESKEY);
-	  Holder<Item> BOUND_HOLDER = BuiltInRegistries.ITEM.getHolderOrThrow(MachineConstants.BOUND_MACHINE_ITEM_RESKEY);
-
 	  static ItemStack unbound() {
 		 return unboundColored(0xFFFFFFFF);
 	  }
 
 	  static ItemStack unboundColored(int color) {
-		 final var stack = new ItemStack(UNBOUND_HOLDER, 1);
-		 stack.set(Machines.DataComponents.ROOM_TEMPLATE_ID, RoomTemplate.NO_TEMPLATE);
+		 final var stack = UNBOUND_MACHINE.toStack();
 		 stack.set(Machines.DataComponents.MACHINE_COLOR, color);
 		 return stack;
 	  }
@@ -83,14 +79,14 @@ public interface Machines {
 	  }
 
 	  static ItemStack boundToRoom(String roomCode, int color) {
-		 ItemStack stack = new ItemStack(BOUND_HOLDER, 1);
+		 ItemStack stack = BOUND_MACHINE.toStack();
 		 stack.set(Machines.DataComponents.BOUND_ROOM_CODE, roomCode);
 		 stack.set(Machines.DataComponents.MACHINE_COLOR, color);
 		 return stack;
 	  }
 
 	  static ItemStack forNewRoom(ResourceLocation templateID, RoomTemplate template) {
-		 final var stack = new ItemStack(UNBOUND_HOLDER, 1);
+		 final var stack = UNBOUND_MACHINE.toStack();
 		 stack.set(Machines.DataComponents.ROOM_TEMPLATE_ID, templateID);
 		 stack.set(Machines.DataComponents.ROOM_TEMPLATE, template);
 		 stack.set(Machines.DataComponents.MACHINE_COLOR, template.defaultMachineColor().rgb());
