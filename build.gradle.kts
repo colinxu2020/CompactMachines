@@ -4,3 +4,9 @@ plugins {
 //    alias(neoforged.plugins.common)
     alias(neoforged.plugins.userdev).apply(false)
 }
+
+subprojects {
+    repositories {
+        mavenLocal()
+    }
+}

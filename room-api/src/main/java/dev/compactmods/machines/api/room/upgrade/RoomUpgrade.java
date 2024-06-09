@@ -15,17 +15,17 @@ import java.util.stream.Stream;
 public interface RoomUpgrade extends TooltipProvider {
 
    Codec<RoomUpgrade> DISPATCH_CODEC = Codec.lazyInitialized(() -> {
-	  @SuppressWarnings("unchecked") final var reg = (Registry<RoomUpgradeType<?>>) BuiltInRegistries.REGISTRY.get(CompactMachinesApi.modRL("room_upgrades"));
+	  @SuppressWarnings("unchecked") final var reg = (Registry<RoomUpgradeDefinition<?>>) BuiltInRegistries.REGISTRY.get(CompactMachinesApi.modRL("room_upgrades"));
 
 	  if (reg != null) {
 		 var upgradeRegistry = reg.byNameCodec();
-		 return upgradeRegistry.dispatchStable(RoomUpgrade::getType, RoomUpgradeType::codec);
+		 return upgradeRegistry.dispatchStable(RoomUpgrade::getType, RoomUpgradeDefinition::codec);
 	  }
 
 	  throw new RuntimeException("Room upgrade registry not registered yet; calling too early?");
    });
 
-   RoomUpgradeType<?> getType();
+   RoomUpgradeDefinition<?> getType();
 
    StreamCodec<RegistryFriendlyByteBuf, RoomUpgrade> STREAM_CODEC = ByteBufCodecs.fromCodecWithRegistries(DISPATCH_CODEC);
 

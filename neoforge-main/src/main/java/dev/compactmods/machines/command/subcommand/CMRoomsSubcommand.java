@@ -141,14 +141,14 @@ public class CMRoomsSubcommand {
         final var owner = EntityArgument.getPlayer(ctx, "owner");
         final var source = ctx.getSource();
 
-        final var owned = RoomApi.owners().findByOwner(owner.getUUID()).toList();
-
-        // TODO Localization
-        if (owned.isEmpty()) {
-            source.sendSuccess(() -> Component.literal("No rooms found."), false);
-        } else {
-            owned.forEach(roomCode -> source.sendSuccess(() -> Component.literal("Room: " + roomCode), false));
-        }
+//        final var owned = RoomApi.owners().findByOwner(owner.getUUID()).toList();
+//
+//        // TODO Localization
+//        if (owned.isEmpty()) {
+//            source.sendSuccess(() -> Component.literal("No rooms found."), false);
+//        } else {
+//            owned.forEach(roomCode -> source.sendSuccess(() -> Component.literal("Room: " + roomCode), false));
+//        }
 
 
         return 0;

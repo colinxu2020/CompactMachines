@@ -3,13 +3,12 @@ package dev.compactmods.machines.test.data;
 import dev.compactmods.machines.api.CompactMachinesApi;
 import dev.compactmods.machines.api.room.RoomApi;
 import dev.compactmods.machines.api.room.history.RoomEntryPoint;
-import dev.compactmods.machines.player.PlayerEntryPointHistory;
-import dev.compactmods.machines.player.RoomEntryResult;
+import dev.compactmods.machines.player.PlayerEntryPointHistoryManager;
+import dev.compactmods.machines.api.room.history.RoomEntryResult;
 import dev.compactmods.machines.room.RoomCodeGenerator;
 import dev.compactmods.machines.test.TestRoomApi;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.world.level.GameType;
 import net.neoforged.neoforge.gametest.GameTestHolder;
@@ -29,7 +28,7 @@ public class PlayerHistoryTrackerTests {
     public static void failsPlayerGoingTooFar(final GameTestHelper test) {
         RoomApi.INSTANCE = TestRoomApi.forTest(test);
 
-        final var history = new PlayerEntryPointHistory(1);
+        final var history = new PlayerEntryPointHistoryManager(1);
 
         final var player = test.makeMockPlayer(GameType.SURVIVAL);
         history.enterRoom(player, RoomCodeGenerator.generateRoomId(), RoomEntryPoint.nonexistent());
@@ -45,7 +44,7 @@ public class PlayerHistoryTrackerTests {
     public static void canGetPlayerHistory(final GameTestHelper test) throws InterruptedException {
         RoomApi.INSTANCE = TestRoomApi.forTest(test);
 
-        final var history = new PlayerEntryPointHistory(5);
+        final var history = new PlayerEntryPointHistoryManager(5);
 
         final var player = test.makeMockPlayer(GameType.SURVIVAL);
 
@@ -74,7 +73,7 @@ public class PlayerHistoryTrackerTests {
     public static void canRemovePlayerHistory(final GameTestHelper test) throws InterruptedException {
         RoomApi.INSTANCE = TestRoomApi.forTest(test);
 
-        final var history = new PlayerEntryPointHistory(5);
+        final var history = new PlayerEntryPointHistoryManager(5);
         final var player = test.makeMockPlayer(GameType.SURVIVAL);
 
         Deque<String> codes = new ArrayDeque<>(5);
@@ -99,7 +98,9 @@ public class PlayerHistoryTrackerTests {
 
     @GameTest(template = "empty_1x1", batch = BATCH, timeoutTicks = 1400)
     public static void testDataLogic(final GameTestHelper test) throws InterruptedException {
-        final var history = new PlayerEntryPointHistory(5);
+        RoomApi.INSTANCE = TestRoomApi.forTest(test);
+
+        final var history = new PlayerEntryPointHistoryManager(5);
 
         final var player = test.makeMockPlayer(GameType.SURVIVAL);
 
@@ -114,9 +115,11 @@ public class PlayerHistoryTrackerTests {
 
         long beforeSave = history.history(player.getUUID()).count();
 
-        final var saved = history.save(new CompoundTag(), test.getLevel().registryAccess());
+        final var saved = history.codec()
+            .encodeStart(NbtOps.INSTANCE, history)
+            .getOrThrow();
 
-        final var loaded = PlayerEntryPointHistory.CODEC.parse(NbtOps.INSTANCE, saved).getOrThrow();
+        final var loaded = PlayerEntryPointHistoryManager.CODEC.parse(NbtOps.INSTANCE, saved).getOrThrow();
 
         long afterLoad = loaded.history(player.getUUID()).count();
 

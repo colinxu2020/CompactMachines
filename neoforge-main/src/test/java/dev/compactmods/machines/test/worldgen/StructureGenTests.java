@@ -10,12 +10,12 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
+import net.neoforged.testframework.annotation.ForEachTest;
 
-@PrefixGameTestTemplate(false)
-@GameTestHolder(CompactMachinesApi.MOD_ID)
+@ForEachTest(groups = StructureGenTests.BATCH)
 public class StructureGenTests {
 
-    private static final String BATCH = "structures";
+    static final String BATCH = "structures";
 
     @GameTest(template = "empty_15x15", batch = BATCH)
     public static void structurePlacedCenter(final CompactGameTestHelper testHelper) {

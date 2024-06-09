@@ -2,14 +2,19 @@ rootProject.name = "Compact Machines 20.6"
 
 dependencyResolutionManagement {
     versionCatalogs.create("neoforged") {
-        version("neogradle", "7.0.135")
-        version("neoforge", "20.6.84-beta")
+        version("neogradle", "7.0.142")
+        version("neoforge", "20.6.125-beta-feat-cap-codecs")
 
         plugin("userdev", "net.neoforged.gradle.userdev")
             .versionRef("neogradle")
 
         library("neoforge", "net.neoforged", "neoforge")
             .versionRef("neoforge")
+
+        library("testframework", "net.neoforged", "testframework")
+            .versionRef("neoforge")
+
+        bundle("neoforge", listOf("neoforge", "testframework"))
     }
 
     versionCatalogs.create("mojang") {

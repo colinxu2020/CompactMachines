@@ -1,20 +1,17 @@
 package dev.compactmods.machines.room;
 
 import com.mojang.serialization.Codec;
+import dev.compactmods.machines.data.CMDataFile;
 import dev.compactmods.machines.api.room.IRoomRegistrar;
 import dev.compactmods.machines.api.room.RoomApi;
 import dev.compactmods.machines.api.room.RoomInstance;
 import dev.compactmods.machines.api.room.RoomTemplate;
 import dev.compactmods.machines.api.room.registration.IRoomBuilder;
 import dev.compactmods.feather.MemoryGraph;
-import dev.compactmods.machines.api.CompactMachinesApi;
-import dev.compactmods.machines.api.dimension.CompactDimension;
-import dev.compactmods.machines.api.dimension.MissingDimensionException;
 import dev.compactmods.machines.api.util.AABBAligner;
-import dev.compactmods.machines.data.CodecBackedSavedData;
+import dev.compactmods.machines.data.CodecHolder;
 import dev.compactmods.machines.room.graph.node.RoomRegistrationNode;
 import dev.compactmods.machines.util.MathUtil;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.phys.AABB;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,11 +25,9 @@ import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-public class RoomRegistrar extends CodecBackedSavedData<RoomRegistrar> implements IRoomRegistrar {
+public class RoomRegistrar implements IRoomRegistrar, CodecHolder<RoomRegistrar>, CMDataFile {
 
     public static final Logger LOGS = LogManager.getLogger();
-
-    public static final String DATA_NAME = CompactMachinesApi.MOD_ID + "_rooms";
 
     public static final Codec<RoomRegistrar> CODEC = RoomRegistrationNode.CODEC.listOf()
             .fieldOf("rooms")
@@ -41,23 +36,14 @@ public class RoomRegistrar extends CodecBackedSavedData<RoomRegistrar> implement
     private final MemoryGraph graph;
     private final Map<String, RoomRegistrationNode> registrationNodes;
 
-    private RoomRegistrar() {
-        super(CODEC, RoomRegistrar::new);
+    public RoomRegistrar() {
         this.graph = new MemoryGraph();
         this.registrationNodes = new HashMap<>();
     }
 
     private RoomRegistrar(List<RoomRegistrationNode> regNodes) {
-        super(CODEC, RoomRegistrar::new);
-        this.graph = new MemoryGraph();
-        this.registrationNodes = new HashMap<>();
+        this();
         regNodes.forEach(this::registerDirty);
-    }
-
-    public static RoomRegistrar forServer(MinecraftServer server) throws MissingDimensionException {
-        return CompactDimension.forServer(server)
-                .getDataStorage()
-                .computeIfAbsent(new CodecWrappedSavedData<>(CODEC, RoomRegistrar::new).sd(), DATA_NAME);
     }
 
     @Override
@@ -82,7 +68,6 @@ public class RoomRegistrar extends CodecBackedSavedData<RoomRegistrar> implement
         this.graph.addNode(node);
 
         RoomApi.chunkManager().calculateChunks(inst.code(), node);
-        setDirty();
 
         return inst;
     }
@@ -127,5 +112,10 @@ public class RoomRegistrar extends CodecBackedSavedData<RoomRegistrar> implement
     private void registerDirty(RoomRegistrationNode node) {
         registrationNodes.putIfAbsent(node.code(), node);
         graph.addNode(node);
+    }
+
+    @Override
+    public Codec<RoomRegistrar> codec() {
+        return CODEC;
     }
 }

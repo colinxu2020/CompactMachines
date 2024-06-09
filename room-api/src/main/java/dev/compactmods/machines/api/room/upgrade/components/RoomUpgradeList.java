@@ -14,6 +14,11 @@ import net.minecraft.world.item.component.TooltipProvider;
 import java.util.List;
 import java.util.function.Consumer;
 
+/**
+ * Represents a set of room upgrades as stored on an item.
+ *
+ * @param upgrades
+ */
 public record RoomUpgradeList(List<RoomUpgrade> upgrades) implements TooltipProvider {
 
   public static final Codec<RoomUpgradeList> CODEC = RoomUpgrade.DISPATCH_CODEC.listOf()

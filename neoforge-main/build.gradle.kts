@@ -83,7 +83,7 @@ runs {
 
         if(!System.getenv().containsKey("CI")) {
             // JetBrains Runtime Hotswap
-            jvmArgument("-XX:+AllowEnhancedClassRedefinition")
+            // jvmArgument("-XX:+AllowEnhancedClassRedefinition")
         }
 
         modSource(sourceSets.main.get())
@@ -153,7 +153,7 @@ dependencies {
     // Core Projects and Libraries
     this {
         implementation(neoforged.neoforge)
-
+        testImplementation(neoforged.testframework)
         implementation(libraries.jnanoid)
         jarJar(libraries.jnanoid)
 

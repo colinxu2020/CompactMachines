@@ -1,106 +1,115 @@
 package dev.compactmods.machines.room.ui.upgrades;
 
 import dev.compactmods.machines.api.CompactMachinesApi;
+import dev.compactmods.machines.api.room.RoomApi;
 import dev.compactmods.machines.api.room.RoomInstance;
 import dev.compactmods.machines.client.render.ConditionalGhostSlot;
 import dev.compactmods.machines.data.room.RoomAttachmentDataManager;
 import dev.compactmods.machines.room.Rooms;
-import dev.compactmods.machines.room.upgrade.NeoforgeRoomUpgradeInventory;
+import dev.compactmods.machines.room.upgrade.RoomUpgradeInventory;
+import dev.compactmods.machines.server.CompactMachinesServer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
 
 public class RoomUpgradeMenu extends AbstractContainerMenu {
-    private final Inventory playerInv;
-    public final String roomCode;
-    public boolean showBackButton = true;
-    private boolean standalone = false;
+   private final Inventory playerInv;
+   public final String roomCode;
+   public boolean showBackButton = true;
+   private boolean standalone = false;
 
-    protected RoomUpgradeMenu(int winId, Inventory playerInv, String roomCode, NeoforgeRoomUpgradeInventory upgradeInv) {
-        super(Rooms.Menus.ROOM_UPGRADES.get(), winId);
-        this.playerInv = playerInv;
-        this.roomCode = roomCode;
+   protected RoomUpgradeMenu(int winId, Inventory playerInv, String roomCode, RoomUpgradeInventory upgradeInv) {
+	  super(Rooms.Menus.ROOM_UPGRADES.get(), winId);
+	  this.playerInv = playerInv;
+	  this.roomCode = roomCode;
 
-        // Room inventory
-        for(int slot = 0; slot < 9; slot++) {
-            int slotX = 8 + slot * 18;
+	  // Room inventory
+	  for (int slot = 0; slot < 9; slot++) {
+		 int slotX = 8 + slot * 18;
 
-            this.addSlot(new SlotItemHandler(upgradeInv, slot, slotX, 18) {
-                @Override
-                public void onTake(Player pPlayer, ItemStack pStack) {
-                    // TODO: Room Upgrade removal event
-                    super.onTake(pPlayer, pStack);
-                }
-            });
-        }
+		 this.addSlot(new SlotItemHandler(upgradeInv, slot, slotX, 18) {
+			@Override
+			public void onTake(Player pPlayer, ItemStack pStack) {
+			   // TODO: Room Upgrade removal event
+			   super.onTake(pPlayer, pStack);
+			}
+		 });
+	  }
 
-        int slotY = 38 + 31;
+	  int slotY = 38 + 31;
 
-        // Main Inventory
-        for(int l = 0; l < 3; ++l) {
-            for(int j1 = 0; j1 < 9; ++j1) {
-                this.addSlot(new ConditionalGhostSlot(playerInv, j1 + l * 9 + 9, 8 + j1 * 18, l * 18 + slotY));
-            }
-        }
+	  // Main Inventory
+	  for (int l = 0; l < 3; ++l) {
+		 for (int j1 = 0; j1 < 9; ++j1) {
+			this.addSlot(new ConditionalGhostSlot(playerInv, j1 + l * 9 + 9, 8 + j1 * 18, l * 18 + slotY));
+		 }
+	  }
 
-        // Hotbar
-        for(int i1 = 0; i1 < 9; ++i1) {
-            this.addSlot(new ConditionalGhostSlot(playerInv, i1, 8 + i1 * 18, slotY + (18 * 3) + 4));
-        }
-    }
+	  // Hotbar
+	  for (int i1 = 0; i1 < 9; ++i1) {
+		 this.addSlot(new ConditionalGhostSlot(playerInv, i1, 8 + i1 * 18, slotY + (18 * 3) + 4));
+	  }
+   }
 
-    @Override
-    public ItemStack quickMoveStack(Player player, int pIndex) {
-        return ItemStack.EMPTY;
-    }
+   @Override
+   public ItemStack quickMoveStack(Player player, int pIndex) {
+	  return ItemStack.EMPTY;
+   }
 
-    @Override
-    public boolean stillValid(Player player) {
-        return true;
-    }
+   @Override
+   public boolean stillValid(Player player) {
+	  return true;
+   }
 
+   @Override
+   public void clicked(int pSlotId, int pButton, ClickType clickType, Player player) {
+	  if (player.level().isClientSide)
+		 return;
 
+	  super.clicked(pSlotId, pButton, clickType, player);
+   }
 
-    public static MenuProvider provider(RoomInstance room) {
-        return new MenuProvider() {
-            @Override
-            public @NotNull Component getDisplayName() {
-                return Component.translatable(CompactMachinesApi.MOD_ID + ".ui.room_upgrades");
-            }
+   public static MenuProvider provider(RoomInstance room) {
+	  return new MenuProvider() {
+		 @Override
+		 public @NotNull Component getDisplayName() {
+			return Component.translatable(CompactMachinesApi.MOD_ID + ".ui.room_upgrades");
+		 }
 
-            @Override
-            public @NotNull AbstractContainerMenu createMenu(int winId, Inventory inventory, Player player) {
-                var serverUpgInv = RoomAttachmentDataManager.instance()
-                        .orElseThrow()
-                        .data(room.code())
-                        .getData(Rooms.DataAttachments.UPGRADE_INV);
+		 @Override
+		 public @NotNull AbstractContainerMenu createMenu(int winId, Inventory inventory, Player player) {
+			// TODO - Expose room data via API
+			var serverUpgInv = CompactMachinesServer.ROOM_DATA_ATTACHMENTS
+				.data(room.code())
+				.getData(Rooms.DataAttachments.UPGRADE_INV);
 
-                return new RoomUpgradeMenu(winId, inventory, room.code(), serverUpgInv);
-            }
+			return new RoomUpgradeMenu(winId, inventory, room.code(), serverUpgInv);
+		 }
 
-            @Override
-            public boolean shouldTriggerClientSideContainerClosingOnOpen() {
-                return false;
-            }
-        };
-    }
+		 @Override
+		 public boolean shouldTriggerClientSideContainerClosingOnOpen() {
+			return false;
+		 }
+	  };
+   }
 
-    public static RoomUpgradeMenu createClientMenu(int id, Inventory playerInv, FriendlyByteBuf extraData) {
-        final var isIsolated = extraData.readBoolean();
-        final var code = extraData.readUtf();
+   public static RoomUpgradeMenu createClientMenu(int id, Inventory playerInv, FriendlyByteBuf extraData) {
+	  final var isIsolated = extraData.readBoolean();
+	  final var code = extraData.readUtf();
 
-        var menu = new RoomUpgradeMenu(id, playerInv, code, NeoforgeRoomUpgradeInventory.EMPTY);
-        menu.setIsolated(isIsolated);
-        return menu;
-    }
+	  var menu = new RoomUpgradeMenu(id, playerInv, code, RoomUpgradeInventory.EMPTY);
+	  menu.setIsolated(isIsolated);
+	  return menu;
+   }
 
-    private void setIsolated(boolean isolated) {
-        this.showBackButton = !isolated;
-    }
+   private void setIsolated(boolean isolated) {
+	  this.showBackButton = !isolated;
+   }
 }

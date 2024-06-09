@@ -1,54 +1,19 @@
 package dev.compactmods.machines.room;
 
-import dev.compactmods.machines.LoggingUtil;
 import dev.compactmods.machines.api.Translations;
 import dev.compactmods.machines.api.dimension.CompactDimension;
-import dev.compactmods.machines.api.dimension.MissingDimensionException;
 import dev.compactmods.machines.api.room.RoomApi;
-import dev.compactmods.machines.data.room.RoomAttachmentDataManager;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.EntityTeleportEvent;
 import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
-import net.neoforged.neoforge.event.level.LevelEvent;
-import net.neoforged.neoforge.event.server.ServerStartingEvent;
-import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 
 public class RoomEventHandler {
 
-    public static void serverStarting(final ServerStartingEvent evt) {
-        final var modLog = LoggingUtil.modLog();
 
-        try {
-            modLog.debug("Setting up room API and data...");
-            MinecraftServer server = evt.getServer();
-
-            // Set up room API
-            RoomApi.INSTANCE = RoomApiInstance.forServer(server);
-
-            // Set up room data attachments for Neo
-            RoomAttachmentDataManager.instance(server);
-
-            modLog.debug("Completed setting up room API and data.");
-        } catch (MissingDimensionException e) {
-            modLog.fatal("Failed to set up room API instance; dimension error.", e);
-        }
-    }
-
-    public static void serverStopping(final ServerStoppingEvent evt) {
-        RoomAttachmentDataManager.instance().ifPresent(manager -> manager.save(evt.getServer().registryAccess()));
-    }
-
-    public static void levelSaved(final LevelEvent.Save level) {
-        if (level.getLevel() instanceof Level l && CompactDimension.isLevelCompact(l)) {
-            RoomAttachmentDataManager.instance().ifPresent(manager -> manager.save(l.registryAccess()));
-        }
-    }
 
     public static void entityJoined(final EntityJoinLevelEvent evt) {
         Entity ent = evt.getEntity();

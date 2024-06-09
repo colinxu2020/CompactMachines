@@ -1,13 +1,12 @@
 package dev.compactmods.machines.api.room;
 
-import dev.compactmods.machines.api.CompactMachinesApi;
 import dev.compactmods.machines.api.room.owner.IRoomOwners;
 import dev.compactmods.machines.api.room.spatial.IRoomChunkManager;
 import dev.compactmods.machines.api.room.spatial.IRoomChunks;
 import dev.compactmods.machines.api.room.spawn.IRoomSpawnManager;
 import dev.compactmods.machines.api.dimension.CompactDimension;
 import dev.compactmods.machines.api.dimension.MissingDimensionException;
-import dev.compactmods.machines.api.room.upgrade.RoomUpgradeType;
+import dev.compactmods.machines.api.room.upgrade.RoomUpgradeDefinition;
 import net.minecraft.core.Registry;
 import net.minecraft.server.MinecraftServer;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -28,8 +27,8 @@ public class RoomApi {
     @ApiStatus.Internal
     public static IRoomApi INSTANCE;
 
-    public static DeferredRegister<RoomUpgradeType<?>> roomUpgradeDR(String namespace) {
-        return DeferredRegister.create(RoomUpgradeType.REG_KEY, namespace);
+    public static DeferredRegister<RoomUpgradeDefinition<?>> roomUpgradeDR(String namespace) {
+        return DeferredRegister.create(RoomUpgradeDefinition.REG_KEY, namespace);
     }
 
     public static Predicate<String> roomCodeValidator() {
@@ -74,10 +73,6 @@ public class RoomApi {
 
     public static IRoomRegistrar registrar() {
         return INSTANCE.registrar();
-    }
-
-    public static IRoomOwners owners() {
-        return INSTANCE.owners();
     }
 
     public static IRoomSpawnManager spawnManager(String roomCode) {

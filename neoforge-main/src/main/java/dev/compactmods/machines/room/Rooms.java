@@ -10,7 +10,7 @@ import dev.compactmods.machines.network.RoomNetworkHandler;
 import dev.compactmods.machines.room.block.SolidWallBlock;
 import dev.compactmods.machines.room.ui.preview.MachineRoomMenu;
 import dev.compactmods.machines.room.ui.upgrades.RoomUpgradeMenu;
-import dev.compactmods.machines.room.upgrade.NeoforgeRoomUpgradeInventory;
+import dev.compactmods.machines.room.upgrade.RoomUpgradeInventory;
 import dev.compactmods.machines.room.wall.BreakableWallBlock;
 import dev.compactmods.machines.room.wall.ItemBlockWall;
 import net.minecraft.core.BlockPos;
@@ -80,8 +80,8 @@ public interface Rooms {
 		  .serialize(RoomEntryPoint.CODEC)
 		  .build());
 
-	 Supplier<AttachmentType<NeoforgeRoomUpgradeInventory>> UPGRADE_INV = CMRegistries.ATTACHMENT_TYPES.register("upgrades", () -> AttachmentType
-		  .serializable(NeoforgeRoomUpgradeInventory::new)
+	 Supplier<AttachmentType<RoomUpgradeInventory>> UPGRADE_INV = CMRegistries.ATTACHMENT_TYPES.register("upgrades", () -> AttachmentType
+		  .serializable(RoomUpgradeInventory::new)
 		  .build());
 
 	 Supplier<AttachmentType<GlobalPos>> OPEN_MACHINE_POS = CMRegistries.ATTACHMENT_TYPES.register("open_machine", () -> AttachmentType
@@ -120,8 +120,5 @@ public interface Rooms {
 	 NeoForge.EVENT_BUS.addListener(RoomEventHandler::checkSpawn);
 	 NeoForge.EVENT_BUS.addListener(RoomEventHandler::entityJoined);
 	 NeoForge.EVENT_BUS.addListener(RoomEventHandler::entityTeleport);
-	 NeoForge.EVENT_BUS.addListener(RoomEventHandler::levelSaved);
-	 NeoForge.EVENT_BUS.addListener(RoomEventHandler::serverStarting);
-	 NeoForge.EVENT_BUS.addListener(RoomEventHandler::serverStopping);
   }
 }

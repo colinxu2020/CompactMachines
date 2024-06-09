@@ -3,20 +3,18 @@ package dev.compactmods.machines.room.upgrade.example;
 import com.mojang.serialization.MapCodec;
 import dev.compactmods.machines.api.room.RoomInstance;
 import dev.compactmods.machines.api.room.upgrade.RoomUpgrade;
-import dev.compactmods.machines.api.room.upgrade.RoomUpgradeType;
+import dev.compactmods.machines.api.room.upgrade.RoomUpgradeDefinition;
 import dev.compactmods.machines.api.room.upgrade.events.RoomUpgradeEvent;
-import dev.compactmods.machines.api.room.upgrade.events.UpgradeTickedEventListener;
+import dev.compactmods.machines.api.room.upgrade.events.lifecycle.UpgradeTickedEventListener;
 import dev.compactmods.machines.room.upgrade.RoomUpgrades;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.CommonColors;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
@@ -37,12 +35,12 @@ public class TreeCutterUpgrade implements RoomUpgrade {
 
    @Override
    public Stream<RoomUpgradeEvent> gatherEvents() {
-	  final UpgradeTickedEventListener listener = TreeCutterUpgrade::onTick;
-	  return Stream.of(listener);
+	  final UpgradeTickedEventListener ticker = TreeCutterUpgrade::onTick;
+	  return Stream.of(ticker);
    }
 
    @Override
-   public RoomUpgradeType<TreeCutterUpgrade> getType() {
+   public RoomUpgradeDefinition<TreeCutterUpgrade> getType() {
 	  return RoomUpgrades.TREECUTTER.get();
    }
 

@@ -1,4 +1,4 @@
-package dev.compactmods.machines.player;
+package dev.compactmods.machines.api.room.history;
 
 public enum RoomEntryResult {
     SUCCESS,

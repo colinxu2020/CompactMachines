@@ -17,14 +17,15 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
+import net.neoforged.testframework.annotation.ForEachTest;
+import net.neoforged.testframework.gametest.EmptyTemplate;
 import org.apache.logging.log4j.LogManager;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@PrefixGameTestTemplate(false)
-@GameTestHolder(CompactMachinesApi.MOD_ID)
+@ForEachTest(groups = RoomGenerationTests.BATCH)
 public class RoomGenerationTests {
 
     public static final String BATCH = "room_generation";
@@ -67,7 +68,7 @@ public class RoomGenerationTests {
         testHelper.succeed();
     }
 
-    @GameTest(template = "empty_15x15", batch = BATCH)
+    @GameTest(template = "empty_15x15")
     public static void checkOffsetsNormalTest(final CompactGameTestHelper testHelper) {
         final var logs = LogManager.getLogger();
 
@@ -88,7 +89,7 @@ public class RoomGenerationTests {
         testHelper.succeed();
     }
 
-    @GameTest(template = "empty_15x15", batch = BATCH)
+    @GameTest(template = "empty_15x15")
     public static void checkRoomGeneratorNormal(final CompactGameTestHelper testHelper) {
 
         AABB localBounds = testHelper.localBounds();
@@ -102,7 +103,7 @@ public class RoomGenerationTests {
         testHelper.succeed();
     }
 
-    @GameTest(template = "empty_15x15", batch = BATCH)
+    @GameTest(template = "empty_15x15")
     public static void checkRoomGeneratorWeirdShape(final CompactGameTestHelper testHelper) {
 
         AABB localBounds = testHelper.localBounds();

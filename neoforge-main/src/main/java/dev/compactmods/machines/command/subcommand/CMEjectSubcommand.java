@@ -4,7 +4,7 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.compactmods.machines.api.dimension.MissingDimensionException;
-import dev.compactmods.machines.player.PlayerEntryPointHistory;
+import dev.compactmods.machines.api.room.history.PlayerHistoryApi;
 import dev.compactmods.machines.util.PlayerUtil;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -38,12 +38,8 @@ public class CMEjectSubcommand {
         final MinecraftServer server = ctx.getSource().getServer();
 
         server.submitAsync(() -> {
-            try {
-                PlayerEntryPointHistory.forServer(server).clearHistory(player);
-            } catch (MissingDimensionException e) {
-                throw new RuntimeException(e);
-            }
-        });
+		   PlayerHistoryApi.historyManager().clearHistory(player);
+		});
 
         PlayerUtil.teleportPlayerToRespawnOrOverworld(ctx.getSource().getServer(), player);
 

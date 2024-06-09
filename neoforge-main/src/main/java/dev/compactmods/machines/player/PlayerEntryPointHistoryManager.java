@@ -6,13 +6,14 @@ import dev.compactmods.feather.MemoryGraph;
 import dev.compactmods.feather.edge.impl.EmptyEdge;
 import dev.compactmods.feather.node.Node;
 import dev.compactmods.feather.traversal.GraphNodeTransformationFunction;
-import dev.compactmods.machines.api.CompactMachinesApi;
 import dev.compactmods.machines.api.dimension.CompactDimension;
-import dev.compactmods.machines.api.dimension.MissingDimensionException;
+import dev.compactmods.machines.api.room.history.IPlayerEntryPointHistoryManager;
 import dev.compactmods.machines.api.room.RoomApi;
 import dev.compactmods.machines.api.room.history.PlayerRoomHistoryEntry;
 import dev.compactmods.machines.api.room.history.RoomEntryPoint;
-import dev.compactmods.machines.data.CodecBackedSavedData;
+import dev.compactmods.machines.api.room.history.RoomEntryResult;
+import dev.compactmods.machines.data.CodecHolder;
+import dev.compactmods.machines.data.CMDataFile;
 import dev.compactmods.machines.room.graph.node.RoomReferenceNode;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.server.MinecraftServer;
@@ -22,6 +23,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
+import java.nio.file.Path;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.Comparator;
@@ -33,22 +35,16 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-// TODO: Global access via PlayerHistoryApi, similar to RoomApi
-public class PlayerEntryPointHistory extends CodecBackedSavedData<PlayerEntryPointHistory> {
-
-    public static final String DATA_NAME = CompactMachinesApi.MOD_ID + "_player_history";
+public class PlayerEntryPointHistoryManager implements CodecHolder<PlayerEntryPointHistoryManager>, CMDataFile, IPlayerEntryPointHistoryManager {
 
     private static final Logger LOGS = LogManager.getLogger();
 
-    private static final int DEFAULT_MAX_DEPTH = 5;
-
-    public static final Codec<PlayerEntryPointHistory> CODEC = RecordCodecBuilder.create(inst -> inst.group(
+    public static final Codec<PlayerEntryPointHistoryManager> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             Codec.INT.fieldOf("max_depth").forGetter(x -> x.maxDepth),
             Codec.unboundedMap(UUIDUtil.STRING_CODEC, PlayerRoomHistoryEntry.CODEC.listOf())
                             .fieldOf("history")
-                            .forGetter(PlayerEntryPointHistory::playerRoomHistory)
-    ).apply(inst, PlayerEntryPointHistory::new));
-    public static final Factory<PlayerEntryPointHistory> FACTORY = new CodecWrappedSavedData<>(CODEC, () -> new PlayerEntryPointHistory(DEFAULT_MAX_DEPTH)).sd();
+                            .forGetter(PlayerEntryPointHistoryManager::playerRoomHistory)
+    ).apply(inst, PlayerEntryPointHistoryManager::new));
 
     private final MemoryGraph graph;
     private final int maxDepth;
@@ -60,7 +56,7 @@ public class PlayerEntryPointHistory extends CodecBackedSavedData<PlayerEntryPoi
     private static final GraphNodeTransformationFunction<PlayerReferenceNode, Stream<PlayerRoomHistoryEntry>> PLAYER_TO_HISTORY =
             (graph, input) -> graph.outboundEdges(input, PlayerEntryPointNode.class)
                     .flatMap(e -> graph.outboundEdges(e.target().get(), RoomReferenceNode.class, PlayerRoomEntryEdge.class))
-                    .map(PlayerEntryPointHistory::fromEdge)
+                    .map(PlayerEntryPointHistoryManager::fromEdge)
                     .sorted(Comparator.comparing(PlayerRoomHistoryEntry::instant).reversed());
 
     private static final GraphNodeTransformationFunction<PlayerReferenceNode, Stream<PlayerEntryPointNode>> PLAYER_TO_HISTORY_NODES =
@@ -69,12 +65,11 @@ public class PlayerEntryPointHistory extends CodecBackedSavedData<PlayerEntryPoi
                     .sorted(Comparator.comparing(PlayerRoomEntryEdge::entryTime).reversed())
                     .map(e -> e.source().get());
 
-    public PlayerEntryPointHistory(int maxDepth) {
+    public PlayerEntryPointHistoryManager(int maxDepth) {
         this(maxDepth, Collections.emptyMap());
     }
 
-    private PlayerEntryPointHistory(int maxDepth, Map<UUID, List<PlayerRoomHistoryEntry>> history) {
-        super(CODEC, FACTORY.constructor());
+    private PlayerEntryPointHistoryManager(int maxDepth, Map<UUID, List<PlayerRoomHistoryEntry>> history) {
         this.graph = new MemoryGraph();
         this.maxDepth = maxDepth;
         this.roomNodes = new HashMap<>();
@@ -88,14 +83,13 @@ public class PlayerEntryPointHistory extends CodecBackedSavedData<PlayerEntryPoi
                     .sorted(Comparator.comparing(PlayerRoomHistoryEntry::instant))
                     .forEach(hist -> enterRoom(entry.getKey(), hist));
         }
-
-        this.setDirty();
     }
 
-    public static PlayerEntryPointHistory forServer(MinecraftServer server) throws MissingDimensionException {
-        return CompactDimension.forServer(server)
-                .getDataStorage()
-                .computeIfAbsent(FACTORY, DATA_NAME);
+    @Override
+    public Path getDataLocation(MinecraftServer server) {
+        return CompactDimension.getDataDirectory(server)
+            .resolve("data")
+            .resolve("player_spawns");
     }
 
     private static PlayerRoomHistoryEntry fromEdge(PlayerRoomEntryEdge edge) {
@@ -116,15 +110,13 @@ public class PlayerEntryPointHistory extends CodecBackedSavedData<PlayerEntryPoi
         newLatest.ifPresentOrElse(
                 l -> latestEntryPoints.replace(player.getUUID(), l),
                 () -> latestEntryPoints.remove(player.getUUID()));
-
-        this.setDirty();
     }
 
     public Optional<PlayerRoomHistoryEntry> lastHistory(Player player) {
         final var lastEntry = latestEntryPoints.get(player.getUUID());
         return graph.outboundEdges(lastEntry, RoomReferenceNode.class, PlayerRoomEntryEdge.class)
                 .max(Comparator.comparing(PlayerRoomEntryEdge::entryTime))
-                .map(PlayerEntryPointHistory::fromEdge);
+                .map(PlayerEntryPointHistoryManager::fromEdge);
     }
 
     public Stream<PlayerRoomHistoryEntry> history(Player player) {
@@ -171,7 +163,6 @@ public class PlayerEntryPointHistory extends CodecBackedSavedData<PlayerEntryPoi
         graph.connectNodes(playerNode, entryNode, new EmptyEdge<>(playerNode, entryNode));
         graph.connectNodes(entryNode, roomNode, new PlayerRoomEntryEdge(entryNode, roomNode, history.instant()));
 
-        this.setDirty();
         return RoomEntryResult.SUCCESS;
     }
 
@@ -184,8 +175,6 @@ public class PlayerEntryPointHistory extends CodecBackedSavedData<PlayerEntryPoi
         return roomNodes.computeIfAbsent(roomCode, (code) -> {
             var node = new RoomReferenceNode(roomCode);
             graph.addNode(node);
-
-            this.setDirty();
             return node;
         });
     }
@@ -195,8 +184,6 @@ public class PlayerEntryPointHistory extends CodecBackedSavedData<PlayerEntryPoi
         return playerNodes.computeIfAbsent(player, (o) -> {
             var node = new PlayerReferenceNode(UUID.randomUUID(), player);
             graph.addNode(node);
-
-            this.setDirty();
             return node;
         });
     }
@@ -215,6 +202,10 @@ public class PlayerEntryPointHistory extends CodecBackedSavedData<PlayerEntryPoi
         }
 
         latestEntryPoints.remove(player.getUUID());
-        setDirty();
+    }
+
+    @Override
+    public Codec<PlayerEntryPointHistoryManager> codec() {
+        return CODEC;
     }
 }

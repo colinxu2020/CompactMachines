@@ -2,7 +2,8 @@ package dev.compactmods.machines.room;
 
 import dev.compactmods.machines.api.room.RoomApi;
 import dev.compactmods.machines.api.room.RoomInstance;
-import dev.compactmods.machines.api.room.exceptions.NonexistentRoomException;
+import dev.compactmods.machines.api.room.history.IPlayerEntryPointHistoryManager;
+import dev.compactmods.machines.api.room.history.PlayerHistoryApi;
 import dev.compactmods.machines.api.room.history.RoomEntryPoint;
 import dev.compactmods.machines.LoggingUtil;
 import dev.compactmods.machines.api.dimension.CompactDimension;
@@ -10,12 +11,11 @@ import dev.compactmods.machines.api.dimension.MissingDimensionException;
 import dev.compactmods.machines.dimension.SimpleTeleporter;
 import dev.compactmods.machines.network.SyncRoomMetadataPacket;
 import dev.compactmods.machines.shrinking.Shrinking;
-import dev.compactmods.machines.player.PlayerEntryPointHistory;
+import dev.compactmods.machines.player.PlayerEntryPointHistoryManager;
 import dev.compactmods.machines.util.PlayerUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.core.GlobalPos;
-import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -25,7 +25,9 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
-import java.util.UUID;
+
+import static dev.compactmods.machines.api.room.history.RoomEntryResult.FAILED_TOO_FAR_DOWN;
+import static dev.compactmods.machines.api.room.history.RoomEntryResult.SUCCESS;
 
 public abstract class RoomHelper {
 
@@ -58,7 +60,7 @@ public abstract class RoomHelper {
 	   throws MissingDimensionException {
 	  final var compactDim = CompactDimension.forServer(serv);
 
-	  final var history = PlayerEntryPointHistory.forServer(serv);
+	  final var history = PlayerHistoryApi.historyManager();
 	  final var result = history.enterRoom(player, room.code(), entryPoint);
 
 	  LOGS.debug("Entry result: {}", result);
@@ -104,14 +106,7 @@ public abstract class RoomHelper {
 	  MinecraftServer serv = serverPlayer.getServer();
 	  assert serv != null;
 
-	  final PlayerEntryPointHistory history;
-	  try {
-		 history = PlayerEntryPointHistory.forServer(serv);
-	  } catch (MissingDimensionException e) {
-		 LOGS.error("Missing compact dimension data. Teleporting player {} to their default spawn...", serverPlayer.getUUID());
-		 PlayerUtil.teleportPlayerToRespawnOrOverworld(serv, serverPlayer);
-		 return;
-	  }
+	  final IPlayerEntryPointHistoryManager history = PlayerHistoryApi.historyManager();
 
 	  serv.submit(() -> {
 		 history.lastHistory(serverPlayer).ifPresentOrElse(
