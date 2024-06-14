@@ -26,8 +26,8 @@ public class RoomUpgradeScreen extends AbstractContainerScreen<RoomUpgradeMenu> 
     private static ResourceLocation CONTAINER_BACKGROUND = CompactMachinesApi.modRL("textures/gui/psd_screen_9slice.png");
 
     WidgetSprites BACK_BTN_SPRITES = new WidgetSprites(
-        new ResourceLocation("recipe_book/page_backward"),
-        new ResourceLocation("recipe_book/page_backward_highlighted")
+        ResourceLocation.withDefaultNamespace("recipe_book/page_backward"),
+        ResourceLocation.withDefaultNamespace("recipe_book/page_backward_highlighted")
     );
 
     private final NineSliceRenderer backgroundRenderer;

@@ -1,12 +1,12 @@
-rootProject.name = "Compact Machines 20.6"
+rootProject.name = "Compact Machines 21.0"
 
 dependencyResolutionManagement {
     versionCatalogs.create("neoforged") {
-        version("neogradle", "7.0.142")
-        version("neoforge", "20.6.125-beta-feat-cap-codecs")
+        version("mdg", "0.1.74")
+        version("neoforge", "21.0.0-beta")
 
-        plugin("userdev", "net.neoforged.gradle.userdev")
-            .versionRef("neogradle")
+        plugin("moddev", "net.neoforged.moddev")
+            .versionRef("mdg")
 
         library("neoforge", "net.neoforged", "neoforge")
             .versionRef("neoforge")
@@ -74,8 +74,6 @@ plugins {
 }
 
 include(":core-api")
-include(":room-api")
-
-include("neoforge-main")
-include("neoforge-datagen")
+include(":neoforge-main")
+include(":neoforge-datagen")
 

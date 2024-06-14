@@ -3,6 +3,7 @@ package dev.compactmods.machines.datagen.loot;
 import dev.compactmods.machines.data.functions.CopyRoomBindingFunction;
 import dev.compactmods.machines.machine.Machines;
 import dev.compactmods.machines.room.Rooms;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
@@ -17,8 +18,8 @@ import java.util.Set;
 
 public class BlockLootGenerator extends BlockLootSubProvider {
 
-    public BlockLootGenerator() {
-        super(Collections.emptySet(), FeatureFlags.REGISTRY.allFlags());
+    public BlockLootGenerator(HolderLookup.Provider holderLookup) {
+        super(Collections.emptySet(), FeatureFlags.REGISTRY.allFlags(), holderLookup);
     }
 
     @Override

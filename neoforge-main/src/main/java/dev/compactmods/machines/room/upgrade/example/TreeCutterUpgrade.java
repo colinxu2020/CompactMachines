@@ -12,6 +12,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.CommonColors;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -65,7 +66,7 @@ public class TreeCutterUpgrade implements RoomUpgrade {
 
 	  if (!logs.isEmpty()) {
 		 logs.forEach(pos -> level.destroyBlock(pos, true));
-		 upgrade.hurtAndBreak(logs.size(), level.random, null, () -> {
+		 upgrade.hurtAndBreak(logs.size(), level, null, (item) -> {
 			upgrade.shrink(1);
 		 });
 	  }

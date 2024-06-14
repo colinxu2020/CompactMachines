@@ -27,7 +27,7 @@ public class UnboundCompactMachineEntity extends BlockEntity implements IUnbound
     public void loadAdditional(@NotNull CompoundTag nbt, HolderLookup.Provider holders) {
         super.loadAdditional(nbt, holders);
         if (nbt.contains(NBT_TEMPLATE_ID))
-            this.templateId = new ResourceLocation(nbt.getString(NBT_TEMPLATE_ID));
+            this.templateId = ResourceLocation.parse(nbt.getString(NBT_TEMPLATE_ID));
     }
 
     @Override
@@ -53,7 +53,7 @@ public class UnboundCompactMachineEntity extends BlockEntity implements IUnbound
         super.handleUpdateTag(tag, lookupProvider);
 
         if (tag.contains(NBT_TEMPLATE_ID))
-            templateId = new ResourceLocation(tag.getString(NBT_TEMPLATE_ID));
+            templateId = ResourceLocation.parse(tag.getString(NBT_TEMPLATE_ID));
     }
 
     public void setTemplate(ResourceLocation template) {

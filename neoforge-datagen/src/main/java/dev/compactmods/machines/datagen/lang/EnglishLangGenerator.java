@@ -64,8 +64,8 @@ public class EnglishLangGenerator extends BaseLangGenerator {
         // add(MachineRoomUpgrades.WORKBENCH_BLOCK.get(), "Workbench");
         add("entity.minecraft.villager.compactmachines.tinkerer", "Spatial Tinkerer");
 
-        add(RoomExitKeyMapping.CATEGORY, "Compact Machines");
-        add(RoomExitKeyMapping.NAME, "Quick-Exit Compact Machine");
+        add(RoomExitKeyMapping.I18n.CATEGORY, "Compact Machines");
+        add(RoomExitKeyMapping.I18n.NAME, "Quick-Exit Compact Machine");
 
         addJade();
     }

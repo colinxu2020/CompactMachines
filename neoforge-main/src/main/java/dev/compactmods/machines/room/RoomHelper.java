@@ -8,10 +8,9 @@ import dev.compactmods.machines.api.room.history.RoomEntryPoint;
 import dev.compactmods.machines.LoggingUtil;
 import dev.compactmods.machines.api.dimension.CompactDimension;
 import dev.compactmods.machines.api.dimension.MissingDimensionException;
-import dev.compactmods.machines.dimension.SimpleTeleporter;
+import dev.compactmods.machines.dimension.CompactDimensionTransitions;
 import dev.compactmods.machines.network.SyncRoomMetadataPacket;
 import dev.compactmods.machines.shrinking.Shrinking;
-import dev.compactmods.machines.player.PlayerEntryPointHistoryManager;
 import dev.compactmods.machines.util.PlayerUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
@@ -25,9 +24,6 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
-
-import static dev.compactmods.machines.api.room.history.RoomEntryResult.FAILED_TOO_FAR_DOWN;
-import static dev.compactmods.machines.api.room.history.RoomEntryResult.SUCCESS;
 
 public abstract class RoomHelper {
 
@@ -91,7 +87,7 @@ public abstract class RoomHelper {
 
 			   final var spawns = RoomApi.spawnManager(room.code()).spawns();
 			   final var spawn = spawns.forPlayer(player.getUUID()).orElse(spawns.defaultSpawn());
-			   player.changeDimension(compactDim, SimpleTeleporter.to(spawn.position(), spawn.rotation()));
+			   player.changeDimension(CompactDimensionTransitions.to(compactDim, spawn.position(), spawn.rotation()));
 
 			   PacketDistributor.sendToPlayer(player, new SyncRoomMetadataPacket(room.code(), Util.NIL_UUID));
 			});
@@ -122,7 +118,7 @@ public abstract class RoomHelper {
 				final var level = serv.getLevel(location.dimension());
 				if (level != null) {
 				   LOGS.debug("Teleporting player {} to {} as they jump up a level...", serverPlayer.getUUID(), location);
-				   serverPlayer.changeDimension(level, SimpleTeleporter.to(location.position(), location.rotation()));
+				   serverPlayer.changeDimension(CompactDimensionTransitions.to(level, location.position(), location.rotation()));
 				} else {
 				   LOGS.error("Player tracking points to an unknown dimension. Teleporting player {} to their default spawn instead.", serverPlayer.getUUID());
 				   PlayerUtil.teleportPlayerToRespawnOrOverworld(serv, serverPlayer);

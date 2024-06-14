@@ -12,22 +12,17 @@ val modId: String = property("mod_id") as String
 val isRelease: Boolean = (System.getenv("RELEASE") ?: "false").equals("true", true)
 
 val coreApi = project(":core-api")
-val roomApi = project(":room-api")
-
-val coreProjects = listOf(coreApi, roomApi)
 
 plugins {
     java
     id("idea")
     id("eclipse")
     id("maven-publish")
-    id("org.ajoberstar.grgit") version("5.2.1")
-    alias(neoforged.plugins.userdev)
+    id("org.ajoberstar.grgit") version ("5.2.1")
+    alias(neoforged.plugins.moddev)
 }
 
-coreProjects.forEach {
-    project.evaluationDependsOn(it.path)
-}
+project.evaluationDependsOn(coreApi.path)
 
 base {
     archivesName.set(modId)
@@ -40,7 +35,7 @@ java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 }
 
-jarJar.enable()
+//jarJar.enable()
 
 sourceSets.main {
     java {
@@ -63,55 +58,56 @@ sourceSets.test {
     }
 }
 
-minecraft {
-    modIdentifier.set(modId)
-    accessTransformers.file(project.file("src/main/resources/META-INF/accesstransformer.cfg"))
-}
+neoForge {
+    version = neoforged.versions.neoforge
+    accessTransformers.add("src/main/resources/META-INF/accesstransformer.cfg")
 
-runs {
-    // applies to all the run configs below
-    configureEach {
-        systemProperty("forge.logging.markers", "") // 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-        // Recommended logging level for the console
-        systemProperty("forge.logging.console.level", "debug")
-
-        dependencies {
-            runtime("dev.compactmods:feather:${libraries.versions.feather.get()}")
-            runtime("com.aventrix.jnanoid:jnanoid:2.0.0")
-        }
-
-        if(!System.getenv().containsKey("CI")) {
-            // JetBrains Runtime Hotswap
-            // jvmArgument("-XX:+AllowEnhancedClassRedefinition")
-        }
-
-        modSource(sourceSets.main.get())
-        coreProjects.forEach {
-            modSource(it.sourceSets.main.get())
-        }
+    this.mods.create(modId) {
+        modSourceSets.add(sourceSets.main)
+        //modSourceSets.add(coreApi.sourceSets.main.get())
+        this.dependency(coreApi)
     }
 
-    create("client") {
-        // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-        systemProperty("forge.enabledGameTestNamespaces", modId)
+    runs {
+        // applies to all the run configs below
+        configureEach {
+            systemProperty("forge.logging.markers", "") // 'SCAN,REGISTRIES,REGISTRYDUMP'
 
-        programArguments("--username", "Nano")
-        programArguments("--width", "1920")
-        programArguments("--height", "1080")
-    }
+            // Recommended logging level for the console
+            systemProperty("forge.logging.console.level", "debug")
 
-    create("server") {
-        systemProperty("forge.enabledGameTestNamespaces", modId)
-        environmentVariables("CM_TEST_RESOURCES", project.file("src/test/resources").path)
-        programArguments("nogui")
-        modSource(project.sourceSets.test.get())
-    }
+            if (!System.getenv().containsKey("CI")) {
+                // JetBrains Runtime Hotswap
+                // jvmArgument("-XX:+AllowEnhancedClassRedefinition")
+            }
 
-    create("gameTestServer") {
-        systemProperty("forge.enabledGameTestNamespaces", modId)
-        environmentVariable("CM_TEST_RESOURCES", file("src/test/resources").path)
-        modSource(project.sourceSets.test.get())
+            additionalRuntimeClasspath.add("dev.compactmods:feather:${libraries.versions.feather.get()}")
+            additionalRuntimeClasspath.add("com.aventrix.jnanoid:jnanoid:2.0.0")
+        }
+
+        create("client") {
+            client()
+
+            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
+            systemProperty("forge.enabledGameTestNamespaces", modId)
+
+            programArguments.addAll("--username", "Nano")
+            programArguments.addAll("--width", "1920")
+            programArguments.addAll("--height", "1080")
+        }
+
+//        create("server") {
+//            systemProperty("forge.enabledGameTestNamespaces", modId)
+//            environmentVariables("CM_TEST_RESOURCES", project.file("src/test/resources").path)
+//            programArguments("nogui")
+//            modSource(project.sourceSets.test.get())
+//        }
+//
+//        create("gameTestServer") {
+//            systemProperty("forge.enabledGameTestNamespaces", modId)
+//            environmentVariable("CM_TEST_RESOURCES", file("src/test/resources").path)
+//            modSource(project.sourceSets.test.get())
+//        }
     }
 }
 
@@ -152,23 +148,19 @@ repositories {
 dependencies {
     // Core Projects and Libraries
     this {
-        implementation(neoforged.neoforge)
-        testImplementation(neoforged.testframework)
-        implementation(libraries.jnanoid)
+        compileOnly(libraries.jnanoid)
         jarJar(libraries.jnanoid)
 
-        listOf(coreApi, roomApi).forEach {
-            compileOnly(it)
-            testCompileOnly(it)
-        }
+        compileOnly(coreApi)
+        testCompileOnly(coreApi)
 
-        implementation(libraries.feather)
+        compileOnly(libraries.feather)
         jarJar(libraries.feather) { isTransitive = false }
     }
 
     // Mods
-    compileOnly(mods.bundles.jei)
-    compileOnly(mods.jade)
+//    compileOnly(mods.bundles.jei)
+//    compileOnly(mods.jade)
 }
 
 tasks.withType<ProcessResources> {
@@ -192,7 +184,8 @@ tasks.withType<Jar> {
 
     manifest {
         val now = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(Date())
-        attributes(mapOf(
+        attributes(
+            mapOf(
                 "Specification-Title" to "Compact Machines",
                 "Specification-Vendor" to "CompactMods",
                 "Specification-Version" to "2",
@@ -204,25 +197,24 @@ tasks.withType<Jar> {
                 "NeoForge-Version" to neoforged.versions.neoforge.get(),
                 "Main-Commit" to mainGit.head().id,
                 "Core-Commit" to coreGit.head().id
-        ))
+            )
+        )
     }
 }
 
 tasks.jar {
     archiveClassifier.set("slim")
     from(sourceSets.main.get().output)
-    coreProjects.forEach {
-        from (it.sourceSets.main.get().output)
-    }
+    from(coreApi.sourceSets.main.get().output)
 }
 
-tasks.jarJar {
-    archiveClassifier.set("")
-    from(sourceSets.main.get().output)
-    coreProjects.forEach {
-        from (it.sourceSets.main.get().output)
-    }
-}
+//tasks.jarJar {
+//    archiveClassifier.set("")
+//    from(sourceSets.main.get().output)
+//    coreProjects.forEach {
+//        from (it.sourceSets.main.get().output)
+//    }
+//}
 
 val PACKAGES_URL = System.getenv("GH_PKG_URL") ?: "https://maven.pkg.github.com/compactmods/compactmachines"
 publishing {

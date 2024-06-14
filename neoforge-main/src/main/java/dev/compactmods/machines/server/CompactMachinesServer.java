@@ -27,7 +27,7 @@ import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
-@Mod(value = CompactMachinesApi.MOD_ID, dist = Dist.DEDICATED_SERVER)
+@Mod(value = CompactMachinesApi.MOD_ID)
 public class CompactMachinesServer {
 
    private static @Nullable MinecraftServer CURRENT_SERVER;

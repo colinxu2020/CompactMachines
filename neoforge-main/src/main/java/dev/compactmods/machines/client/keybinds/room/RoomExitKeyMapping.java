@@ -12,8 +12,10 @@ import net.neoforged.neoforge.network.PacketDistributor;
 
 public class RoomExitKeyMapping {
 
-   public static final String CATEGORY = Util.makeDescriptionId("key.category", CompactMachinesApi.modRL("general"));
-   public static final String NAME = Util.makeDescriptionId("key.mapping", CompactMachinesApi.modRL("exit_room"));
+   public interface I18n {
+	  String CATEGORY = Util.makeDescriptionId("key.category", CompactMachinesApi.modRL("general"));
+	  String NAME = Util.makeDescriptionId("key.mapping", CompactMachinesApi.modRL("exit_room"));
+   }
 
    public static final IKeyConflictContext CONFLICT_CONTEXT = new IKeyConflictContext() {
 	  @Override
@@ -28,7 +30,7 @@ public class RoomExitKeyMapping {
 	  }
    };
 
-   public static final KeyMapping MAPPING = new KeyMapping(NAME, CONFLICT_CONTEXT, InputConstants.UNKNOWN, CATEGORY);
+   public static final KeyMapping MAPPING = new KeyMapping(I18n.NAME, CONFLICT_CONTEXT, InputConstants.UNKNOWN, I18n.CATEGORY);
 
    public static void handle() {
 	  final var level = Minecraft.getInstance().level;

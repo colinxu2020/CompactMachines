@@ -31,11 +31,11 @@ public class ItemTagGenerator extends ItemTagsProvider {
     private void shrinkingDevices(PersonalShrinkingDevice psd) {
         final var cmShrinkTag = tag(PSDTags.ITEM);
         cmShrinkTag.add(psd);
-        cmShrinkTag.addOptional(new ResourceLocation("shrink", "shrinking_device"));
+        cmShrinkTag.addOptional(ResourceLocation.fromNamespaceAndPath("shrink", "shrinking_device"));
     }
 
     private void curiosTags(PersonalShrinkingDevice psd) {
-        final var curiosPsdTag = tag(TagKey.create(CMRegistries.ITEMS.getRegistryKey(), new ResourceLocation("curios", "psd")));
+        final var curiosPsdTag = tag(TagKey.create(CMRegistries.ITEMS.getRegistryKey(), ResourceLocation.fromNamespaceAndPath("curios", "psd")));
         curiosPsdTag.add(psd);
     }
 

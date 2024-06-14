@@ -1,7 +1,7 @@
 package dev.compactmods.machines.util;
 
 import com.mojang.authlib.GameProfile;
-import dev.compactmods.machines.dimension.SimpleTeleporter;
+import dev.compactmods.machines.dimension.CompactDimensionTransitions;
 import dev.compactmods.machines.room.Rooms;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -24,7 +24,7 @@ public abstract class PlayerUtil {
         if (player.getRespawnPosition() != null)
             worldPos = Vec3.atCenterOf(player.getRespawnPosition());
 
-        player.changeDimension(level, SimpleTeleporter.to(worldPos));
+        player.changeDimension(CompactDimensionTransitions.to(level, worldPos));
 
         player.removeData(Rooms.DataAttachments.LAST_ROOM_ENTRYPOINT);
     }
