@@ -1,6 +1,5 @@
 @file:Suppress("SpellCheckingInspection")
 
-import org.ajoberstar.grgit.Grgit
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -18,7 +17,6 @@ plugins {
     id("idea")
     id("eclipse")
     id("maven-publish")
-    id("org.ajoberstar.grgit") version ("5.2.1")
     alias(neoforged.plugins.moddev)
 }
 
@@ -34,8 +32,6 @@ java {
     // toolchain.vendor.set(JvmVendorSpec.JETBRAINS)
     toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 }
-
-//jarJar.enable()
 
 sourceSets.main {
     java {
@@ -64,7 +60,6 @@ neoForge {
 
     this.mods.create(modId) {
         modSourceSets.add(sourceSets.main)
-        //modSourceSets.add(coreApi.sourceSets.main.get())
         this.dependency(coreApi)
     }
 
@@ -174,13 +169,9 @@ tasks.withType<JavaCompile> {
 
 tasks.withType<Jar> {
 
-    val coreGit = Grgit.open {
-        currentDir = project.rootDir.resolve("core")
-    }
-
-    val mainGit = Grgit.open {
-        currentDir = project.rootDir
-    }
+    val gitVersion = providers.exec {
+        commandLine("git", "rev-parse", "HEAD")
+    }.standardOutput.asText.get()
 
     manifest {
         val now = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(Date())
@@ -195,32 +186,21 @@ tasks.withType<Jar> {
                 "Implementation-Timestamp" to now,
                 "Minecraft-Version" to mojang.versions.minecraft.get(),
                 "NeoForge-Version" to neoforged.versions.neoforge.get(),
-                "Main-Commit" to mainGit.head().id,
-                "Core-Commit" to coreGit.head().id
+                "Main-Commit" to gitVersion
             )
         )
     }
 }
 
 tasks.jar {
-    archiveClassifier.set("slim")
     from(sourceSets.main.get().output)
     from(coreApi.sourceSets.main.get().output)
 }
-
-//tasks.jarJar {
-//    archiveClassifier.set("")
-//    from(sourceSets.main.get().output)
-//    coreProjects.forEach {
-//        from (it.sourceSets.main.get().output)
-//    }
-//}
 
 val PACKAGES_URL = System.getenv("GH_PKG_URL") ?: "https://maven.pkg.github.com/compactmods/compactmachines"
 publishing {
     publications.register<MavenPublication>("compactmachines") {
         artifactId = "$modId-neoforge"
-        this.artifact(tasks.jarJar)
         from(components.getByName("java"))
     }
 
