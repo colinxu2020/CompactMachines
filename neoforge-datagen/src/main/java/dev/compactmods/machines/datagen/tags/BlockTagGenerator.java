@@ -1,6 +1,6 @@
 package dev.compactmods.machines.datagen.tags;
 
-import dev.compactmods.machines.api.CompactMachinesApi;
+import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.api.machine.MachineConstants;
 import dev.compactmods.machines.machine.Machines;
 import dev.compactmods.machines.room.Rooms;
@@ -15,7 +15,7 @@ import java.util.concurrent.CompletableFuture;
 public class BlockTagGenerator extends BlockTagsProvider {
 
   public BlockTagGenerator(PackOutput packOut, ExistingFileHelper files, CompletableFuture<HolderLookup.Provider> lookup) {
-	 super(packOut, lookup, CompactMachinesApi.MOD_ID, files);
+	 super(packOut, lookup, CompactMachines.MOD_ID, files);
   }
 
   @Override

@@ -1,5 +1,6 @@
 package dev.compactmods.machines.api.room;
 
+import dev.compactmods.machines.api.room.registration.IRoomRegistrar;
 import dev.compactmods.machines.api.room.spatial.IRoomChunkManager;
 import dev.compactmods.machines.api.room.spatial.IRoomChunks;
 import dev.compactmods.machines.api.room.spawn.IRoomSpawnManager;

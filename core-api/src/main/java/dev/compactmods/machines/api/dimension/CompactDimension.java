@@ -1,6 +1,6 @@
 package dev.compactmods.machines.api.dimension;
 
-import dev.compactmods.machines.api.CompactMachinesApi;
+import dev.compactmods.machines.api.CompactMachines;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -18,10 +18,10 @@ import java.nio.file.Path;
 
 public abstract class CompactDimension {
     public static final ResourceKey<Level> LEVEL_KEY = ResourceKey
-            .create(Registries.DIMENSION, CompactMachinesApi.modRL("compact_world"));
+            .create(Registries.DIMENSION, CompactMachines.modRL("compact_world"));
 
     public static final ResourceKey<DimensionType> DIM_TYPE_KEY = ResourceKey
-            .create(Registries.DIMENSION_TYPE, CompactMachinesApi.modRL("compact_world"));
+            .create(Registries.DIMENSION_TYPE, CompactMachines.modRL("compact_world"));
 
     private CompactDimension() {}
 

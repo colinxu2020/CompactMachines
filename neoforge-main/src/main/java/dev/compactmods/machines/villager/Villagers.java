@@ -1,7 +1,7 @@
 package dev.compactmods.machines.villager;
 
 import com.google.common.collect.ImmutableSet;
-import dev.compactmods.machines.api.CompactMachinesApi;
+import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.CMRegistries;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
@@ -19,7 +19,7 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import java.util.function.Supplier;
 
 public class Villagers {
-  public static final ResourceLocation TINKERER_ID = CompactMachinesApi.modRL("tinkerer");
+  public static final ResourceLocation TINKERER_ID = CompactMachines.modRL("tinkerer");
 
   public static final ResourceKey<PoiType> TINKERER_WORKBENCH_KEY = ResourceKey
 		.create(BuiltInRegistries.POINT_OF_INTEREST_TYPE.key(), TINKERER_ID);

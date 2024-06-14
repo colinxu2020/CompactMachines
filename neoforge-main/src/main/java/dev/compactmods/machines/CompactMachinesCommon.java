@@ -1,16 +1,11 @@
 package dev.compactmods.machines;
 
-import dev.compactmods.machines.api.CompactMachinesApi;
-import dev.compactmods.machines.api.dimension.CompactDimension;
-import dev.compactmods.machines.client.CompactMachinesClient;
+import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.command.Commands;
-import dev.compactmods.machines.client.config.ClientConfig;
-import dev.compactmods.machines.client.creative.CreativeTabs;
 import dev.compactmods.machines.compat.InterModCompat;
 import dev.compactmods.machines.config.CommonConfig;
 import dev.compactmods.machines.config.ServerConfig;
 import dev.compactmods.machines.data.functions.LootFunctions;
-import dev.compactmods.machines.data.room.RoomAttachmentDataManager;
 import dev.compactmods.machines.dimension.Dimension;
 import dev.compactmods.machines.dimension.WorldBorderFixer;
 import dev.compactmods.machines.machine.Machines;
@@ -21,23 +16,19 @@ import dev.compactmods.machines.room.upgrade.RoomUpgrades;
 import dev.compactmods.machines.shrinking.Shrinking;
 import dev.compactmods.machines.villager.Villagers;
 import net.minecraft.util.FastColor;
-import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
-import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.level.LevelEvent;
-import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 
-@Mod(CompactMachinesApi.MOD_ID)
-public class CompactMachines {
+@Mod(CompactMachines.MOD_ID)
+public class CompactMachinesCommon {
 
     public static final int BRAND_MACHINE_COLOR = FastColor.ARGB32.color(255, 248, 246, 76);
 
     @SuppressWarnings("unused")
-    public CompactMachines(IEventBus modBus, ModContainer modContainer) {
+    public CompactMachinesCommon(IEventBus modBus, ModContainer modContainer) {
         initConfigs(modContainer);
         prepare();
         registerEvents(modBus);
@@ -46,7 +37,6 @@ public class CompactMachines {
     }
 
     private static void initConfigs(ModContainer modContainer) {
-        modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.CONFIG);
         modContainer.registerConfig(ModConfig.Type.COMMON, CommonConfig.CONFIG);
         modContainer.registerConfig(ModConfig.Type.SERVER, ServerConfig.CONFIG);
     }
@@ -60,10 +50,6 @@ public class CompactMachines {
         Commands.prepare();
         LootFunctions.prepare();
         Villagers.prepare();
-
-        if(FMLEnvironment.dist.isClient()) {
-            CreativeTabs.prepare();
-        }
     }
 
     private static void registerEvents(IEventBus modBus) {
@@ -76,9 +62,5 @@ public class CompactMachines {
 
         NeoForge.EVENT_BUS.addListener(Commands::onCommandsRegister);
         NeoForge.EVENT_BUS.addListener(ProtectedBlockEventHandler::leftClickBlock);
-
-        if(FMLEnvironment.dist.isClient()) {
-            CompactMachinesClient.registerEvents(modBus);
-        }
     }
 }

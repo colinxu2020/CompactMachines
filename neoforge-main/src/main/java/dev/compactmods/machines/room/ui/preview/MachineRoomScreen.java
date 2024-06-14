@@ -1,6 +1,6 @@
 package dev.compactmods.machines.room.ui.preview;
 
-import dev.compactmods.machines.api.CompactMachinesApi;
+import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.client.render.NineSliceRenderer;
 import dev.compactmods.machines.client.widget.ImageButtonBuilder;
 import dev.compactmods.machines.network.PlayerRequestedTeleportPacket;
@@ -41,10 +41,10 @@ public class MachineRoomScreen extends AbstractContainerScreen<MachineRoomMenu> 
         super.init();
 
         final var psdBtnSprites = new WidgetSprites(
-                CompactMachinesApi.modRL("personal_shrinking_device"),
-                CompactMachinesApi.modRL("personal_shrinking_device_disabled"),
-                CompactMachinesApi.modRL("personal_shrinking_device_highlighted"),
-                CompactMachinesApi.modRL("personal_shrinking_device_disabled"));
+                CompactMachines.modRL("personal_shrinking_device"),
+                CompactMachines.modRL("personal_shrinking_device_disabled"),
+                CompactMachines.modRL("personal_shrinking_device_highlighted"),
+                CompactMachines.modRL("personal_shrinking_device_disabled"));
 
         this.psdButton = ImageButtonBuilder.button(psdBtnSprites)
                 .size(12, 12)
@@ -57,8 +57,8 @@ public class MachineRoomScreen extends AbstractContainerScreen<MachineRoomMenu> 
         addRenderableWidget(psdButton);
 
         final var upgradeBtnSprites = new WidgetSprites(
-                CompactMachinesApi.modRL("upgrade_btn"),
-                CompactMachinesApi.modRL("upgrade_btn")
+                CompactMachines.modRL("upgrade_btn"),
+                CompactMachines.modRL("upgrade_btn")
         );
 
         var upgradeScreenBtn = ImageButtonBuilder.button(upgradeBtnSprites)
@@ -73,7 +73,7 @@ public class MachineRoomScreen extends AbstractContainerScreen<MachineRoomMenu> 
 
     @Override
     protected void renderBg(GuiGraphics graphics, float v, int i, int i1) {
-        var backgroundRenderer = NineSliceRenderer.builder(CompactMachinesApi.modRL("textures/gui/psd_screen_9slice.png"))
+        var backgroundRenderer = NineSliceRenderer.builder(CompactMachines.modRL("textures/gui/psd_screen_9slice.png"))
                 .area(0, 0, 248, 210)
                 .uv(32, 32)
                 .sliceSize(4, 4)

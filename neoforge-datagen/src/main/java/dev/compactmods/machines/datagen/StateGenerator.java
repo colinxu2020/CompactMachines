@@ -1,6 +1,6 @@
 package dev.compactmods.machines.datagen;
 
-import dev.compactmods.machines.api.CompactMachinesApi;
+import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.machine.Machines;
 import dev.compactmods.machines.room.Rooms;
 import net.minecraft.data.PackOutput;
@@ -11,7 +11,7 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 public class StateGenerator extends BlockStateProvider {
     public StateGenerator(PackOutput packOutput, ExistingFileHelper exFileHelper) {
-        super(packOutput, CompactMachinesApi.MOD_ID, exFileHelper);
+        super(packOutput, CompactMachines.MOD_ID, exFileHelper);
     }
 
     @Override

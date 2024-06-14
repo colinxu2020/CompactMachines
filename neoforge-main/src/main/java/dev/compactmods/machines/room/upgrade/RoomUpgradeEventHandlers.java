@@ -1,11 +1,9 @@
 package dev.compactmods.machines.room.upgrade;
 
+import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.api.dimension.CompactDimension;
-import dev.compactmods.machines.api.room.RoomApi;
 import dev.compactmods.machines.api.room.upgrade.events.lifecycle.UpgradeTickedEventListener;
 import dev.compactmods.machines.room.Rooms;
-import dev.compactmods.machines.data.room.RoomAttachmentDataManager;
-import dev.compactmods.machines.server.CompactMachinesServer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.Item;
@@ -21,18 +19,14 @@ public class RoomUpgradeEventHandlers {
 
    public static void onLevelTick(LevelTickEvent.Post postTick) {
 	  if (postTick.getLevel() instanceof ServerLevel serverLevel && CompactDimension.isLevelCompact(serverLevel)) {
-		 // TODO - Api instead of direct instance reference here
-		 var roomDataManager = CompactMachinesServer.ROOM_DATA_ATTACHMENTS;
-
-		 final var rooms = RoomApi.registrar().allRooms()
+		 final var rooms = CompactMachines.roomApi()
+			 .registrar()
+			 .allRooms()
 			 .collect(Collectors.toUnmodifiableSet());
 
 		 for (var room : rooms) {
-			if (!roomDataManager.hasData(room.code()))
-			   continue;
-
-			roomDataManager.data(room.code())
-				.getExistingData(Rooms.DataAttachments.UPGRADE_INV)
+			CompactMachines.existingRoomData(room.code())
+				.flatMap(rd -> rd.getExistingData(Rooms.DataAttachments.UPGRADE_INV))
 				.ifPresent(appliedUpgrades -> {
 				   final var upgradeStacks = appliedUpgrades.items()
 					   .collect(Collectors.toUnmodifiableSet());

@@ -1,7 +1,7 @@
 package dev.compactmods.machines.test;
 
 import dev.compactmods.machines.api.CompactMachinesApi;
-import dev.compactmods.machines.api.room.RoomApi;
+import dev.compactmods.machines.api.room.CompactMachines.roomApi();
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;

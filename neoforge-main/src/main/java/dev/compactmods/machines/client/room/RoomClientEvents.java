@@ -1,6 +1,6 @@
 package dev.compactmods.machines.client.room;
 
-import dev.compactmods.machines.api.CompactMachinesApi;
+import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.client.keybinds.room.RoomExitKeyMapping;
 import dev.compactmods.machines.client.keybinds.room.RoomUpgradeUIMapping;
 import dev.compactmods.machines.room.Rooms;
@@ -32,6 +32,6 @@ public class RoomClientEvents {
     }
 
     public static void onOverlayRegistration(final RegisterGuiLayersEvent layers) {
-        layers.registerAbove(VanillaGuiLayers.DEBUG_OVERLAY, CompactMachinesApi.modRL("room_meta_debug"), new RoomMetadataDebugOverlay());
+        layers.registerAbove(VanillaGuiLayers.DEBUG_OVERLAY, CompactMachines.modRL("room_meta_debug"), new RoomMetadataDebugOverlay());
     }
 }

@@ -1,7 +1,7 @@
 package dev.compactmods.machines.api.room.upgrade;
 
 import com.mojang.serialization.Codec;
-import dev.compactmods.machines.api.CompactMachinesApi;
+import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.api.room.upgrade.events.RoomUpgradeEvent;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 public interface RoomUpgrade extends TooltipProvider {
 
    Codec<RoomUpgrade> DISPATCH_CODEC = Codec.lazyInitialized(() -> {
-	  @SuppressWarnings("unchecked") final var reg = (Registry<RoomUpgradeDefinition<?>>) BuiltInRegistries.REGISTRY.get(CompactMachinesApi.modRL("room_upgrades"));
+	  @SuppressWarnings("unchecked") final var reg = (Registry<RoomUpgradeDefinition<?>>) BuiltInRegistries.REGISTRY.get(CompactMachines.modRL("room_upgrades"));
 
 	  if (reg != null) {
 		 var upgradeRegistry = reg.byNameCodec();

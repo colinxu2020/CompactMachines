@@ -1,6 +1,6 @@
 package dev.compactmods.machines.room.spawn;
 
-import dev.compactmods.machines.api.room.IRoomRegistrar;
+import dev.compactmods.machines.api.room.registration.IRoomRegistrar;
 import dev.compactmods.machines.api.room.spawn.IRoomSpawnManager;
 import dev.compactmods.machines.api.room.spawn.IRoomSpawnManagers;
 

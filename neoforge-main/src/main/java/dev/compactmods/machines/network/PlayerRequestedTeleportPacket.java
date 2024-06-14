@@ -1,6 +1,6 @@
 package dev.compactmods.machines.network;
 
-import dev.compactmods.machines.api.CompactMachinesApi;
+import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.room.RoomHelper;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -12,7 +12,7 @@ import net.neoforged.neoforge.network.handling.IPayloadHandler;
 
 public record PlayerRequestedTeleportPacket(GlobalPos machine, String room) implements CustomPacketPayload {
 
-  public static final Type<PlayerRequestedTeleportPacket> TYPE = new Type<>(CompactMachinesApi.modRL("player_teleport"));
+  public static final Type<PlayerRequestedTeleportPacket> TYPE = new Type<>(CompactMachines.modRL("player_teleport"));
 
   public static final StreamCodec<FriendlyByteBuf, PlayerRequestedTeleportPacket> STREAM_CODEC = StreamCodec.composite(
 		GlobalPos.STREAM_CODEC, PlayerRequestedTeleportPacket::machine,

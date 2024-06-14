@@ -3,8 +3,8 @@ package dev.compactmods.machines.command.subcommand;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.api.machine.MachineTranslations;
-import dev.compactmods.machines.api.room.RoomApi;
 import dev.compactmods.machines.api.command.CommandTranslations;
 import dev.compactmods.machines.api.dimension.CompactDimension;
 import dev.compactmods.machines.api.machine.MachineConstants;
@@ -74,7 +74,7 @@ public class CMRoomsSubcommand {
 //        long grandTotal = ls.build().sum();
 //        src.sendSuccess(() -> Component.translatable(CommandTranslations.IDs.MACHINE_REG_TOTAL, grandTotal).withStyle(ChatFormatting.GOLD), false);
 
-        final var roomCount = RoomApi.registrar().count();
+        final var roomCount = CompactMachines.roomApi().registrar().count();
         src.sendSuccess(() -> Component.translatable(CommandTranslations.IDs.ROOM_COUNT, roomCount), false);
 
         return 0;
@@ -83,7 +83,7 @@ public class CMRoomsSubcommand {
     private static int fetchByChunkPos(CommandContext<CommandSourceStack> ctx) {
         final var chunkPos = ColumnPosArgument.getColumnPos(ctx, "chunk");
 
-        final var m = RoomApi.chunkManager()
+        final var m = CompactMachines.roomApi().chunkManager()
                 .findRoomByChunk(chunkPos.toChunkPos())
 
                 // FIXME Translations
@@ -106,7 +106,7 @@ public class CMRoomsSubcommand {
 
         if (level.getBlockEntity(block) instanceof BoundCompactMachineBlockEntity be) {
             final var roomCode = be.connectedRoom();
-            RoomApi.registrar().get(roomCode).ifPresent(roomInfo -> {
+            CompactMachines.roomApi().registrar().get(roomCode).ifPresent(roomInfo -> {
                 ctx.getSource().sendSuccess(() -> RoomTranslations.MACHINE_ROOM_INFO.apply(block, roomInfo), false);
             });
         } else {
@@ -127,7 +127,7 @@ public class CMRoomsSubcommand {
             return -1;
         }
 
-        final var m = RoomApi.chunkManager()
+        final var m = CompactMachines.roomApi().chunkManager()
                 .findRoomByChunk(player.chunkPosition())
                 .map(code -> RoomTranslations.PLAYER_ROOM_INFO.apply(player, code))
                 .orElse(RoomTranslations.UNKNOWN_ROOM_BY_PLAYER_CHUNK.apply(player));
@@ -141,7 +141,7 @@ public class CMRoomsSubcommand {
         final var owner = EntityArgument.getPlayer(ctx, "owner");
         final var source = ctx.getSource();
 
-//        final var owned = RoomApi.owners().findByOwner(owner.getUUID()).toList();
+//        final var owned = CompactMachines.roomApi().owners().findByOwner(owner.getUUID()).toList();
 //
 //        // TODO Localization
 //        if (owned.isEmpty()) {

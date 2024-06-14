@@ -3,8 +3,7 @@ package dev.compactmods.machines.command.subcommand;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.compactmods.machines.api.dimension.MissingDimensionException;
-import dev.compactmods.machines.api.room.history.PlayerHistoryApi;
+import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.util.PlayerUtil;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -38,7 +37,7 @@ public class CMEjectSubcommand {
         final MinecraftServer server = ctx.getSource().getServer();
 
         server.submitAsync(() -> {
-		   PlayerHistoryApi.historyManager().clearHistory(player);
+		   CompactMachines.playerHistoryApi().entryPoints().clearHistory(player);
 		});
 
         PlayerUtil.teleportPlayerToRespawnOrOverworld(ctx.getSource().getServer(), player);

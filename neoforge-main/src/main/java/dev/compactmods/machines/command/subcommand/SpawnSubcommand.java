@@ -3,7 +3,7 @@ package dev.compactmods.machines.command.subcommand;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import dev.compactmods.machines.api.room.RoomApi;
+import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.api.command.CommandTranslations;
 import dev.compactmods.machines.config.ServerConfig;
 import net.minecraft.commands.CommandSourceStack;
@@ -29,7 +29,7 @@ public class SpawnSubcommand {
         final var src = ctx.getSource();
         final var roomCode = StringArgumentType.getString(ctx, "room");
 
-        final var spawnManager = RoomApi.spawnManager(roomCode);
+        final var spawnManager = CompactMachines.roomApi().spawnManager(roomCode);
 
         // FIXME roomProvider.setDefaultSpawn();
         src.sendSuccess(() -> Component.translatable(CommandTranslations.IDs.SPAWN_CHANGED_SUCCESSFULLY, roomCode), true);

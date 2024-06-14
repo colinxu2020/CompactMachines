@@ -1,7 +1,7 @@
 package dev.compactmods.machines;
 
 import dev.compactmods.machines.api.room.RoomTemplate;
-import dev.compactmods.machines.api.CompactMachinesApi;
+import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.shrinking.Shrinking;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -25,30 +25,30 @@ import java.util.stream.Stream;
 public interface CMRegistries {
 
    // Machines, Walls, Shrinking
-   DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(CompactMachinesApi.MOD_ID);
-   DeferredRegister.Items ITEMS = DeferredRegister.createItems(CompactMachinesApi.MOD_ID);
+   DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(CompactMachines.MOD_ID);
+   DeferredRegister.Items ITEMS = DeferredRegister.createItems(CompactMachines.MOD_ID);
 
-   DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(BuiltInRegistries.CREATIVE_MODE_TAB, CompactMachinesApi.MOD_ID);
+   DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(BuiltInRegistries.CREATIVE_MODE_TAB, CompactMachines.MOD_ID);
 
-   DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, CompactMachinesApi.MOD_ID);
+   DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, CompactMachines.MOD_ID);
 
    // UIRegistration
-   DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(BuiltInRegistries.MENU, CompactMachinesApi.MOD_ID);
+   DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(BuiltInRegistries.MENU, CompactMachines.MOD_ID);
 
    // Commands
-   DeferredRegister<ArgumentTypeInfo<?, ?>> COMMAND_ARGUMENT_TYPES = DeferredRegister.create(BuiltInRegistries.COMMAND_ARGUMENT_TYPE, CompactMachinesApi.MOD_ID);
+   DeferredRegister<ArgumentTypeInfo<?, ?>> COMMAND_ARGUMENT_TYPES = DeferredRegister.create(BuiltInRegistries.COMMAND_ARGUMENT_TYPE, CompactMachines.MOD_ID);
 
    // LootFunctions
-   DeferredRegister<LootItemFunctionType<?>> LOOT_FUNCTIONS = DeferredRegister.create(BuiltInRegistries.LOOT_FUNCTION_TYPE, CompactMachinesApi.MOD_ID);
+   DeferredRegister<LootItemFunctionType<?>> LOOT_FUNCTIONS = DeferredRegister.create(BuiltInRegistries.LOOT_FUNCTION_TYPE, CompactMachines.MOD_ID);
 
    // Villagers
-   DeferredRegister<VillagerProfession> VILLAGERS = DeferredRegister.create(BuiltInRegistries.VILLAGER_PROFESSION, CompactMachinesApi.MOD_ID);
+   DeferredRegister<VillagerProfession> VILLAGERS = DeferredRegister.create(BuiltInRegistries.VILLAGER_PROFESSION, CompactMachines.MOD_ID);
 
-   DeferredRegister<PoiType> POINTS_OF_INTEREST = DeferredRegister.create(BuiltInRegistries.POINT_OF_INTEREST_TYPE, CompactMachinesApi.MOD_ID);
+   DeferredRegister<PoiType> POINTS_OF_INTEREST = DeferredRegister.create(BuiltInRegistries.POINT_OF_INTEREST_TYPE, CompactMachines.MOD_ID);
 
-   DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, CompactMachinesApi.MOD_ID);
+   DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, CompactMachines.MOD_ID);
 
-   DeferredRegister.DataComponents DATA_COMPONENTS = DeferredRegister.createDataComponents(CompactMachinesApi.MOD_ID);
+   DeferredRegister.DataComponents DATA_COMPONENTS = DeferredRegister.createDataComponents(CompactMachines.MOD_ID);
 
    static Item basicItem() {
 	  return new Item(new Item.Properties());

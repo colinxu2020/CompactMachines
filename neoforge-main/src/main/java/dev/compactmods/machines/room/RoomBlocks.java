@@ -1,6 +1,6 @@
 package dev.compactmods.machines.room;
 
-import dev.compactmods.machines.api.room.RoomApi;
+import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.api.dimension.CompactDimension;
 import dev.compactmods.machines.api.dimension.MissingDimensionException;
 import dev.compactmods.machines.api.room.RoomInstance;
@@ -21,7 +21,7 @@ public class RoomBlocks {
         final var compactDim = server.getLevel(CompactDimension.LEVEL_KEY);
         final var chunkSource = compactDim.getChunkSource();
 
-        final var chunkLoading = RoomApi.chunks(room.code())
+        final var chunkLoading = CompactMachines.roomApi().chunks(room.code())
                 .stream()
                 .map(cp -> chunkSource.getChunkFuture(cp.x, cp.z, ChunkStatus.FULL, true))
                 .toList();

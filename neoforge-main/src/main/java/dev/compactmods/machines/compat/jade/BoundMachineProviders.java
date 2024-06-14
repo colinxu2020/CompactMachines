@@ -3,7 +3,7 @@
 //import com.mojang.authlib.GameProfile;
 //import dev.compactmods.machines.api.CompactMachinesApi;
 //import dev.compactmods.machines.api.machine.MachineTranslations;
-//import dev.compactmods.machines.api.room.RoomApi;
+//import dev.compactmods.machines.api.room.CompactMachines.roomApi();
 //import dev.compactmods.machines.machine.block.BoundCompactMachineBlockEntity;
 //import net.minecraft.ChatFormatting;
 //import net.minecraft.Util;
@@ -56,7 +56,7 @@
 //                var owner = machine.getOwnerUUID().orElse(Util.NIL_UUID);
 //                tag.putUUID("owner", owner);
 //
-//                RoomApi.room(machine.connectedRoom()).ifPresent(inst -> {
+//                CompactMachines.roomApi().room(machine.connectedRoom()).ifPresent(inst -> {
 //                    tag.putString("room_code", inst.code());
 //                });
 //            }

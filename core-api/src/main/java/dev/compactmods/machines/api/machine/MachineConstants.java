@@ -1,6 +1,6 @@
 package dev.compactmods.machines.api.machine;
 
-import dev.compactmods.machines.api.CompactMachinesApi;
+import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.api.util.KeyHelper;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -10,15 +10,15 @@ import net.minecraft.world.level.block.Block;
 
 public interface MachineConstants {
 
-    ResourceLocation BOUND_MACHINE_BLOCK_ID = CompactMachinesApi.modRL( "machine");
-    ResourceLocation BOUND_MACHINE_ENTITY = CompactMachinesApi.modRL( "machine");
+    ResourceLocation BOUND_MACHINE_BLOCK_ID = CompactMachines.modRL( "machine");
+    ResourceLocation BOUND_MACHINE_ENTITY = CompactMachines.modRL( "machine");
     ResourceKey<Block> BOUND_MACHINE_BLOCK_RESKEY = KeyHelper.blockResKey("machine");
     ResourceKey<Item> BOUND_MACHINE_ITEM_RESKEY = KeyHelper.itemResKey("machine");
 
 
-    ResourceLocation UNBOUND_MACHINE_BLOCK_ID = CompactMachinesApi.modRL( "new_machine");
-    ResourceLocation UNBOUND_MACHINE_ITEM_ID = CompactMachinesApi.modRL( "new_machine");
-    ResourceLocation UNBOUND_MACHINE_ENTITY = CompactMachinesApi.modRL( "new_machine");
+    ResourceLocation UNBOUND_MACHINE_BLOCK_ID = CompactMachines.modRL( "new_machine");
+    ResourceLocation UNBOUND_MACHINE_ITEM_ID = CompactMachines.modRL( "new_machine");
+    ResourceLocation UNBOUND_MACHINE_ENTITY = CompactMachines.modRL( "new_machine");
 
     ResourceKey<Block> UNBOUND_MACHINE_BLOCK_RESKEY = KeyHelper.blockResKey("new_machine");
     ResourceKey<Item> UNBOUND_MACHINE_ITEM_RESKEY = KeyHelper.itemResKey("new_machine");

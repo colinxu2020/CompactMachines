@@ -1,8 +1,8 @@
 package dev.compactmods.machines.room;
 
+import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.api.Translations;
 import dev.compactmods.machines.api.dimension.CompactDimension;
-import dev.compactmods.machines.api.room.RoomApi;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -76,9 +76,9 @@ public class RoomEventHandler {
         final var level = entity.level();
         if (!level.dimension().equals(CompactDimension.LEVEL_KEY)) return false;
 
-        return RoomApi.chunkManager()
+        return CompactMachines.roomApi().chunkManager()
                 .findRoomByChunk(entity.chunkPosition())
-                .flatMap(RoomApi::room)
+                .flatMap(CompactMachines::room)
                 .map(ib -> ib.boundaries().innerBounds().contains(target))
                 .orElse(false);
     }

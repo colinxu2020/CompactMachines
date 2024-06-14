@@ -3,6 +3,7 @@ package dev.compactmods.machines.room.spawn;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mojang.serialization.codecs.UnboundedMapCodec;
+import dev.compactmods.machines.api.room.data.CMRoomDataLocations;
 import dev.compactmods.machines.data.CMDataFile;
 import dev.compactmods.machines.api.room.spatial.IRoomBoundaries;
 import dev.compactmods.machines.api.room.spawn.IRoomSpawn;
@@ -10,12 +11,14 @@ import dev.compactmods.machines.api.room.spawn.IRoomSpawnManager;
 import dev.compactmods.machines.api.room.spawn.IRoomSpawns;
 import dev.compactmods.machines.data.CodecHolder;
 import net.minecraft.core.UUIDUtil;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.nio.file.Path;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -77,6 +80,11 @@ public class SpawnManager implements IRoomSpawnManager, CodecHolder<SpawnManager
             return;
 
         playerSpawns.put(player, new RoomSpawn(location, rotation));
+    }
+
+    @Override
+    public Path getDataLocation(MinecraftServer server) {
+        return CMRoomDataLocations.SPAWN_DATA.apply(server);
     }
 
     @Override

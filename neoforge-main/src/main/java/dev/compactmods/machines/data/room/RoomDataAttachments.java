@@ -1,29 +1,41 @@
 package dev.compactmods.machines.data.room;
 
 import com.mojang.serialization.Codec;
-import dev.compactmods.machines.api.CompactMachinesApi;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import dev.compactmods.machines.api.room.data.CMRoomDataLocations;
 import dev.compactmods.machines.data.CMDataFile;
 import dev.compactmods.machines.data.CodecHolder;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.level.storage.LevelResource;
 import net.neoforged.neoforge.attachment.AttachmentHolder;
+import net.neoforged.neoforge.attachment.IAttachmentHolder;
 
 import java.nio.file.Path;
 
-public class RoomDataAttachments extends AttachmentHolder implements CMDataFile, CodecHolder<RoomDataAttachments> {
+public class RoomDataAttachments extends AttachmentHolder implements CMDataFile, CodecHolder<RoomDataAttachments>, IAttachmentHolder {
 
     private final String roomCode;
+    private final Codec<RoomDataAttachments> codec;
 
-    RoomDataAttachments(String roomCode) {
+    public RoomDataAttachments(MinecraftServer server, String roomCode) {
         this.roomCode = roomCode;
+        this.codec = makeCodec(server);
+    }
+
+    public static Codec<RoomDataAttachments> makeCodec(MinecraftServer server) {
+        return RecordCodecBuilder.create(i -> i.group(
+            Codec.STRING.fieldOf("room_code").forGetter(RoomDataAttachments::roomCode),
+            CompoundTag.CODEC.fieldOf("attachments").forGetter(inst -> inst.serializeAttachments(server.registryAccess()))
+        ).apply(i, (roomCode, ct) -> {
+            var inst = new RoomDataAttachments(server, roomCode);
+            inst.deserializeAttachments(server.registryAccess(), ct);
+            return inst;
+        }));
     }
 
     @Override
     public Path getDataLocation(MinecraftServer server) {
-        return server.getWorldPath(LevelResource.ROOT)
-            .resolve(CompactMachinesApi.MOD_ID)
-            .resolve("data")
-            .resolve("room_data");
+        return CMRoomDataLocations.ROOM_DATA_ATTACHMENTS.apply(server);
     }
 
     public String roomCode() {
@@ -32,6 +44,6 @@ public class RoomDataAttachments extends AttachmentHolder implements CMDataFile,
 
     @Override
     public Codec<RoomDataAttachments> codec() {
-        return null;
+        return codec;
     }
 }

@@ -1,6 +1,6 @@
 package dev.compactmods.machines.network;
 
-import dev.compactmods.machines.api.CompactMachinesApi;
+import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.client.room.ClientRoomPacketHandler;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.FriendlyByteBuf;
@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public record SyncRoomMetadataPacket(String roomCode, UUID owner) implements CustomPacketPayload {
 
-  public static final Type<SyncRoomMetadataPacket> TYPE = new Type<>(CompactMachinesApi.modRL("sync_room_metadata"));
+  public static final Type<SyncRoomMetadataPacket> TYPE = new Type<>(CompactMachines.modRL("sync_room_metadata"));
 
   public static final StreamCodec<FriendlyByteBuf, SyncRoomMetadataPacket> STREAM_CODEC = StreamCodec.composite(
 		ByteBufCodecs.STRING_UTF8, SyncRoomMetadataPacket::roomCode,

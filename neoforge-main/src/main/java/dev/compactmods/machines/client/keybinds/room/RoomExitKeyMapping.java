@@ -1,7 +1,7 @@
 package dev.compactmods.machines.client.keybinds.room;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import dev.compactmods.machines.api.CompactMachinesApi;
+import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.api.dimension.CompactDimension;
 import dev.compactmods.machines.network.PlayerRequestedLeavePacket;
 import net.minecraft.Util;
@@ -13,8 +13,8 @@ import net.neoforged.neoforge.network.PacketDistributor;
 public class RoomExitKeyMapping {
 
    public interface I18n {
-	  String CATEGORY = Util.makeDescriptionId("key.category", CompactMachinesApi.modRL("general"));
-	  String NAME = Util.makeDescriptionId("key.mapping", CompactMachinesApi.modRL("exit_room"));
+	  String CATEGORY = Util.makeDescriptionId("key.category", CompactMachines.modRL("general"));
+	  String NAME = Util.makeDescriptionId("key.mapping", CompactMachines.modRL("exit_room"));
    }
 
    public static final IKeyConflictContext CONFLICT_CONTEXT = new IKeyConflictContext() {

@@ -1,6 +1,6 @@
 package dev.compactmods.machines.shrinking;
 
-import dev.compactmods.machines.api.room.RoomApi;
+import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.api.Translations;
 import dev.compactmods.machines.api.dimension.CompactDimension;
 import dev.compactmods.machines.api.room.RoomTranslations;
@@ -48,11 +48,11 @@ public class PersonalShrinkingDevice extends Item {
         if (world instanceof ServerLevel playerDim && player instanceof ServerPlayer serverPlayer) {
             if (playerDim.dimension().equals(CompactDimension.LEVEL_KEY)) {
                 if (player.isShiftKeyDown()) {
-                    final var roomCode = RoomApi.chunkManager()
+                    final var roomCode = CompactMachines.roomApi().chunkManager()
                             .findRoomByChunk(serverPlayer.chunkPosition())
                             .orElseThrow();
 
-                    final var spawnManager = RoomApi.spawnManager(roomCode);
+                    final var spawnManager = CompactMachines.roomApi().spawnManager(roomCode);
                     spawnManager.setPlayerSpawn(serverPlayer);
 
                     player.displayClientMessage(RoomTranslations.ROOM_SPAWNPOINT_SET.apply(serverPlayer, roomCode), true);

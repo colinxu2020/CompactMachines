@@ -1,7 +1,7 @@
 package dev.compactmods.machines.machine.block;
 
 import dev.compactmods.machines.LoggingUtil;
-import dev.compactmods.machines.api.room.RoomApi;
+import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.api.shrinking.PSDTags;
 import dev.compactmods.machines.machine.config.EnumMachinePlayersBreakHandling;
 import dev.compactmods.machines.config.ServerConfig;
@@ -119,7 +119,7 @@ public class BoundCompactMachineBlock extends CompactMachineBlock implements Ent
         if (!level.isClientSide && !(player instanceof FakePlayer)) {
             level.getBlockEntity(pos, Machines.BlockEntities.MACHINE.get()).ifPresent(machine -> {
                 final var roomCode = machine.connectedRoom();
-                RoomApi.room(roomCode).ifPresent(inst -> {
+                CompactMachines.room(roomCode).ifPresent(inst -> {
                     if (player instanceof ServerPlayer sp) {
                         sp.setData(Rooms.DataAttachments.OPEN_MACHINE_POS, machine.getLevelPosition());
                         sp.openMenu(MachineRoomMenu.provider(sp.server, inst), (buf) -> {

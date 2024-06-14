@@ -1,6 +1,6 @@
 package dev.compactmods.machines.datagen.lang;
 
-import dev.compactmods.machines.api.CompactMachinesApi;
+import dev.compactmods.machines.api.CompactMachines;
 import net.minecraft.Util;
 import net.minecraft.core.Direction;
 import net.minecraft.data.DataGenerator;
@@ -14,7 +14,7 @@ public abstract class BaseLangGenerator extends LanguageProvider {
     private final String locale;
 
     public BaseLangGenerator(DataGenerator gen, String locale) {
-        super(gen.getPackOutput(), CompactMachinesApi.MOD_ID, locale);
+        super(gen.getPackOutput(), CompactMachines.MOD_ID, locale);
         this.locale = locale;
     }
 
@@ -30,7 +30,7 @@ public abstract class BaseLangGenerator extends LanguageProvider {
     protected void addTranslations() {
         // Direction Names
         for (var dir : Direction.values()) {
-            add(Util.makeDescriptionId("direction", CompactMachinesApi.modRL(dir.getSerializedName())), getDirectionTranslation(dir));
+            add(Util.makeDescriptionId("direction", CompactMachines.modRL(dir.getSerializedName())), getDirectionTranslation(dir));
         }
     }
 

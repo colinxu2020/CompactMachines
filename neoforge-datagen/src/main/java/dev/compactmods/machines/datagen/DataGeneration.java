@@ -1,6 +1,6 @@
 package dev.compactmods.machines.datagen;
 
-import dev.compactmods.machines.api.CompactMachinesApi;
+import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.datagen.compat.curios.CurioEntityGenerator;
 import dev.compactmods.machines.datagen.compat.curios.CurioSlotGenerator;
 import dev.compactmods.machines.datagen.lang.EnglishLangGenerator;
@@ -17,7 +17,7 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 import java.util.Collections;
 import java.util.List;
 
-@EventBusSubscriber(modid = CompactMachinesApi.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = CompactMachines.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class DataGeneration {
 
     @SubscribeEvent

@@ -1,7 +1,7 @@
 package dev.compactmods.machines.client.keybinds.room;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import dev.compactmods.machines.api.CompactMachinesApi;
+import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.api.dimension.CompactDimension;
 import dev.compactmods.machines.network.PlayerRequestedUpgradeUIPacket;
 import dev.compactmods.machines.room.Rooms;
@@ -13,8 +13,8 @@ import net.neoforged.neoforge.network.PacketDistributor;
 
 public class RoomUpgradeUIMapping {
 
-   public static final String CATEGORY = Util.makeDescriptionId("key.category", CompactMachinesApi.modRL("general"));
-   public static final String NAME = Util.makeDescriptionId("key.mapping", CompactMachinesApi.modRL("open_upgrade_screen"));
+   public static final String CATEGORY = Util.makeDescriptionId("key.category", CompactMachines.modRL("general"));
+   public static final String NAME = Util.makeDescriptionId("key.mapping", CompactMachines.modRL("open_upgrade_screen"));
 
    public static final IKeyConflictContext CONFLICT_CONTEXT = new IKeyConflictContext() {
 	  @Override

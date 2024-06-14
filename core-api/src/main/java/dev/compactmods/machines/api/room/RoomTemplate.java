@@ -2,7 +2,7 @@ package dev.compactmods.machines.api.room;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.compactmods.machines.api.CompactMachinesApi;
+import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.api.machine.MachineColor;
 import dev.compactmods.machines.api.machine.MachineTranslations;
 import net.minecraft.ChatFormatting;
@@ -34,9 +34,9 @@ import java.util.function.Consumer;
 public record RoomTemplate(RoomDimensions internalDimensions, MachineColor defaultMachineColor, List<RoomStructureInfo> structures)
     implements TooltipProvider {
 
-    public static final ResourceKey<Registry<RoomTemplate>> REGISTRY_KEY = ResourceKey.createRegistryKey(CompactMachinesApi.modRL("room_templates"));
+    public static final ResourceKey<Registry<RoomTemplate>> REGISTRY_KEY = ResourceKey.createRegistryKey(CompactMachines.modRL("room_templates"));
 
-    public static final ResourceLocation NO_TEMPLATE = CompactMachinesApi.modRL("empty");
+    public static final ResourceLocation NO_TEMPLATE = CompactMachines.modRL("empty");
 
     public static final RoomTemplate INVALID_TEMPLATE = new RoomTemplate(0, 0);
 

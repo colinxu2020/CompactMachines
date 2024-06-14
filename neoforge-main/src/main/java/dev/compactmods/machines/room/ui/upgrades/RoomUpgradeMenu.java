@@ -1,13 +1,10 @@
 package dev.compactmods.machines.room.ui.upgrades;
 
-import dev.compactmods.machines.api.CompactMachinesApi;
-import dev.compactmods.machines.api.room.RoomApi;
+import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.api.room.RoomInstance;
 import dev.compactmods.machines.client.render.ConditionalGhostSlot;
-import dev.compactmods.machines.data.room.RoomAttachmentDataManager;
 import dev.compactmods.machines.room.Rooms;
 import dev.compactmods.machines.room.upgrade.RoomUpgradeInventory;
-import dev.compactmods.machines.server.CompactMachinesServer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
@@ -80,14 +77,13 @@ public class RoomUpgradeMenu extends AbstractContainerMenu {
 	  return new MenuProvider() {
 		 @Override
 		 public @NotNull Component getDisplayName() {
-			return Component.translatable(CompactMachinesApi.MOD_ID + ".ui.room_upgrades");
+			return Component.translatable(CompactMachines.MOD_ID + ".ui.room_upgrades");
 		 }
 
 		 @Override
 		 public @NotNull AbstractContainerMenu createMenu(int winId, Inventory inventory, Player player) {
 			// TODO - Expose room data via API
-			var serverUpgInv = CompactMachinesServer.ROOM_DATA_ATTACHMENTS
-				.data(room.code())
+			var serverUpgInv = CompactMachines.roomData(room.code())
 				.getData(Rooms.DataAttachments.UPGRADE_INV);
 
 			return new RoomUpgradeMenu(winId, inventory, room.code(), serverUpgInv);

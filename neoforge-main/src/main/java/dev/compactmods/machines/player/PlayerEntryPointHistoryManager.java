@@ -6,9 +6,9 @@ import dev.compactmods.feather.MemoryGraph;
 import dev.compactmods.feather.edge.impl.EmptyEdge;
 import dev.compactmods.feather.node.Node;
 import dev.compactmods.feather.traversal.GraphNodeTransformationFunction;
+import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.api.dimension.CompactDimension;
 import dev.compactmods.machines.api.room.history.IPlayerEntryPointHistoryManager;
-import dev.compactmods.machines.api.room.RoomApi;
 import dev.compactmods.machines.api.room.history.PlayerRoomHistoryEntry;
 import dev.compactmods.machines.api.room.history.RoomEntryPoint;
 import dev.compactmods.machines.api.room.history.RoomEntryResult;
@@ -138,7 +138,7 @@ public class PlayerEntryPointHistoryManager implements CodecHolder<PlayerEntryPo
     }
 
     public RoomEntryResult enterRoom(UUID player, PlayerRoomHistoryEntry history) {
-        if (!RoomApi.isValidRoomCode(history.roomCode()))
+        if (!CompactMachines.isValidRoomCode(history.roomCode()))
             return RoomEntryResult.FAILED_ROOM_INVALID;
 
         PlayerReferenceNode playerNode = getOrCreatePlayer(player);

@@ -21,9 +21,9 @@ public interface Translations {
             .withStyle(ChatFormatting.ITALIC);
 
     interface IDs {
-        String TELEPORT_OUT_OF_BOUNDS = Util.makeDescriptionId("messages", CompactMachinesApi.modRL("teleport_oob"));
-        String HOW_DID_YOU_GET_HERE = Util.makeDescriptionId("messages", CompactMachinesApi.modRL("how_did_you_get_here"));
-        String HINT_HOLD_SHIFT = Util.makeDescriptionId("messages", CompactMachinesApi.modRL("hint.hold_shift"));
-        String UNBREAKABLE_BLOCK = Util.makeDescriptionId("messages", CompactMachinesApi.modRL("solid_wall"));
+        String TELEPORT_OUT_OF_BOUNDS = Util.makeDescriptionId("messages", CompactMachines.modRL("teleport_oob"));
+        String HOW_DID_YOU_GET_HERE = Util.makeDescriptionId("messages", CompactMachines.modRL("how_did_you_get_here"));
+        String HINT_HOLD_SHIFT = Util.makeDescriptionId("messages", CompactMachines.modRL("hint.hold_shift"));
+        String UNBREAKABLE_BLOCK = Util.makeDescriptionId("messages", CompactMachines.modRL("solid_wall"));
     }
 }

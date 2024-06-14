@@ -3,7 +3,7 @@ rootProject.name = "Compact Machines 21.0"
 dependencyResolutionManagement {
     versionCatalogs.create("neoforged") {
         version("mdg", "0.1.74")
-        version("neoforge", "21.0.0-beta")
+        version("neoforge", "21.0.2-beta")
 
         plugin("moddev", "net.neoforged.moddev")
             .versionRef("mdg")

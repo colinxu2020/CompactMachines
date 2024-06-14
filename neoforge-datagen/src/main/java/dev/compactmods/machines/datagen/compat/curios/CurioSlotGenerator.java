@@ -2,7 +2,7 @@ package dev.compactmods.machines.datagen.compat.curios;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.compactmods.machines.api.CompactMachinesApi;
+import dev.compactmods.machines.api.CompactMachines;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -24,12 +24,12 @@ public class CurioSlotGenerator extends JsonCodecProvider<CurioSlotGenerator.Cur
     }
 
     public CurioSlotGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, ExistingFileHelper existingFileHelper) {
-        super(output, PackOutput.Target.DATA_PACK, "curios/slots", PackType.SERVER_DATA, CurioSlot.CODEC, lookupProvider, CompactMachinesApi.MOD_ID, existingFileHelper);
+        super(output, PackOutput.Target.DATA_PACK, "curios/slots", PackType.SERVER_DATA, CurioSlot.CODEC, lookupProvider, CompactMachines.MOD_ID, existingFileHelper);
     }
 
     @Override
     protected void gather() {
-        var cmPSDSlot = new CurioSlot(1, "SET", CompactMachinesApi.modRL("slot/empty_psd"));
-        unconditional(CompactMachinesApi.modRL("psd"), cmPSDSlot);
+        var cmPSDSlot = new CurioSlot(1, "SET", CompactMachines.modRL("slot/empty_psd"));
+        unconditional(CompactMachines.modRL("psd"), cmPSDSlot);
     }
 }

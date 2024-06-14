@@ -2,7 +2,7 @@ package dev.compactmods.machines.network.machine;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.compactmods.machines.api.CompactMachinesApi;
+import dev.compactmods.machines.api.CompactMachines;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -11,7 +11,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.neoforged.neoforge.network.handling.IPayloadHandler;
 
 public record MachineColorSyncPacket(GlobalPos position, int color) implements CustomPacketPayload {
-    public static final Type<MachineColorSyncPacket> TYPE = new Type<>(CompactMachinesApi.modRL("update_machine_color"));
+    public static final Type<MachineColorSyncPacket> TYPE = new Type<>(CompactMachines.modRL("update_machine_color"));
 
     public static final Codec<MachineColorSyncPacket> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             GlobalPos.CODEC.fieldOf("position").forGetter(MachineColorSyncPacket::position),

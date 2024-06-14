@@ -1,7 +1,7 @@
 //package dev.compactmods.machines.compat.jei;
 //
 //import dev.compactmods.machines.api.CompactMachinesApi;
-//import dev.compactmods.machines.api.room.RoomApi;
+//import dev.compactmods.machines.api.room.CompactMachines.roomApi();
 //import dev.compactmods.machines.CompactMachines;
 //import dev.compactmods.machines.machine.Machines;
 //import dev.compactmods.machines.shrinking.Shrinking;
@@ -32,7 +32,7 @@
 //                Component.translatable("jei.compactmachines.machines"));
 //
 //        // Add all known template JEI infos
-//        RoomApi.getTemplates(ServerLifecycleHooks.getCurrentServer())
+//        CompactMachines.roomApi().getTemplates(ServerLifecycleHooks.getCurrentServer())
 //                .entrySet()
 //                .stream()
 //                .map(t -> Machines.Items.forNewRoom(t.getKey().location(), t.getValue()))

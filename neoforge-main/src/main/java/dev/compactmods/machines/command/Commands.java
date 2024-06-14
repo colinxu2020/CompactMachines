@@ -1,7 +1,7 @@
 package dev.compactmods.machines.command;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import dev.compactmods.machines.api.CompactMachinesApi;
+import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.api.room.upgrade.components.RoomUpgradeList;
 import dev.compactmods.machines.command.subcommand.CMEjectSubcommand;
 import dev.compactmods.machines.command.subcommand.CMGiveMachineSubcommand;
@@ -25,7 +25,7 @@ public class Commands {
     // TODO: /cm spawn set <room> <pos>
 
     static final LiteralArgumentBuilder<CommandSourceStack> CM_COMMAND_ROOT
-            = LiteralArgumentBuilder.literal(CompactMachinesApi.MOD_ID);
+            = LiteralArgumentBuilder.literal(CompactMachines.MOD_ID);
 
     public static void prepare() {
 

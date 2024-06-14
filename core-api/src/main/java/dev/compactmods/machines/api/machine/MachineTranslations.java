@@ -1,6 +1,6 @@
 package dev.compactmods.machines.api.machine;
 
-import dev.compactmods.machines.api.CompactMachinesApi;
+import dev.compactmods.machines.api.CompactMachines;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
@@ -16,9 +16,9 @@ public interface MachineTranslations {
             .withStyle(ChatFormatting.YELLOW);
 
     interface IDs {
-        String OWNER = Util.makeDescriptionId("machine", CompactMachinesApi.modRL("machine.owner"));
-        String SIZE = Util.makeDescriptionId("machine", CompactMachinesApi.modRL("machine.size"));
-        String BOUND_TO = Util.makeDescriptionId("machine", CompactMachinesApi.modRL("machine.bound_to"));
-        String NEW_MACHINE = Util.makeDescriptionId("machine", CompactMachinesApi.modRL("new_machine"));
+        String OWNER = Util.makeDescriptionId("machine", CompactMachines.modRL("machine.owner"));
+        String SIZE = Util.makeDescriptionId("machine", CompactMachines.modRL("machine.size"));
+        String BOUND_TO = Util.makeDescriptionId("machine", CompactMachines.modRL("machine.bound_to"));
+        String NEW_MACHINE = Util.makeDescriptionId("machine", CompactMachines.modRL("new_machine"));
     }
 }

@@ -1,9 +1,8 @@
 package dev.compactmods.machines.room;
 
-import dev.compactmods.machines.api.room.RoomApi;
+import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.api.room.RoomInstance;
 import dev.compactmods.machines.api.room.history.IPlayerEntryPointHistoryManager;
-import dev.compactmods.machines.api.room.history.PlayerHistoryApi;
 import dev.compactmods.machines.api.room.history.RoomEntryPoint;
 import dev.compactmods.machines.LoggingUtil;
 import dev.compactmods.machines.api.dimension.CompactDimension;
@@ -32,7 +31,7 @@ public abstract class RoomHelper {
    public static boolean entityInsideRoom(LivingEntity entity, String roomCode) {
 	  // Recursion check. Player is inside the room being queried.
 	  if (entity.level().dimension().equals(CompactDimension.LEVEL_KEY)) {
-		 return RoomApi.chunks(roomCode).hasChunk(entity.chunkPosition());
+		 return CompactMachines.roomApi().chunks(roomCode).hasChunk(entity.chunkPosition());
 	  }
 
 	  return false;
@@ -43,7 +42,7 @@ public abstract class RoomHelper {
 
 
 	  LOGS.debug("Player {} entering machine at: {}", player.getName(), machinePos);
-	  RoomApi.room(roomCode).ifPresent(roomInfo -> {
+	  CompactMachines.room(roomCode).ifPresent(roomInfo -> {
 		 try {
 			teleportPlayerIntoRoom(serv, player, roomInfo, RoomEntryPoint.playerEnteringMachine(player));
 		 } catch (MissingDimensionException e) {
@@ -56,7 +55,7 @@ public abstract class RoomHelper {
 	   throws MissingDimensionException {
 	  final var compactDim = CompactDimension.forServer(serv);
 
-	  final var history = PlayerHistoryApi.historyManager();
+	  final var history = CompactMachines.playerHistoryApi().entryPoints();
 	  final var result = history.enterRoom(player, room.code(), entryPoint);
 
 	  LOGS.debug("Entry result: {}", result);
@@ -76,7 +75,7 @@ public abstract class RoomHelper {
 
 			// UUID owner;
 //			try {
-//			   owner = RoomApi.owners().getRoomOwner(room.code());
+//			   owner = CompactMachines.roomApi().owners().getRoomOwner(room.code());
 //			} catch (NonexistentRoomException e) {
 //			   LoggingUtil.modLog().debug("SCREM", e);
 //			   owner = Util.NIL_UUID;
@@ -85,7 +84,7 @@ public abstract class RoomHelper {
 			serv.submitAsync(() -> {
 			   player.getCooldowns().addCooldown(Shrinking.PERSONAL_SHRINKING_DEVICE.get(), 25);
 
-			   final var spawns = RoomApi.spawnManager(room.code()).spawns();
+			   final var spawns = CompactMachines.roomApi().spawnManager(room.code()).spawns();
 			   final var spawn = spawns.forPlayer(player.getUUID()).orElse(spawns.defaultSpawn());
 			   player.changeDimension(CompactDimensionTransitions.to(compactDim, spawn.position(), spawn.rotation()));
 
@@ -102,7 +101,7 @@ public abstract class RoomHelper {
 	  MinecraftServer serv = serverPlayer.getServer();
 	  assert serv != null;
 
-	  final IPlayerEntryPointHistoryManager history = PlayerHistoryApi.historyManager();
+	  final IPlayerEntryPointHistoryManager history = CompactMachines.playerHistoryApi().entryPoints();
 
 	  serv.submit(() -> {
 		 history.lastHistory(serverPlayer).ifPresentOrElse(

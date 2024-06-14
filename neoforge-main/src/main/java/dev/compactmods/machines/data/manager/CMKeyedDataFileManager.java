@@ -1,19 +1,18 @@
 package dev.compactmods.machines.data.manager;
 
-import com.mojang.serialization.Codec;
 import dev.compactmods.machines.LoggingUtil;
 import dev.compactmods.machines.data.CMDataFile;
 import dev.compactmods.machines.data.CodecHolder;
+import dev.compactmods.machines.data.DataFileUtil;
+import dev.compactmods.machines.room.RoomRegistrar;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.MinecraftServer;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.function.BiFunction;
 
 public class CMKeyedDataFileManager<Key, T extends CMDataFile & CodecHolder<T>> implements IKeyedDataFileManager<Key, T> {
@@ -33,9 +32,15 @@ public class CMKeyedDataFileManager<Key, T extends CMDataFile & CodecHolder<T>> 
 	  return cache.computeIfAbsent(key, k -> {
 		 var inst = creator.apply(server, k);
 		 var dir = inst.getDataLocation(server);
-		 CMDataFile.ensureDirExists(dir);
-		 return loadItem(dir.resolve(k.toString() + ".dat").toFile(), inst.codec());
+		 DataFileUtil.ensureDirExists(dir);
+		 final var file = dir.resolve(k.toString() + ".dat").toFile();
+		 return !file.exists() ? inst : DataFileUtil.loadFileWithCodec(file, inst.codec());
 	  });
+   }
+
+   @Override
+   public Optional<T> optionalData(Key key) {
+	  return hasData(key) ? Optional.ofNullable(data(key)) : Optional.empty();
    }
 
    public void save() {
@@ -57,18 +62,7 @@ public class CMKeyedDataFileManager<Key, T extends CMDataFile & CodecHolder<T>> 
 	  });
    }
 
-   protected T loadItem(File file, Codec<T> codec) {
-	  try (var is = new FileInputStream(file)) {
-		 final var tag = NbtIo.readCompressed(is, NbtAccounter.unlimitedHeap());
-		 return codec.parse(NbtOps.INSTANCE, tag.contains("data") ? tag.getCompound("data") : new CompoundTag())
-			 .getOrThrow();
-
-	  } catch (IOException e) {
-		 throw new RuntimeException(e);
-	  }
-   }
-
-   public boolean hasData(String code) {
-	  return cache.containsKey(code);
+   public boolean hasData(Key key) {
+	  return cache.containsKey(key);
    }
 }

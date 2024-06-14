@@ -4,8 +4,8 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.api.machine.MachineTranslations;
-import dev.compactmods.machines.api.room.RoomApi;
 import dev.compactmods.machines.LoggingUtil;
 import dev.compactmods.machines.config.ServerConfig;
 import dev.compactmods.machines.machine.block.BoundCompactMachineBlockEntity;
@@ -32,7 +32,7 @@ public class CMRebindSubcommand {
 
         final var LOGS = LoggingUtil.modLog();
 
-        final var roomProvider = RoomApi.registrar();
+        final var roomProvider = CompactMachines.roomApi().registrar();
         final var rebindingMachine = BlockPosArgument.getLoadedBlockPos(ctx, "pos");
         final var roomCode = StringArgumentType.getString(ctx, "bindTo");
 

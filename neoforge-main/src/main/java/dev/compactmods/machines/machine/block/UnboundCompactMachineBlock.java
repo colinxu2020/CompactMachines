@@ -1,6 +1,6 @@
 package dev.compactmods.machines.machine.block;
 
-import dev.compactmods.machines.api.room.RoomApi;
+import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.api.room.RoomTemplate;
 import dev.compactmods.machines.LoggingUtil;
 import dev.compactmods.machines.api.dimension.MissingDimensionException;
@@ -73,7 +73,7 @@ public class UnboundCompactMachineBlock extends CompactMachineBlock implements E
 
                     try {
                         // Generate a new machine room
-                        final var newRoom = RoomApi.newRoom(server, template, sp.getUUID());
+                        final var newRoom = CompactMachines.newRoom(server, template, sp.getUUID());
 
                         // Change into a bound machine block
                         level.setBlock(pos, Machines.Blocks.BOUND_MACHINE.get().defaultBlockState(), Block.UPDATE_ALL);
