@@ -8,11 +8,10 @@ import dev.compactmods.machines.data.CodecHolder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.neoforged.neoforge.attachment.AttachmentHolder;
-import net.neoforged.neoforge.attachment.IAttachmentHolder;
 
 import java.nio.file.Path;
 
-public class RoomDataAttachments extends AttachmentHolder implements CMDataFile, CodecHolder<RoomDataAttachments>, IAttachmentHolder {
+public class RoomDataAttachments extends AttachmentHolder implements CMDataFile, CodecHolder<RoomDataAttachments> {
 
     private final String roomCode;
     private final Codec<RoomDataAttachments> codec;
