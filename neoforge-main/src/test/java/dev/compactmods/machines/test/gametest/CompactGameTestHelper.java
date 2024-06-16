@@ -1,4 +1,4 @@
-package dev.compactmods.machines.test.util;
+package dev.compactmods.machines.test.gametest;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

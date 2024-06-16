@@ -1,7 +1,7 @@
-package dev.compactmods.machines.test;
+package dev.compactmods.machines.test.gametest;
 
 import com.google.common.collect.ImmutableSet;
-import dev.compactmods.machines.api.CompactMachinesApi;
+import dev.compactmods.machines.api.CompactMachines;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.FolderRepositorySource;
@@ -18,7 +18,7 @@ import org.apache.logging.log4j.Logger;
 import java.nio.file.Path;
 import java.util.concurrent.ExecutionException;
 
-@EventBusSubscriber(modid = CompactMachinesApi.MOD_ID)
+@EventBusSubscriber(modid = CompactMachines.MOD_ID)
 public class ServerEventHandler {
 
     final static Logger LOG = LogManager.getLogger();
@@ -55,7 +55,7 @@ public class ServerEventHandler {
                 server.reloadResources(packs.getSelectedIds()).get();
 
                 server.getResourceManager()
-                        .listResources("structures", rl -> rl.getNamespace().equals(CompactMachinesApi.MOD_ID))
+                        .listResources("structures", rl -> rl.getNamespace().equals(CompactMachines.MOD_ID))
                         .forEach((rl, res) -> LOG.debug(rl.toDebugFileName()));
 
             } catch (InterruptedException | ExecutionException e) {

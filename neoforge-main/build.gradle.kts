@@ -63,6 +63,11 @@ neoForge {
         this.dependency(coreApi)
     }
 
+    unitTest {
+        enable()
+        testedMod = mods.named(modId)
+    }
+
     runs {
         // applies to all the run configs below
         configureEach {
@@ -70,6 +75,8 @@ neoForge {
 
             // Recommended logging level for the console
             systemProperty("forge.logging.console.level", "debug")
+
+            sourceSet = project.sourceSets.main
 
             if (!System.getenv().containsKey("CI")) {
                 // JetBrains Runtime Hotswap
@@ -91,18 +98,28 @@ neoForge {
             programArguments.addAll("--height", "1080")
         }
 
-//        create("server") {
-//            systemProperty("forge.enabledGameTestNamespaces", modId)
-//            environmentVariables("CM_TEST_RESOURCES", project.file("src/test/resources").path)
-//            programArguments("nogui")
-//            modSource(project.sourceSets.test.get())
-//        }
-//
-//        create("gameTestServer") {
-//            systemProperty("forge.enabledGameTestNamespaces", modId)
-//            environmentVariable("CM_TEST_RESOURCES", file("src/test/resources").path)
-//            modSource(project.sourceSets.test.get())
-//        }
+        create("server") {
+            server()
+            gameDirectory.set(file("runs/server"))
+
+            systemProperty("forge.enabledGameTestNamespaces", modId)
+            programArgument("nogui")
+
+            environment.put("CM_TEST_RESOURCES", file("src/test/resources").path)
+
+            sourceSet = project.sourceSets.test
+            sourceSets.add(project.sourceSets.test.get())
+        }
+
+        create("gameTestServer") {
+            type = "gameTestServer"
+
+            systemProperty("forge.enabledGameTestNamespaces", modId)
+            environment.put("CM_TEST_RESOURCES", file("src/test/resources").path)
+
+            sourceSet = project.sourceSets.test
+            sourceSets.add(project.sourceSets.test.get())
+        }
     }
 }
 
@@ -153,9 +170,17 @@ dependencies {
         jarJar(libraries.feather) { isTransitive = false }
     }
 
+    testImplementation(neoforged.testframework)
+    testImplementation("org.junit.jupiter:junit-jupiter:5.7.1")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
     // Mods
 //    compileOnly(mods.bundles.jei)
 //    compileOnly(mods.jade)
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
 }
 
 tasks.withType<ProcessResources> {

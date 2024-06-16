@@ -1,12 +1,11 @@
-package dev.compactmods.machines.test.data;
+package dev.compactmods.machines.test.gametest.data;
 
-import dev.compactmods.machines.api.CompactMachinesApi;
-import dev.compactmods.machines.api.room.CompactMachines.roomApi();
+import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.api.room.history.RoomEntryPoint;
 import dev.compactmods.machines.player.PlayerEntryPointHistoryManager;
 import dev.compactmods.machines.api.room.history.RoomEntryResult;
 import dev.compactmods.machines.room.RoomCodeGenerator;
-import dev.compactmods.machines.test.TestCompactMachines.roomApi();
+import dev.compactmods.machines.test.gametest.TestRoomApi;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.NbtOps;
@@ -19,14 +18,14 @@ import java.util.Deque;
 import java.util.stream.Collectors;
 
 @PrefixGameTestTemplate(false)
-@GameTestHolder(CompactMachinesApi.MOD_ID)
+@GameTestHolder(CompactMachines.MOD_ID)
 public class PlayerHistoryTrackerTests {
 
     private static final String BATCH = "PLAYER_HISTORY_TRACKING";
 
     @GameTest(template = "empty_1x1", batch = BATCH)
     public static void failsPlayerGoingTooFar(final GameTestHelper test) {
-        CompactMachines.roomApi().INSTANCE = TestCompactMachines.roomApi().forTest(test);
+        CompactMachines.Internal.ROOM_API = TestRoomApi.forTest();
 
         final var history = new PlayerEntryPointHistoryManager(1);
 
@@ -42,7 +41,7 @@ public class PlayerHistoryTrackerTests {
 
     @GameTest(template = "empty_1x1", batch = BATCH, timeoutTicks = 1400)
     public static void canGetPlayerHistory(final GameTestHelper test) throws InterruptedException {
-        CompactMachines.roomApi().INSTANCE = TestCompactMachines.roomApi().forTest(test);
+        CompactMachines.Internal.ROOM_API = TestRoomApi.forTest();
 
         final var history = new PlayerEntryPointHistoryManager(5);
 
@@ -71,7 +70,7 @@ public class PlayerHistoryTrackerTests {
 
     @GameTest(template = "empty_1x1", batch = BATCH, timeoutTicks = 1400)
     public static void canRemovePlayerHistory(final GameTestHelper test) throws InterruptedException {
-        CompactMachines.roomApi().INSTANCE = TestCompactMachines.roomApi().forTest(test);
+        CompactMachines.Internal.ROOM_API = TestRoomApi.forTest();
 
         final var history = new PlayerEntryPointHistoryManager(5);
         final var player = test.makeMockPlayer(GameType.SURVIVAL);
@@ -98,7 +97,7 @@ public class PlayerHistoryTrackerTests {
 
     @GameTest(template = "empty_1x1", batch = BATCH, timeoutTicks = 1400)
     public static void testDataLogic(final GameTestHelper test) throws InterruptedException {
-        CompactMachines.roomApi().INSTANCE = TestCompactMachines.roomApi().forTest(test);
+        CompactMachines.Internal.ROOM_API = TestRoomApi.forTest();
 
         final var history = new PlayerEntryPointHistoryManager(5);
 

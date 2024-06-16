@@ -1,15 +1,13 @@
-package dev.compactmods.machines.test.worldgen;
+package dev.compactmods.machines.test.gametest.worldgen;
 
-import dev.compactmods.machines.api.CompactMachinesApi;
+import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.api.room.CompactRoomGenerator;
 import dev.compactmods.machines.api.room.RoomStructureInfo;
-import dev.compactmods.machines.test.util.CompactGameTestHelper;
+import dev.compactmods.machines.test.gametest.CompactGameTestHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import net.neoforged.testframework.annotation.ForEachTest;
 
 @ForEachTest(groups = StructureGenTests.BATCH)
@@ -28,7 +26,7 @@ public class StructureGenTests {
         CompactRoomGenerator.generateRoom(testHelper.getLevel(), roomDims, Blocks.WHITE_STAINED_GLASS.defaultBlockState());
 
         CompactRoomGenerator.populateStructure(testHelper.getLevel(),
-                CompactMachinesApi.modRL("gold_1x1"),
+                CompactMachines.modRL("gold_1x1"),
                 roomDims.deflate(1), RoomStructureInfo.RoomStructurePlacement.CENTERED);
 
         testHelper.succeed();
@@ -45,7 +43,7 @@ public class StructureGenTests {
         CompactRoomGenerator.generateRoom(testHelper.getLevel(), roomDims, Blocks.WHITE_STAINED_GLASS.defaultBlockState());
 
         CompactRoomGenerator.populateStructure(testHelper.getLevel(),
-                CompactMachinesApi.modRL("gold_1x1"),
+                CompactMachines.modRL("gold_1x1"),
                 roomDims.deflate(1), RoomStructureInfo.RoomStructurePlacement.CENTERED_CEILING);
 
         testHelper.succeed();
@@ -62,7 +60,7 @@ public class StructureGenTests {
         CompactRoomGenerator.generateRoom(testHelper.getLevel(), roomDims, Blocks.WHITE_STAINED_GLASS.defaultBlockState());
 
         CompactRoomGenerator.populateStructure(testHelper.getLevel(),
-                CompactMachinesApi.modRL("gold_1x1"),
+                CompactMachines.modRL("gold_1x1"),
                 roomDims.deflate(1), RoomStructureInfo.RoomStructurePlacement.CENTERED_FLOOR);
 
         testHelper.succeed();

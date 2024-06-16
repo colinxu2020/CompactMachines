@@ -1,10 +1,10 @@
-package dev.compactmods.machines.test.worldgen;
+package dev.compactmods.machines.test.gametest.worldgen;
 
 import dev.compactmods.machines.api.room.CompactRoomGenerator;
 import dev.compactmods.machines.api.room.RoomTemplate;
-import dev.compactmods.machines.api.CompactMachinesApi;
+import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.api.util.BlockSpaceUtil;
-import dev.compactmods.machines.test.util.CompactGameTestHelper;
+import dev.compactmods.machines.test.gametest.CompactGameTestHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.GameTest;
@@ -15,10 +15,7 @@ import net.minecraft.util.CommonColors;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.phys.AABB;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import net.neoforged.testframework.annotation.ForEachTest;
-import net.neoforged.testframework.gametest.EmptyTemplate;
 import org.apache.logging.log4j.LogManager;
 
 import java.util.ArrayList;
@@ -34,12 +31,12 @@ public class RoomGenerationTests {
     public static Collection<TestFunction> roomTests() {
         List<TestFunction> funcs = new ArrayList<>();
 
-        makeAndAddRoomTemplateTest(funcs, CompactMachinesApi.modRL("3_cubed"), new RoomTemplate(3, CommonColors.WHITE));
-        makeAndAddRoomTemplateTest(funcs, CompactMachinesApi.modRL("5_cubed"), new RoomTemplate(5, CommonColors.WHITE));
-        makeAndAddRoomTemplateTest(funcs, CompactMachinesApi.modRL("7_cubed"), new RoomTemplate(7, CommonColors.WHITE));
-        makeAndAddRoomTemplateTest(funcs, CompactMachinesApi.modRL("9_cubed"), new RoomTemplate(9, CommonColors.WHITE));
-        makeAndAddRoomTemplateTest(funcs, CompactMachinesApi.modRL("11_cubed"), new RoomTemplate(11, CommonColors.WHITE));
-        makeAndAddRoomTemplateTest(funcs, CompactMachinesApi.modRL("13_cubed"), new RoomTemplate(13, CommonColors.WHITE));
+        makeAndAddRoomTemplateTest(funcs, CompactMachines.modRL("3_cubed"), new RoomTemplate(3, CommonColors.WHITE));
+        makeAndAddRoomTemplateTest(funcs, CompactMachines.modRL("5_cubed"), new RoomTemplate(5, CommonColors.WHITE));
+        makeAndAddRoomTemplateTest(funcs, CompactMachines.modRL("7_cubed"), new RoomTemplate(7, CommonColors.WHITE));
+        makeAndAddRoomTemplateTest(funcs, CompactMachines.modRL("9_cubed"), new RoomTemplate(9, CommonColors.WHITE));
+        makeAndAddRoomTemplateTest(funcs, CompactMachines.modRL("11_cubed"), new RoomTemplate(11, CommonColors.WHITE));
+        makeAndAddRoomTemplateTest(funcs, CompactMachines.modRL("13_cubed"), new RoomTemplate(13, CommonColors.WHITE));
 
         return funcs;
     }
@@ -48,7 +45,7 @@ public class RoomGenerationTests {
         funcs.add(new TestFunction(
             "room_generation",
             "builtin_roomgen_" + id.getPath(),
-            CompactMachinesApi.MOD_ID + ":empty_15x15",
+            CompactMachines.MOD_ID + ":empty_15x15",
             Rotation.NONE,
             200,
             0,

@@ -1,26 +1,22 @@
-package dev.compactmods.machines.test;
+package dev.compactmods.machines.test.junit;
 
-import dev.compactmods.machines.api.CompactMachinesApi;
 import dev.compactmods.machines.util.MathUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
-import net.minecraft.gametest.framework.GameTest;
-import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
+import net.neoforged.testframework.junit.EphemeralTestServerProvider;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.HashMap;
 
-@PrefixGameTestTemplate(false)
-@GameTestHolder(CompactMachinesApi.MOD_ID)
+@ExtendWith(EphemeralTestServerProvider.class)
 public class MathUtilTests {
 
-    private static final String BATCH = "MathUtil";
-
-    @GameTest(template = "empty_1x1", batch = BATCH)
-    public static void positionGeneratorWorksCorrectly(final GameTestHelper test) {
+    @Test
+    public void positionGeneratorWorksCorrectly() {
         // Our generation works in a counter-clockwise spiral, starting at 0,0
         /*
          *    6  5  4
@@ -45,11 +41,7 @@ public class MathUtilTests {
 
             ChunkPos calculatedChunk = new ChunkPos(BlockPos.containing(finalPos));
 
-            String error = String.format("Generation did not match for %s.", id);
-            if(!expectedChunk.equals(calculatedChunk))
-                test.fail(error);
+            Assertions.assertEquals(expectedChunk, calculatedChunk, String.format("Generation did not match for %s.", id));
         });
-
-        test.succeed();
     }
 }
