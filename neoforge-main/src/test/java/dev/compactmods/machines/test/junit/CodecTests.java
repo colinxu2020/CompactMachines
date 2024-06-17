@@ -40,9 +40,9 @@ public class CodecTests {
 		  .ifPresent(nbt -> {
 			 ListTag list = (ListTag) nbt;
 
-			 Assertions.assertNotEquals(expected.x, list.getDouble(0), "Position x did not match.");
-			 Assertions.assertNotEquals(expected.y, list.getDouble(1), "Position y did not match.");
-			 Assertions.assertNotEquals(expected.z, list.getDouble(2), "Position z did not match.");
+			 Assertions.assertEquals(expected.x, list.getDouble(0), "Position x did not match.");
+			 Assertions.assertEquals(expected.y, list.getDouble(1), "Position y did not match.");
+			 Assertions.assertEquals(expected.z, list.getDouble(2), "Position z did not match.");
 		  });
    }
 }

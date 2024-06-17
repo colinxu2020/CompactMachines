@@ -60,6 +60,7 @@ neoForge {
 
     this.mods.create(modId) {
         modSourceSets.add(sourceSets.main)
+        modSourceSets.add(sourceSets.test)
         this.dependency(coreApi)
     }
 
@@ -83,12 +84,13 @@ neoForge {
                 // jvmArgument("-XX:+AllowEnhancedClassRedefinition")
             }
 
-            additionalRuntimeClasspath.add("dev.compactmods:feather:${libraries.versions.feather.get()}")
-            additionalRuntimeClasspath.add("com.aventrix.jnanoid:jnanoid:2.0.0")
+            additionalRuntimeClasspath.add(libraries.feather)
+            additionalRuntimeClasspath.add(libraries.jnanoid)
         }
 
         create("client") {
             client()
+            gameDirectory.set(file("runs/client"))
 
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             systemProperty("forge.enabledGameTestNamespaces", modId)
@@ -108,17 +110,18 @@ neoForge {
             environment.put("CM_TEST_RESOURCES", file("src/test/resources").path)
 
             sourceSet = project.sourceSets.test
-            sourceSets.add(project.sourceSets.test.get())
+            // sourceSets.add(project.sourceSets.test.get())
         }
 
         create("gameTestServer") {
             type = "gameTestServer"
+            gameDirectory.set(file("runs/gametest"))
 
             systemProperty("forge.enabledGameTestNamespaces", modId)
             environment.put("CM_TEST_RESOURCES", file("src/test/resources").path)
 
             sourceSet = project.sourceSets.test
-            sourceSets.add(project.sourceSets.test.get())
+            // sourceSets.add(project.sourceSets.test.get())
         }
     }
 }
@@ -170,6 +173,7 @@ dependencies {
         jarJar(libraries.feather) { isTransitive = false }
     }
 
+    runtimeOnly(neoforged.testframework)
     testImplementation(neoforged.testframework)
     testImplementation("org.junit.jupiter:junit-jupiter:5.7.1")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")

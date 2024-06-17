@@ -4,7 +4,8 @@ import dev.compactmods.machines.api.room.CompactRoomGenerator;
 import dev.compactmods.machines.api.room.RoomTemplate;
 import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.api.util.BlockSpaceUtil;
-import dev.compactmods.machines.test.gametest.CompactGameTestHelper;
+import dev.compactmods.machines.test.gametest.core.CompactGameTestHelper;
+import dev.compactmods.machines.test.gametest.core.EmptyTestSizes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.GameTest;
@@ -16,17 +17,18 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.testframework.annotation.ForEachTest;
+import net.neoforged.testframework.annotation.TestHolder;
+import net.neoforged.testframework.gametest.EmptyTemplate;
 import org.apache.logging.log4j.LogManager;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@ForEachTest(groups = RoomGenerationTests.BATCH)
+@ForEachTest(groups = "room_generation")
 public class RoomGenerationTests {
 
-    public static final String BATCH = "room_generation";
-
+    @TestHolder
     @GameTestGenerator
     public static Collection<TestFunction> roomTests() {
         List<TestFunction> funcs = new ArrayList<>();
@@ -45,7 +47,7 @@ public class RoomGenerationTests {
         funcs.add(new TestFunction(
             "room_generation",
             "builtin_roomgen_" + id.getPath(),
-            CompactMachines.MOD_ID + ":empty_15x15",
+            CompactMachines.modRL("empty_15_cubed").toString(),
             Rotation.NONE,
             200,
             0,
@@ -65,7 +67,9 @@ public class RoomGenerationTests {
         testHelper.succeed();
     }
 
-    @GameTest(template = "empty_15x15")
+    @TestHolder
+    @GameTest
+    @EmptyTemplate(EmptyTestSizes.FIFTEEN_CUBED)
     public static void checkOffsetsNormalTest(final CompactGameTestHelper testHelper) {
         final var logs = LogManager.getLogger();
 
@@ -86,7 +90,9 @@ public class RoomGenerationTests {
         testHelper.succeed();
     }
 
-    @GameTest(template = "empty_15x15")
+    @TestHolder
+    @GameTest
+    @EmptyTemplate(EmptyTestSizes.FIFTEEN_CUBED)
     public static void checkRoomGeneratorNormal(final CompactGameTestHelper testHelper) {
 
         AABB localBounds = testHelper.localBounds();
@@ -100,7 +106,9 @@ public class RoomGenerationTests {
         testHelper.succeed();
     }
 
-    @GameTest(template = "empty_15x15")
+    @TestHolder
+    @GameTest
+    @EmptyTemplate(EmptyTestSizes.FIFTEEN_CUBED)
     public static void checkRoomGeneratorWeirdShape(final CompactGameTestHelper testHelper) {
 
         AABB localBounds = testHelper.localBounds();

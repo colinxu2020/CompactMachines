@@ -1,4 +1,4 @@
-package dev.compactmods.machines.test.gametest;
+package dev.compactmods.machines.test;
 
 import com.google.common.base.Predicates;
 import dev.compactmods.machines.api.room.IRoomApi;

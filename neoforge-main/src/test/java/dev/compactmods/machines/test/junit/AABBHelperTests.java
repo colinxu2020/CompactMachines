@@ -21,7 +21,6 @@ import java.util.stream.Stream;
 
 @ExtendWith(EphemeralTestServerProvider.class)
 public class AABBHelperTests {
-   private static final String BATCH = "aabb-helper";
 
    @Test
    public void canFloorToY0() {

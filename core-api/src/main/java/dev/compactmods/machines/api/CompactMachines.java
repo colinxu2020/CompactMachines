@@ -22,6 +22,10 @@ import java.util.UUID;
 public class CompactMachines {
     public final static String MOD_ID = "compactmachines";
 
+    public static String id(String path) {
+        return ResourceLocation.isValidPath(path) ? (MOD_ID + ":" + path) : MOD_ID + ":invalid";
+    }
+
     public static ResourceLocation modRL(String path) {
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
     }
