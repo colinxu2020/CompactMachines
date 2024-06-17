@@ -1,3 +1,5 @@
+import org.slf4j.event.Level
+
 plugins {
     id("java")
     id("eclipse")
@@ -28,6 +30,10 @@ neoForge {
     }
 
     this.runs {
+        configureEach {
+            logLevel.set(Level.DEBUG)
+        }
+
         create("data") {
             data()
 

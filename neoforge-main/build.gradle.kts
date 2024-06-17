@@ -1,5 +1,6 @@
 @file:Suppress("SpellCheckingInspection")
 
+import org.slf4j.event.Level
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -72,10 +73,8 @@ neoForge {
     runs {
         // applies to all the run configs below
         configureEach {
-            systemProperty("forge.logging.markers", "") // 'SCAN,REGISTRIES,REGISTRYDUMP'
 
-            // Recommended logging level for the console
-            systemProperty("forge.logging.console.level", "debug")
+            logLevel.set(Level.DEBUG)
 
             sourceSet = project.sourceSets.main
 

@@ -2,8 +2,8 @@ rootProject.name = "Compact Machines 21.0"
 
 dependencyResolutionManagement {
     versionCatalogs.create("neoforged") {
-        version("mdg", "0.1.79")
-        version("neoforge", "21.0.2-beta")
+        version("mdg", "0.1.92")
+        version("neoforge", "21.0.14-beta")
         version("neoforgeRange") {
             require("[21.0,22)")
             prefer("21.0.2-beta")

@@ -10,18 +10,22 @@ import dev.compactmods.machines.datagen.tags.ItemTagGenerator;
 import dev.compactmods.machines.datagen.tags.PointOfInterestTagGenerator;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 import java.util.Collections;
 import java.util.List;
 
-@EventBusSubscriber(modid = CompactMachines.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@Mod(CompactMachines.MOD_ID)
 public class DataGeneration {
 
-    @SubscribeEvent
-    public static void gatherData(GatherDataEvent event) {
+    public DataGeneration(IEventBus modBus) {
+        modBus.addListener(DataGeneration::gatherData);
+    }
+
+    private static void gatherData(GatherDataEvent event) {
         final var fileHelper = event.getExistingFileHelper();
         final var generator = event.getGenerator();
 
