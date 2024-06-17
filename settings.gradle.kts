@@ -4,6 +4,10 @@ dependencyResolutionManagement {
     versionCatalogs.create("neoforged") {
         version("mdg", "0.1.79")
         version("neoforge", "21.0.2-beta")
+        version("neoforgeRange") {
+            require("[21.0,22)")
+            prefer("21.0.2-beta")
+        }
 
         plugin("moddev", "net.neoforged.moddev")
             .versionRef("mdg")
@@ -19,6 +23,10 @@ dependencyResolutionManagement {
 
     versionCatalogs.create("mojang") {
         version("minecraft", "1.20.6")
+        version("minecraftRange") {
+            this.require("[1.21, 1.21.1)")
+            this.prefer("1.21")
+        }
     }
 
     versionCatalogs.create("libraries") {

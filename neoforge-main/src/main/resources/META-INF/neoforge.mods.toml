@@ -7,7 +7,7 @@ file = "META-INF/accesstransformer.cfg"
 
 [[mods]] #mandatory
 modId = "compactmachines"
-version = "${file.jarVersion}"
+version = "${mod_version}"
 displayName = "Compact Machines 6"
 authors = "Davenonymous, RobotGryphon" #optional
 description = "It's all so tiny!"

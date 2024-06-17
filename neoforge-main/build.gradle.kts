@@ -7,7 +7,7 @@ var envVersion: String = System.getenv("VERSION") ?: "9.9.9"
 if (envVersion.startsWith("v"))
     envVersion = envVersion.trimStart('v')
 
-val modId: String = property("mod_id") as String
+val modId: String = "compactmachines"
 val isRelease: Boolean = (System.getenv("RELEASE") ?: "false").equals("true", true)
 
 val coreApi = project(":core-api")
@@ -218,6 +218,23 @@ tasks.withType<Jar> {
                 "Main-Commit" to gitVersion
             )
         )
+    }
+}
+
+tasks.withType<ProcessResources>().configureEach {
+    var replaceProperties: Map<String, Any> = mapOf(
+        "minecraft_version" to mojang.versions.minecraft.get(),
+        "neo_version" to neoforged.versions.neoforge.get(),
+        "minecraft_version_range" to mojang.versions.minecraftRange.get(),
+        "neo_version_range" to neoforged.versions.neoforgeRange.get(),
+        "loader_version_range" to "[1,)",
+        "mod_id" to modId,
+        "mod_version" to envVersion
+    )
+
+    inputs.properties(replaceProperties)
+    filesMatching("META-INF/neoforge.mods.toml") {
+        expand(replaceProperties)
     }
 }
 

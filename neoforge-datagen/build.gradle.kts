@@ -6,7 +6,7 @@ plugins {
     alias(neoforged.plugins.moddev)
 }
 
-val modId: String = rootProject.property("mod_id") as String
+val modId: String = "compactmachines"
 val mainProject: Project = project(":neoforge-main")
 evaluationDependsOn(mainProject.path)
 
