@@ -112,6 +112,16 @@ neoForge {
             // sourceSets.add(project.sourceSets.test.get())
         }
 
+        create("data") {
+            data()
+            gameDirectory.set(file("runs/datagen"))
+
+            programArguments.addAll("--mod", "compactmachines")
+            programArguments.addAll("--all")
+            programArguments.addAll("--output", file("src/generated/resources").absolutePath)
+            programArguments.addAll("--existing", file("src/main/resources").absolutePath)
+        }
+
         create("gameTestServer") {
             type = "gameTestServer"
             gameDirectory.set(file("runs/gametest"))

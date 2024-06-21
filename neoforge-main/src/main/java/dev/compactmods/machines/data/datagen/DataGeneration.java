@@ -1,19 +1,17 @@
-package dev.compactmods.machines.datagen;
+package dev.compactmods.machines.data.datagen;
 
 import dev.compactmods.machines.api.CompactMachines;
-import dev.compactmods.machines.datagen.compat.curios.CurioEntityGenerator;
-import dev.compactmods.machines.datagen.compat.curios.CurioSlotGenerator;
-import dev.compactmods.machines.datagen.lang.EnglishLangGenerator;
-import dev.compactmods.machines.datagen.loot.BlockLootGenerator;
-import dev.compactmods.machines.datagen.tags.BlockTagGenerator;
-import dev.compactmods.machines.datagen.tags.ItemTagGenerator;
-import dev.compactmods.machines.datagen.tags.PointOfInterestTagGenerator;
+import dev.compactmods.machines.data.datagen.compat.curios.CurioEntityGenerator;
+import dev.compactmods.machines.data.datagen.compat.curios.CurioSlotGenerator;
+import dev.compactmods.machines.data.datagen.lang.EnglishLangGenerator;
+import dev.compactmods.machines.data.datagen.loot.BlockLootGenerator;
+import dev.compactmods.machines.data.datagen.tags.BlockTagGenerator;
+import dev.compactmods.machines.data.datagen.tags.ItemTagGenerator;
+import dev.compactmods.machines.data.datagen.tags.PointOfInterestTagGenerator;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 import java.util.Collections;

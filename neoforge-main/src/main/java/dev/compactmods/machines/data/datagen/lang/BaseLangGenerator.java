@@ -1,4 +1,4 @@
-package dev.compactmods.machines.datagen.lang;
+package dev.compactmods.machines.data.datagen.lang;
 
 import dev.compactmods.machines.api.CompactMachines;
 import net.minecraft.Util;

@@ -87,5 +87,5 @@ plugins {
 
 include(":core-api")
 include(":neoforge-main")
-include(":neoforge-datagen")
+//include(":neoforge-datagen")
 

@@ -1,9 +1,9 @@
-package dev.compactmods.machines.datagen;
+package dev.compactmods.machines.data.datagen;
 
 import dev.compactmods.machines.api.room.RoomTemplate;
 import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.api.dimension.CompactDimension;
-import dev.compactmods.machines.datagen.util.DimensionTypeBuilder;
+import dev.compactmods.machines.data.datagen.util.DimensionTypeBuilder;
 import dev.compactmods.machines.dimension.Dimension;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistrySetBuilder;

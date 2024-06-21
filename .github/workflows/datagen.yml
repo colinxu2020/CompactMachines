@@ -27,7 +27,7 @@ jobs:
           uses: gradle/actions/setup-gradle@v3
 
         - name: Data Generation
-          run: ./gradlew :neoforge-datagen:runData
+          run: ./gradlew :neoforge-main:runData
           env:
             VERSION: ${{ inputs.version }}
             GITHUB_ACTOR: ${{ secrets.GITHUB_ACTOR }}

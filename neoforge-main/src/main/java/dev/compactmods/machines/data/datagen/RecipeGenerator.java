@@ -1,4 +1,4 @@
-package dev.compactmods.machines.datagen;
+package dev.compactmods.machines.data.datagen;
 
 import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.api.room.RoomTemplate;
