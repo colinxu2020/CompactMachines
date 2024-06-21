@@ -33,7 +33,7 @@ jobs:
             path: neoforge-main/src/generated/resources
 
         - name: Run Game Tests
-          run: ./gradlew :neoforge-main:test
+          run: ./gradlew :neoforge-main:runGameTestServer
           env:
             VERSION: ${{ inputs.version }}
             GITHUB_ACTOR: ${{ secrets.GITHUB_ACTOR }}
@@ -45,3 +45,10 @@ jobs:
           with:
             name: test-data
             path: run/gametest
+
+        - name: Run JUnit Tests
+          run: ./gradlew :neoforge-main:test
+          env:
+            VERSION: ${{ inputs.version }}
+            GITHUB_ACTOR: ${{ secrets.GITHUB_ACTOR }}
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
