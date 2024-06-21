@@ -1,4 +1,4 @@
-package dev.compactmods.machines.data.datagen;
+package dev.compactmods.machines.datagen;
 
 import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.api.room.RoomTemplate;
@@ -33,7 +33,7 @@ public class RecipeGenerator extends RecipeProvider {
 		  .pattern("D D")
 		  .pattern("DDD")
 		  .define('D', Items.POLISHED_DEEPSLATE)
-		  .unlockedBy("picked_up_deepslate", has(Tags.Items.COBBLESTONES_DEEPSLATE))
+		  .unlockedBy("picked_up_deepslate", RecipeProvider.has(Tags.Items.COBBLESTONES_DEEPSLATE))
 		  .save(recipeOutput);
 
 	  ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, Shrinking.PERSONAL_SHRINKING_DEVICE.get())
@@ -47,7 +47,7 @@ public class RecipeGenerator extends RecipeProvider {
 		  .define('5', Shrinking.SHRINKING_MODULE)
 		  .define('6', Tags.Items.INGOTS_IRON)
 		  .define('7', Tags.Items.INGOTS_COPPER)
-		  .unlockedBy("picked_up_ender_eye", has(Items.ENDER_EYE))
+		  .unlockedBy("picked_up_ender_eye", RecipeProvider.has(Items.ENDER_EYE))
 		  .save(recipeOutput);
 
 	  ShapedRecipeBuilder.shaped(RecipeCategory.MISC, Shrinking.ENLARGING_MODULE)
@@ -58,7 +58,7 @@ public class RecipeGenerator extends RecipeProvider {
 		  .define('P', Items.PISTON)
 		  .define('E', Items.ENDER_EYE)
 		  .define('L', Items.LIGHT_WEIGHTED_PRESSURE_PLATE)
-		  .unlockedBy("picked_up_ender_eye", has(Items.ENDER_EYE))
+		  .unlockedBy("picked_up_ender_eye", RecipeProvider.has(Items.ENDER_EYE))
 		  .save(recipeOutput);
 
 	  ShapedRecipeBuilder.shaped(RecipeCategory.MISC, Shrinking.SHRINKING_MODULE)
@@ -69,7 +69,7 @@ public class RecipeGenerator extends RecipeProvider {
 		  .define('P', Items.STICKY_PISTON)
 		  .define('E', Items.ENDER_EYE)
 		  .define('L', Items.LIGHT_WEIGHTED_PRESSURE_PLATE)
-		  .unlockedBy("picked_up_ender_eye", has(Items.ENDER_EYE))
+		  .unlockedBy("picked_up_ender_eye", RecipeProvider.has(Items.ENDER_EYE))
 		  .save(recipeOutput);
 
 	  addMachineRecipes(recipeOutput);
@@ -105,7 +105,7 @@ public class RecipeGenerator extends RecipeProvider {
 		  .define('S', Shrinking.SHRINKING_MODULE)
 		  .define('P', catalyst);
 
-	  recipe.unlockedBy("has_recipe", has(Rooms.Items.BREAKABLE_WALL));
+	  recipe.unlockedBy("has_recipe", RecipeProvider.has(Rooms.Items.BREAKABLE_WALL));
 
 	  final var recipeId = CompactMachines.modRL("new_machine_" + temId.getPath());
 	  recipe.save(consumer, recipeId);

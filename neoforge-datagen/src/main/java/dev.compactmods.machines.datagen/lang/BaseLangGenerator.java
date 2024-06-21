@@ -1,4 +1,4 @@
-package dev.compactmods.machines.data.datagen.lang;
+package dev.compactmods.machines.datagen.lang;
 
 import dev.compactmods.machines.api.CompactMachines;
 import net.minecraft.Util;
@@ -6,8 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.common.data.LanguageProvider;
-
-import static org.apache.commons.lang3.StringUtils.capitalize;
+import org.apache.commons.lang3.StringUtils;
 
 public abstract class BaseLangGenerator extends LanguageProvider {
 
@@ -19,7 +18,7 @@ public abstract class BaseLangGenerator extends LanguageProvider {
     }
 
     protected String getDirectionTranslation(Direction dir) {
-        return capitalize(dir.getSerializedName());
+        return StringUtils.capitalize(dir.getSerializedName());
     }
 
     protected String getMachineTranslation() {

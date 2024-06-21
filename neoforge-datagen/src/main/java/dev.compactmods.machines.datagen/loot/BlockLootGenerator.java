@@ -1,4 +1,4 @@
-package dev.compactmods.machines.data.datagen.loot;
+package dev.compactmods.machines.datagen.loot;
 
 import dev.compactmods.machines.data.functions.CopyRoomBindingFunction;
 import dev.compactmods.machines.machine.Machines;

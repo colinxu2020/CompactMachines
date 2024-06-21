@@ -1,4 +1,4 @@
-package dev.compactmods.machines.data.datagen.lang;
+package dev.compactmods.machines.datagen.lang;
 
 import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.api.Translations;
@@ -8,6 +8,7 @@ import dev.compactmods.machines.api.machine.MachineTranslations;
 import dev.compactmods.machines.api.room.RoomTranslations;
 import dev.compactmods.machines.client.keybinds.room.RoomExitKeyMapping;
 import dev.compactmods.machines.client.creative.CreativeTabs;
+import dev.compactmods.machines.datagen.lang.BaseLangGenerator;
 import dev.compactmods.machines.room.Rooms;
 import dev.compactmods.machines.shrinking.Shrinking;
 import net.minecraft.Util;

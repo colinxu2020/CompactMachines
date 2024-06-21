@@ -1,4 +1,4 @@
-package dev.compactmods.machines.data.datagen.compat.curios;
+package dev.compactmods.machines.datagen.compat.curios;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

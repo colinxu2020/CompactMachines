@@ -2,8 +2,8 @@ rootProject.name = "Compact Machines 21.0"
 
 dependencyResolutionManagement {
     versionCatalogs.create("neoforged") {
-        version("mdg", "0.1.92")
-        version("neoforge", "21.0.14-beta")
+        version("mdg", "0.1.105")
+        version("neoforge", "21.0.21-beta")
         version("neogradle", "7.0.145")
         version("neoforgeRange") {
             require("[21.0,22)")
@@ -87,5 +87,5 @@ plugins {
 
 include(":core-api")
 include(":neoforge-main")
-//include(":neoforge-datagen")
+include(":neoforge-datagen")
 

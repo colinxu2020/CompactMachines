@@ -1,4 +1,4 @@
-package dev.compactmods.machines.data.datagen.tags;
+package dev.compactmods.machines.datagen.tags;
 
 import dev.compactmods.machines.api.machine.MachineConstants;
 import dev.compactmods.machines.api.shrinking.PSDTags;
