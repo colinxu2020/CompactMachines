@@ -132,7 +132,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: "17"
+          java-version: 21
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
@@ -257,7 +257,7 @@ jobs:
           file_path: ${{ steps.filename.outputs.fullpath }}
           changelog: ${{ steps.changelog.outputs.changelog }}
           changelog_type: markdown
-          game_versions: java:Java 17,Forge
+          game_versions: java:Java 21,NeoForge
           release_type: ${{ needs.vars.outputs.release_type }}
 
   publishMaven:
@@ -272,7 +272,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: "17"
+          java-version: 21
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
