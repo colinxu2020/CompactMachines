@@ -12,20 +12,18 @@ import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 import java.util.Collections;
 import java.util.List;
 
-@Mod(CompactMachines.MOD_ID)
+@EventBusSubscriber(modid = CompactMachines.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class DataGeneration {
 
-    public DataGeneration(IEventBus modBus) {
-        modBus.addListener(DataGeneration::gatherData);
-    }
-
-    private static void gatherData(GatherDataEvent event) {
+    @SubscribeEvent
+    public static void gatherData(GatherDataEvent event) {
         final var fileHelper = event.getExistingFileHelper();
         final var generator = event.getGenerator();
 

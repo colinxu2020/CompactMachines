@@ -5,43 +5,46 @@ plugins {
     id("eclipse")
     id("idea")
     id("maven-publish")
-    alias(neoforged.plugins.moddev)
+    alias(neoforged.plugins.userdev)
 }
 
 val modId: String = "compactmachines"
-val mainProject: Project = project(":neoforge-main")
-evaluationDependsOn(mainProject.path)
 
 val coreApi = project(":core-api")
+val mainProject: Project = project(":neoforge-main")
 
 project.evaluationDependsOn(coreApi.path)
+project.evaluationDependsOn(mainProject.path)
 
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 }
 
-neoForge {
-    version = neoforged.versions.neoforge
+minecraft {
+    modIdentifier.set(modId)
+}
 
-    this.mods.create(modId) {
-        modSourceSets.add(sourceSets.main)
-        this.dependency(coreApi)
-        this.dependency(mainProject)
+runs {
+    // applies to all the run configs below
+    configureEach {
+        systemProperty("forge.logging.markers", "") // 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+        // Recommended logging level for the console
+        systemProperty("forge.logging.console.level", "debug")
+
+        modSource(project.sourceSets.main.get())
+        modSource(mainProject.sourceSets.main.get())
+
+        modSource(coreApi.sourceSets.main.get())
     }
 
-    this.runs {
-        configureEach {
-            logLevel.set(Level.DEBUG)
-        }
+    create("data") {
+        dataGenerator(true)
 
-        create("data") {
-            data()
-
-            programArguments.addAll("--mod", modId)
-            programArguments.addAll("--all")
-            programArguments.addAll("--output", mainProject.file("src/generated/resources").absolutePath)
-            programArguments.addAll("--existing", mainProject.file("src/main/resources").absolutePath)
-        }
+        programArguments("--mod", "compactmachines")
+        programArguments("--all")
+        programArguments("--output", mainProject.file("src/generated/resources").absolutePath)
+        programArguments("--existing", mainProject.file("src/main/resources").absolutePath)
     }
 }
 
@@ -52,6 +55,8 @@ repositories {
 dependencies {
     compileOnly(coreApi)
     compileOnly(mainProject)
+
+    implementation(neoforged.neoforge)
 }
 
 tasks.compileJava {
