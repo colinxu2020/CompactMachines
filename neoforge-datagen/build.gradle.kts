@@ -50,8 +50,8 @@ repositories {
 }
 
 dependencies {
-    implementation(coreApi)
-    implementation(mainProject)
+    compileOnly(coreApi)
+    compileOnly(mainProject)
 }
 
 tasks.compileJava {
