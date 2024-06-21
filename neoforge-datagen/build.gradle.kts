@@ -27,15 +27,14 @@ minecraft {
 runs {
     // applies to all the run configs below
     configureEach {
-        systemProperty("forge.logging.markers", "") // 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-        // Recommended logging level for the console
+        systemProperty("forge.logging.markers", "")
         systemProperty("forge.logging.console.level", "debug")
 
-        modSource(project.sourceSets.main.get())
-        modSource(mainProject.sourceSets.main.get())
-
-        modSource(coreApi.sourceSets.main.get())
+        modSources {
+            add(modId, project.sourceSets.main.get())
+            add(modId, mainProject.sourceSets.main.get())
+            add(modId, coreApi.sourceSets.main.get())
+        }
     }
 
     create("data") {
