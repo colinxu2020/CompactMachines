@@ -32,6 +32,19 @@ jobs:
             name: generated-data
             path: neoforge-main/src/generated/resources
 
+        - name: Build Core
+          run: ./gradlew :core-api:jar
+          env:
+            VERSION: ${{ inputs.version }}
+            GITHUB_ACTOR: ${{ secrets.GITHUB_ACTOR }}
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+        - name: Upload built core
+          uses: actions/upload-artifact@v4
+          with:
+            name: built-core-api
+            path: core-api/build/libs
+
         - name: Run Game Tests
           run: ./gradlew :neoforge-main:runGameTestServer
           env:
