@@ -7,6 +7,11 @@ on:
         required: true
         type: string
 
+env:
+  VERSION: ${{ inputs.version }}
+  GITHUB_ACTOR: ${{ secrets.GITHUB_ACTOR }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 jobs:
   run-tests:
       name: Run Game Testss
@@ -34,10 +39,6 @@ jobs:
 
         - name: Build Core
           run: ./gradlew :core-api:jar
-          env:
-            VERSION: ${{ inputs.version }}
-            GITHUB_ACTOR: ${{ secrets.GITHUB_ACTOR }}
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
         - name: Upload built core
           uses: actions/upload-artifact@v4
@@ -47,10 +48,6 @@ jobs:
 
         - name: Run Game Tests
           run: ./gradlew :neoforge-main:runGameTestServer
-          env:
-            VERSION: ${{ inputs.version }}
-            GITHUB_ACTOR: ${{ secrets.GITHUB_ACTOR }}
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
         - name: Upload build failure
           if: failure()
@@ -61,10 +58,6 @@ jobs:
 
         - name: Run JUnit Tests
           run: ./gradlew :neoforge-main:test
-          env:
-            VERSION: ${{ inputs.version }}
-            GITHUB_ACTOR: ${{ secrets.GITHUB_ACTOR }}
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
         - name: Upload test reports on failure
           if: failure()

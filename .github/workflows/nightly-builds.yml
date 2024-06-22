@@ -44,7 +44,7 @@ jobs:
       version: ${{ needs.vars.outputs.version }}
 
   tests:
-    needs: [datagen]
+    needs: [vars, datagen]
     uses: ./.github/workflows/run-gametests.yml
     secrets: inherit
     with:
