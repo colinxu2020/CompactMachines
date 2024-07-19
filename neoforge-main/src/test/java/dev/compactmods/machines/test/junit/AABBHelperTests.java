@@ -1,14 +1,17 @@
 package dev.compactmods.machines.test.junit;
 
 
+import com.google.common.base.Predicates;
 import com.google.common.math.DoubleMath;
 import dev.compactmods.machines.api.util.AABBAligner;
 import dev.compactmods.machines.api.util.AABBHelper;
 import dev.compactmods.machines.util.RandomSourceUtil;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.testframework.junit.EphemeralTestServerProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DynamicTest;
@@ -17,13 +20,26 @@ import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Collection;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 @ExtendWith(EphemeralTestServerProvider.class)
 public class AABBHelperTests {
 
+	private static class MyThing extends ItemStackHandler {
+		public MyThing(final int size) {
+			super(size);
+		}
+
+		boolean isEmpty() {
+			return stacks.stream().allMatch(ItemStack::isEmpty);
+		}
+	}
+
    @Test
    public void canFloorToY0() {
+		Predicate<MyThing> empty = Predicates.not(MyThing::isEmpty);
+
 	  // Source minY = 5
 	  AABB before = AABB.ofSize(new Vec3(0, 7.5, 0), 5, 5, 5);
 

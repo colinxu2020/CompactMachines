@@ -13,56 +13,55 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.level.LevelEvent;
 
 import java.util.Collections;
+import java.util.stream.Collectors;
 
 public class WorldBorderFixer {
 
-   public static void registerEvents() {
-	  NeoForge.EVENT_BUS.addListener(WorldBorderFixer::onWorldLoaded);
-	  NeoForge.EVENT_BUS.addListener(WorldBorderFixer::onPlayerLogin);
-	  NeoForge.EVENT_BUS.addListener(WorldBorderFixer::onPlayerDimChange);
-   }
+	public static void registerEvents() {
+		NeoForge.EVENT_BUS.addListener(WorldBorderFixer::onWorldLoaded);
+		NeoForge.EVENT_BUS.addListener(WorldBorderFixer::onPlayerLogin);
+		NeoForge.EVENT_BUS.addListener(WorldBorderFixer::onPlayerDimChange);
+	}
 
-   private static void onWorldLoaded(final LevelEvent.Load evt) {
-	  if (evt.getLevel() instanceof ServerLevel compactDim && compactDim.dimension().equals(CompactDimension.LEVEL_KEY))
-		 WorldBorderFixer.sendWorldBorderListenerOverrides(compactDim.getServer(), compactDim);
-   }
+	private static void onWorldLoaded(final LevelEvent.Load evt) {
+		if (evt.getLevel() instanceof ServerLevel compactDim && compactDim.dimension().equals(CompactDimension.LEVEL_KEY))
+			WorldBorderFixer.sendWorldBorderListenerOverrides(compactDim.getServer(), compactDim);
+	}
 
-   private static void onPlayerLogin(final PlayerEvent.PlayerLoggedInEvent evt) {
-	  if (evt.getEntity() instanceof ServerPlayer sp && CompactDimension.isLevelCompact(sp.level()))
-		 WorldBorderFixer.sendClientWorldBorderFix(sp);
-   }
+	private static void onPlayerLogin(final PlayerEvent.PlayerLoggedInEvent evt) {
+		if (evt.getEntity() instanceof ServerPlayer sp && CompactDimension.isLevelCompact(sp.level()))
+			WorldBorderFixer.sendClientWorldBorderFix(sp);
+	}
 
-   private static void onPlayerDimChange(final PlayerEvent.PlayerChangedDimensionEvent evt) {
-	  if (evt.getTo().equals(CompactDimension.LEVEL_KEY) && evt.getEntity() instanceof ServerPlayer sp)
-		 WorldBorderFixer.sendClientWorldBorderFix(sp);
-   }
+	private static void onPlayerDimChange(final PlayerEvent.PlayerChangedDimensionEvent evt) {
+		if (evt.getTo().equals(CompactDimension.LEVEL_KEY) && evt.getEntity() instanceof ServerPlayer sp)
+			WorldBorderFixer.sendClientWorldBorderFix(sp);
+	}
 
-   private static void sendWorldBorderListenerOverrides(MinecraftServer serv, ServerLevel compactDim) {
-	  final var owBorder = serv.overworld().getWorldBorder();
-	  final var cwBorder = compactDim.getWorldBorder();
+	private static void sendWorldBorderListenerOverrides(MinecraftServer serv, ServerLevel compactDim) {
+		final var owBorder = serv.overworld().getWorldBorder();
+		final var cwBorder = compactDim.getWorldBorder();
 
-	  // Filter border listeners down to the compact world, then remove them from the OW listener list
-	  final var listeners = Collections.<BorderChangeListener>emptySet();
-	  // TODO Fix World Border (AT issue)
-//        final var listeners = owBorder.listeners.stream()
-//                .filter(border -> border instanceof BorderChangeListener.DelegateBorderChangeListener)
-//                .map(BorderChangeListener.DelegateBorderChangeListener.class::cast)
-//                .filter(list -> list.worldBorder == cwBorder)
-//                .collect(Collectors.toSet());
+		// Filter border listeners down to the compact world, then remove them from the OW listener list
+		final var listeners = owBorder.listeners.stream()
+			.filter(border -> border instanceof BorderChangeListener.DelegateBorderChangeListener)
+			.map(BorderChangeListener.DelegateBorderChangeListener.class::cast)
+			.filter(list -> list.worldBorder == cwBorder)
+			.collect(Collectors.toSet());
 
-	  for (var listener : listeners)
-		 owBorder.removeListener(listener);
+		for (var listener : listeners)
+			owBorder.removeListener(listener);
 
-	  // Fix set compact world border if it was loaded weirdly
-	  cwBorder.setCenter(0, 0);
-	  cwBorder.setSize(WorldBorder.MAX_SIZE);
+		// Fix set compact world border if it was loaded weirdly
+		cwBorder.setCenter(0, 0);
+		cwBorder.setSize(WorldBorder.MAX_SIZE);
 
-	  // Send update to all players
-	  serv.getPlayerList().broadcastAll(new ClientboundSetBorderSizePacket(cwBorder), compactDim.dimension());
-   }
+		// Send update to all players
+		serv.getPlayerList().broadcastAll(new ClientboundSetBorderSizePacket(cwBorder), compactDim.dimension());
+	}
 
-   private static void sendClientWorldBorderFix(ServerPlayer player) {
-	  // Send a fake world border to the player instead of the "real" one in overworld
-	  player.connection.send(new ClientboundInitializeBorderPacket(new WorldBorder()));
-   }
+	private static void sendClientWorldBorderFix(ServerPlayer player) {
+		// Send a fake world border to the player instead of the "real" one in overworld
+		player.connection.send(new ClientboundInitializeBorderPacket(new WorldBorder()));
+	}
 }

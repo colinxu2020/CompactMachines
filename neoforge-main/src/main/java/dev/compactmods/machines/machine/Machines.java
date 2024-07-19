@@ -20,8 +20,11 @@ import net.minecraft.nbt.IntTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.attachment.AttachmentType;
@@ -35,9 +38,11 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.Supplier;
 
 public interface Machines {
-   // TODO: Metal material replacement
    BlockBehaviour.Properties MACHINE_BLOCK_PROPS = BlockBehaviour.Properties
 	   .of()
+	   .instrument(NoteBlockInstrument.COW_BELL)
+	   .pushReaction(PushReaction.IGNORE)
+	   .sound(SoundType.METAL)
 	   .strength(8.0F, 20.0F)
 	   .requiresCorrectToolForDrops();
 

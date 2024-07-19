@@ -57,7 +57,6 @@ sourceSets.test {
 
 neoForge {
     version = neoforged.versions.neoforge
-    accessTransformers.add("src/main/resources/META-INF/accesstransformer.cfg")
 
     this.mods.create(modId) {
         modSourceSets.add(sourceSets.main)
@@ -82,9 +81,6 @@ neoForge {
                 // JetBrains Runtime Hotswap
                 // jvmArgument("-XX:+AllowEnhancedClassRedefinition")
             }
-
-            additionalRuntimeClasspath.add(libraries.feather)
-            additionalRuntimeClasspath.add(libraries.jnanoid)
         }
 
         create("client") {
@@ -176,6 +172,9 @@ dependencies {
     testImplementation(neoforged.testframework)
     testImplementation("org.junit.jupiter:junit-jupiter:5.7.1")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    additionalRuntimeClasspath(libraries.feather)
+    additionalRuntimeClasspath(libraries.jnanoid)
 
     // Mods
 //    compileOnly(mods.bundles.jei)

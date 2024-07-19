@@ -7,10 +7,12 @@ import dev.compactmods.machines.LoggingUtil;
 import dev.compactmods.machines.api.dimension.CompactDimension;
 import dev.compactmods.machines.api.machine.MachineTranslations;
 import dev.compactmods.machines.config.ServerConfig;
+import dev.compactmods.machines.machine.Machines;
 import dev.compactmods.machines.machine.block.BoundCompactMachineBlockEntity;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
+import net.minecraft.world.level.block.Block;
 
 public class CMUnbindSubcommand {
 
@@ -40,7 +42,7 @@ public class CMUnbindSubcommand {
             return -1;
         }
 
-        machine.disconnect();
+        level.setBlock(rebindingMachine, Machines.Blocks.UNBOUND_MACHINE.get().defaultBlockState(), Block.UPDATE_ALL);
         return 0;
     }
 }

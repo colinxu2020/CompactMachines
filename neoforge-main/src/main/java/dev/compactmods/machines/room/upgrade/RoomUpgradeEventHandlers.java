@@ -33,7 +33,8 @@ public class RoomUpgradeEventHandlers {
 
 				   for (final var upgradeStack : upgradeStacks) {
 					  final var upgrades = upgradeStack.get(RoomUpgrades.UPGRADE_LIST_COMPONENT);
-					  upgrades.upgrades().stream()
+					  upgrades.upgrades()
+						  .stream()
 						  .flatMap(ru -> ru.gatherEvents().filter(UpgradeTickedEventListener.class::isInstance))
 						  .map(UpgradeTickedEventListener.class::cast)
 						  .forEach(ticker -> {

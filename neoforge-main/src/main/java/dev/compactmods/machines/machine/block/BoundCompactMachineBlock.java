@@ -138,6 +138,5 @@ public class BoundCompactMachineBlock extends CompactMachineBlock implements Ent
     @Override
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pMovedByPiston) {
         super.onRemove(pState, pLevel, pPos, pNewState, pMovedByPiston);
-        // TODO: Remove machine from room graph
     }
 }

@@ -36,6 +36,7 @@ public class RoomRegistrar implements IRoomRegistrar, CodecHolder<RoomRegistrar>
             .fieldOf("rooms")
             .xmap(RoomRegistrar::new, (RoomRegistrar x) -> List.copyOf(x.registrationNodes.values()))
             .codec();
+
     private final MemoryGraph graph;
     private final Map<String, RoomRegistrationNode> registrationNodes;
 

@@ -1,5 +1,7 @@
 package dev.compactmods.machines.machine.block;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.api.machine.block.IBoundCompactMachineBlockEntity;
 import dev.compactmods.machines.machine.Machines;
@@ -108,14 +110,7 @@ public class BoundCompactMachineBlockEntity extends BlockEntity implements IBoun
    }
 
    public void setConnectedRoom(String roomCode) {
-	  if (level instanceof ServerLevel sl) {
-		 // FIXME: Register machine location in room's connection graph
-//            final var dimMachines = DimensionMachineGraph.forDimension(sl);
-//            if (this.roomCode != null) {
-//                dimMachines.unregisterMachine(worldPosition);
-//            }
-//
-//            dimMachines.register(worldPosition, roomCode);
+	  if (level != null && !level.isClientSide()) {
 		 this.roomCode = roomCode;
 
 		 CompactMachines.room(roomCode).ifPresentOrElse(inst -> {
@@ -126,16 +121,6 @@ public class BoundCompactMachineBlockEntity extends BlockEntity implements IBoun
 			 });
 
 		 this.setChanged();
-	  }
-   }
-
-   public void disconnect() {
-	  if (level instanceof ServerLevel sl) {
-		 // FIXME: Room machine graph unregister
-//            final var dimMachines = DimensionMachineGraph.forDimension(sl);
-//            dimMachines.unregisterMachine(worldPosition);
-
-		 sl.setBlock(worldPosition, Machines.Blocks.UNBOUND_MACHINE.get().defaultBlockState(), Block.UPDATE_ALL);
 	  }
    }
 
