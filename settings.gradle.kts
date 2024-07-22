@@ -2,9 +2,9 @@ rootProject.name = "Compact Machines 21.0"
 
 dependencyResolutionManagement {
     versionCatalogs.create("neoforged") {
-        version("mdg", "1.0.13")
-        version("neoforge", "21.0.109-beta")
-        version("neogradle", "7.0.145")
+        version("mdg", "1.0.14")
+        version("neoforge", "21.0.114-beta")
+
         version("neoforgeRange") {
             require("[21.0,22)")
             prefer("21.0.2-beta")
@@ -13,16 +13,8 @@ dependencyResolutionManagement {
         plugin("moddev", "net.neoforged.moddev")
             .versionRef("mdg")
 
-        plugin("userdev", "net.neoforged.gradle.userdev")
-            .versionRef("neogradle")
-
-        library("neoforge", "net.neoforged", "neoforge")
-            .versionRef("neoforge")
-
         library("testframework", "net.neoforged", "testframework")
             .versionRef("neoforge")
-
-        bundle("neoforge", listOf("neoforge", "testframework"))
     }
 
     versionCatalogs.create("mojang") {
