@@ -1,6 +1,5 @@
 @file:Suppress("SpellCheckingInspection")
 
-import org.slf4j.event.Level
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -55,71 +54,81 @@ sourceSets.test {
     }
 }
 
-neoForge {
-    version = neoforged.versions.neoforge
-
-    this.mods.create(modId) {
-        modSourceSets.add(sourceSets.main)
-        modSourceSets.add(sourceSets.test)
-        this.dependency(coreApi)
-    }
-
-    unitTest {
-        enable()
-        testedMod = mods.named(modId)
-    }
-
-    runs {
-        // applies to all the run configs below
-        configureEach {
-
-            logLevel.set(Level.DEBUG)
-
-            sourceSet = project.sourceSets.main
-
-            if (!System.getenv().containsKey("CI")) {
-                // JetBrains Runtime Hotswap
-                // jvmArgument("-XX:+AllowEnhancedClassRedefinition")
-            }
-        }
-
-        create("client") {
-            client()
-            gameDirectory.set(file("runs/client"))
-
-            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-            systemProperty("forge.enabledGameTestNamespaces", modId)
-
-            programArguments.addAll("--username", "Nano")
-            programArguments.addAll("--width", "1920")
-            programArguments.addAll("--height", "1080")
-        }
-
-        create("server") {
-            server()
-            gameDirectory.set(file("runs/server"))
-
-            systemProperty("forge.enabledGameTestNamespaces", modId)
-            programArgument("nogui")
-
-            environment.put("CM_TEST_RESOURCES", file("src/test/resources").path)
-
-            sourceSet = project.sourceSets.test
-            // sourceSets.add(project.sourceSets.test.get())
-        }
-
-        create("gameTestServer") {
-            type = "gameTestServer"
-            gameDirectory.set(file("runs/gametest"))
-
-            systemProperty("forge.enabledGameTestNamespaces", modId)
-            environment.put("CM_TEST_RESOURCES", file("src/test/resources").path)
-
-            sourceSet = project.sourceSets.test
-            // sourceSets.add(project.sourceSets.test.get())
-        }
+minecraft {
+    this.modIdentifier = modId
+    this.accessTransformers {
+        this.file(project.file("src/main/resources/META-INF/accesstransformer.cfg"))
     }
 }
+
+runs {
+    configureEach {
+        this.modSource(coreApi.sourceSets.main.get())
+
+        dependencies {
+            runtime(libraries.feather)
+            runtime(libraries.jnanoid)
+        }
+
+//            if (!System.getenv().containsKey("CI")) {
+//                // JetBrains Runtime Hotswap
+//                // jvmArgument("-XX:+AllowEnhancedClassRedefinition")
+//            }
+    }
+
+    this.create("client") {
+        client()
+
+        this.workingDirectory.set(file("runs/client"))
+
+        // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
+        systemProperty("forge.enabledGameTestNamespaces", modId)
+
+        programArguments.addAll("--username", "Nano")
+        programArguments.addAll("--width", "1920")
+        programArguments.addAll("--height", "1080")
+    }
+}
+//neoForge {
+//    version = neoforged.versions.neoforge
+//
+//    this.mods.create(modId) {
+//        modSourceSets.add(sourceSets.main)
+//        modSourceSets.add(sourceSets.test)
+//        this.dependency(coreApi)
+//    }
+//
+//    unitTest {
+//        enable()
+//        testedMod = mods.named(modId)
+//    }
+//
+
+//        create("server") {
+//            server()
+//            gameDirectory.set(file("runs/server"))
+//
+//            systemProperty("forge.enabledGameTestNamespaces", modId)
+//            programArgument("nogui")
+//
+//            environment.put("CM_TEST_RESOURCES", file("src/test/resources").path)
+//
+//            sourceSet = project.sourceSets.test
+//            // sourceSets.add(project.sourceSets.test.get())
+//        }
+//
+//        create("gameTestServer") {
+//            type = "gameTestServer"
+//            gameDirectory.set(file("runs/gametest"))
+//
+//            systemProperty("forge.enabledGameTestNamespaces", modId)
+//            environment.put("CM_TEST_RESOURCES", file("src/test/resources").path)
+//
+//            sourceSet = project.sourceSets.test
+//            // sourceSets.add(project.sourceSets.test.get())
+//        }
+//    }
+//}
 
 repositories {
     mavenLocal()
@@ -163,18 +172,20 @@ dependencies {
 
         compileOnly(coreApi)
         testCompileOnly(coreApi)
+        jarJar(coreApi)
 
         compileOnly(libraries.feather)
         jarJar(libraries.feather) { isTransitive = false }
     }
+
+    implementation(neoforged.neoforge)
 
     runtimeOnly(neoforged.testframework)
     testImplementation(neoforged.testframework)
     testImplementation("org.junit.jupiter:junit-jupiter:5.7.1")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
-    additionalRuntimeClasspath(libraries.feather)
-    additionalRuntimeClasspath(libraries.jnanoid)
+
 
     // Mods
 //    compileOnly(mods.bundles.jei)

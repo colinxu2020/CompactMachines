@@ -28,8 +28,10 @@ java {
     withJavadocJar()
 }
 
-neoForge {
-    version = neoforged.versions.neoforge
+minecraft {}
+
+dependencies {
+    api(neoforged.neoforge)
 }
 
 tasks.withType<JavaCompile> {
