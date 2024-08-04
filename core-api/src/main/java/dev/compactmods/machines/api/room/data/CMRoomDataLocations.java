@@ -9,17 +9,13 @@ import java.util.function.Function;
 
 public interface CMRoomDataLocations {
 
-   Function<MinecraftServer, Path> REGISTRATION_DATA = (server) -> server.getWorldPath(LevelResource.ROOT)
-	   .resolve(CompactMachines.MOD_ID)
-	   .resolve("data");
+   Function<MinecraftServer, Path> DATA_ROOT = (server) -> server.getWorldPath(LevelResource.ROOT)
+	   .resolve(CompactMachines.MOD_ID);
 
-   Function<MinecraftServer, Path> SPAWN_DATA = (server) -> server.getWorldPath(LevelResource.ROOT)
-	   .resolve(CompactMachines.MOD_ID)
-	   .resolve("data")
-	   .resolve("spawn_data");
+	Function<MinecraftServer, Path> PLAYER_SPAWNS = (server) -> DATA_ROOT.apply(server)
+	   .resolve("player_spawns");
 
-   Function<MinecraftServer, Path> ROOM_DATA_ATTACHMENTS = (server) -> server.getWorldPath(LevelResource.ROOT)
-	   .resolve(CompactMachines.MOD_ID)
-	   .resolve("data")
+   Function<MinecraftServer, Path> ROOM_DATA_ATTACHMENTS = (server) -> DATA_ROOT.apply(server)
 	   .resolve("room_data");
+
 }

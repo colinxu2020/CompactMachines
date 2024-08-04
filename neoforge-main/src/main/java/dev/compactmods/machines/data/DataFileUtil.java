@@ -6,6 +6,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.nbt.NbtOps;
+import net.neoforged.neoforge.common.IOUtilities;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,23 +16,26 @@ import java.nio.file.Path;
 
 public class DataFileUtil {
 
-   public static void ensureDirExists(Path dir) {
-	  if(!Files.exists(dir)) {
-		 try {
-			Files.createDirectories(dir);
-		 } catch (IOException e) {
-			throw new RuntimeException(e);
-		 }
-	  }
-   }
+	public static void ensureDirExists(Path dir) {
+		if (!Files.exists(dir)) {
+			try {
+				Files.createDirectories(dir);
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+		}
+	}
 
-   public static <T> T loadFileWithCodec(File file, Codec<T> codec) {
-	  try (var is = new FileInputStream(file)) {
-		 final var tag = NbtIo.readCompressed(is, NbtAccounter.unlimitedHeap());
-		 return codec.parse(NbtOps.INSTANCE, tag.contains("data") ? tag.getCompound("data") : new CompoundTag())
-			 .getOrThrow();
-	  } catch (IOException e) {
-		 throw new RuntimeException(e);
-	  }
-   }
+	public static <T> T loadFileWithCodec(File file, Codec<T> codec) {
+		try {
+			IOUtilities.cleanupTempFiles(Path.of(file.getParent()), file.getName());
+			try (var is = new FileInputStream(file)) {
+				final var tag = NbtIo.readCompressed(is, NbtAccounter.unlimitedHeap());
+				return codec.parse(NbtOps.INSTANCE, tag.contains("data") ? tag.getCompound("data") : new CompoundTag())
+					.getOrThrow();
+			}
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
 }

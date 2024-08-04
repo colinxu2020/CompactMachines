@@ -1,7 +1,7 @@
 package dev.compactmods.machines.machine.block;
 
 import dev.compactmods.machines.api.machine.block.IUnboundCompactMachineBlockEntity;
-import dev.compactmods.machines.api.room.RoomTemplate;
+import dev.compactmods.machines.api.room.template.RoomTemplate;
 import dev.compactmods.machines.machine.Machines;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -64,11 +64,5 @@ public class UnboundCompactMachineEntity extends BlockEntity implements IUnbound
     @Nullable
     public ResourceLocation templateId() {
         return templateId;
-    }
-
-    public Optional<RoomTemplate> template() {
-        assert level != null;
-        var t = this.components().getOrDefault(Machines.DataComponents.ROOM_TEMPLATE.get(), RoomTemplate.INVALID_TEMPLATE);
-        return Optional.ofNullable(t);
     }
 }

@@ -84,7 +84,7 @@ public class SpawnManager implements IRoomSpawnManager, CodecHolder<SpawnManager
 
     @Override
     public Path getDataLocation(MinecraftServer server) {
-        return CMRoomDataLocations.SPAWN_DATA.apply(server);
+        return CMRoomDataLocations.PLAYER_SPAWNS.apply(server);
     }
 
     @Override

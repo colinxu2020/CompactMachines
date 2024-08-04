@@ -29,7 +29,6 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.level.LevelEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -71,10 +70,7 @@ public class CompactMachinesServer {
 	  PLAYER_HISTORY_DATA = new CMSingletonDataFileManager<>(server, "player_entrypoint_history", PLAYER_HISTORY);
 
 	  // Set up room API
-	  var file = CMRoomDataLocations.REGISTRATION_DATA.apply(server)
-		  .resolve("room_registrations.dat")
-		  .toFile();
-
+	  var file = RoomRegistrar.getFile(server);
 	  ROOM_REGISTRAR = file.exists() ? DataFileUtil.loadFileWithCodec(file, RoomRegistrar.CODEC) : new RoomRegistrar();
 	  ROOM_REGISTRAR_DATA = new CMSingletonDataFileManager<>(server, "room_registrations", ROOM_REGISTRAR);
 

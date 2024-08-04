@@ -1,10 +1,11 @@
 package dev.compactmods.machines.machine.block;
 
 import dev.compactmods.machines.api.CompactMachines;
-import dev.compactmods.machines.api.room.RoomTemplate;
+import dev.compactmods.machines.api.room.template.RoomTemplate;
 import dev.compactmods.machines.LoggingUtil;
 import dev.compactmods.machines.api.dimension.MissingDimensionException;
 import dev.compactmods.machines.api.room.history.RoomEntryPoint;
+import dev.compactmods.machines.api.room.template.RoomTemplateHelper;
 import dev.compactmods.machines.api.shrinking.PSDTags;
 import dev.compactmods.machines.machine.Machines;
 import dev.compactmods.machines.room.RoomHelper;
@@ -29,76 +30,75 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class UnboundCompactMachineBlock extends CompactMachineBlock implements EntityBlock {
-    public UnboundCompactMachineBlock(Properties props) {
-        super(props);
-    }
+	public UnboundCompactMachineBlock(Properties props) {
+		super(props);
+	}
 
-    @Override
-    public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player) {
-        if (level.getBlockEntity(pos) instanceof UnboundCompactMachineEntity be) {
-            final var id = be.templateId();
-            final var temp = be.template().orElse(RoomTemplate.INVALID_TEMPLATE);
+	@Override
+	public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player) {
+		if (level.getBlockEntity(pos) instanceof UnboundCompactMachineEntity be) {
+			final var id = be.templateId();
+			if (id != null) {
+				final var template = RoomTemplateHelper.getTemplateHolder(level, id);
+				var item = Machines.Items.forNewRoom(template);
+				be.getExistingData(Machines.Attachments.MACHINE_COLOR).ifPresent(color -> {
+					item.set(Machines.DataComponents.MACHINE_COLOR, color);
+				});
 
-            if (id != null && !temp.equals(RoomTemplate.INVALID_TEMPLATE)) {
-                var item = Machines.Items.forNewRoom(id, temp);
-                be.getExistingData(Machines.Attachments.MACHINE_COLOR).ifPresent(color -> {
-                    item.set(Machines.DataComponents.MACHINE_COLOR, color);
-                });
+				return item;
+			}
+		}
 
-                return item;
-            }
-        }
+		return Machines.Items.unbound();
+	}
 
-        return Machines.Items.unbound();
-    }
+	@Override
+	public @Nullable BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
+		return new UnboundCompactMachineEntity(pos, state);
+	}
 
-    @Override
-    public @Nullable BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-        return new UnboundCompactMachineEntity(pos, state);
-    }
+	@Override
+	protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand p_316595_, BlockHitResult p_316140_) {
+		if (stack.getItem() instanceof DyeItem dye && !level.isClientSide && level instanceof ServerLevel serverLevel) {
+			return tryDyingMachine(serverLevel, pos, player, dye, stack);
+		}
 
-    @Override
-    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand p_316595_, BlockHitResult p_316140_) {
+		MinecraftServer server = level.getServer();
+		if (stack.is(PSDTags.ITEM) && player instanceof ServerPlayer sp) {
+			level.getBlockEntity(pos, Machines.BlockEntities.UNBOUND_MACHINE.get()).ifPresent(unboundEntity -> {
 
-        if (stack.getItem() instanceof DyeItem dye && !level.isClientSide && level instanceof ServerLevel serverLevel) {
-            return tryDyingMachine(serverLevel, pos, player, dye, stack);
-        }
+				RoomTemplate template = RoomTemplateHelper.getTemplate(level, unboundEntity.templateId());
+				if (!template.equals(RoomTemplate.INVALID_TEMPLATE)) {
+					int color = unboundEntity.getData(Machines.Attachments.MACHINE_COLOR);
 
-        MinecraftServer server = level.getServer();
-        if (stack.is(PSDTags.ITEM) && player instanceof ServerPlayer sp) {
-            level.getBlockEntity(pos, Machines.BlockEntities.UNBOUND_MACHINE.get()).ifPresent(unboundEntity -> {
-                RoomTemplate template = unboundEntity.template().orElse(RoomTemplate.INVALID_TEMPLATE);
-                if (!template.equals(RoomTemplate.INVALID_TEMPLATE)) {
-                    int color = unboundEntity.getData(Machines.Attachments.MACHINE_COLOR);
+					try {
+						// Generate a new machine room
+						final var newRoom = CompactMachines.newRoom(server, template, sp.getUUID());
 
-                    try {
-                        // Generate a new machine room
-                        final var newRoom = CompactMachines.newRoom(server, template, sp.getUUID());
+						// Change into a bound machine block
+						level.setBlock(pos, Machines.Blocks.BOUND_MACHINE.get().defaultBlockState(), Block.UPDATE_ALL);
 
-                        // Change into a bound machine block
-                        level.setBlock(pos, Machines.Blocks.BOUND_MACHINE.get().defaultBlockState(), Block.UPDATE_ALL);
+						// Set up binding and enter
+						level.getBlockEntity(pos, Machines.BlockEntities.MACHINE.get()).ifPresent(ent -> {
+							ent.setConnectedRoom(newRoom.code());
+							ent.setData(Machines.Attachments.MACHINE_COLOR, color);
 
-                        // Set up binding and enter
-                        level.getBlockEntity(pos, Machines.BlockEntities.MACHINE.get()).ifPresent(ent -> {
-                            ent.setConnectedRoom(newRoom.code());
-                            ent.setData(Machines.Attachments.MACHINE_COLOR, color);
+							try {
+								RoomHelper.teleportPlayerIntoRoom(server, sp, newRoom, RoomEntryPoint.playerEnteringMachine(player));
+							} catch (MissingDimensionException e) {
+								throw new RuntimeException(e);
+							}
+						});
 
-                            try {
-                                RoomHelper.teleportPlayerIntoRoom(server, sp, newRoom, RoomEntryPoint.playerEnteringMachine(player));
-                            } catch (MissingDimensionException e) {
-                                throw new RuntimeException(e);
-                            }
-                        });
+					} catch (MissingDimensionException e) {
+						LoggingUtil.modLog().error("Error occurred while generating new room and machine info for first player entry.", e);
+					}
+				} else {
+					LoggingUtil.modLog().fatal("Tried to create and enter an invalidly-registered room. Something went very wrong!");
+				}
+			});
+		}
 
-                    } catch (MissingDimensionException e) {
-                        LoggingUtil.modLog().error("Error occurred while generating new room and machine info for first player entry.", e);
-                    }
-                } else {
-                    LoggingUtil.modLog().fatal("Tried to create and enter an invalidly-registered room. Something went very wrong!");
-                }
-            });
-        }
-
-        return super.useItemOn(stack, state, level, pos, player, p_316595_, p_316140_);
-    }
+		return super.useItemOn(stack, state, level, pos, player, p_316595_, p_316140_);
+	}
 }

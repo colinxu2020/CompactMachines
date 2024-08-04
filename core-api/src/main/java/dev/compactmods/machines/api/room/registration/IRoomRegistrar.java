@@ -1,8 +1,7 @@
 package dev.compactmods.machines.api.room.registration;
 
 import dev.compactmods.machines.api.room.RoomInstance;
-import dev.compactmods.machines.api.room.RoomTemplate;
-import dev.compactmods.machines.api.room.registration.IRoomBuilder;
+import dev.compactmods.machines.api.room.template.RoomTemplate;
 import net.minecraft.world.phys.AABB;
 
 import java.util.Optional;

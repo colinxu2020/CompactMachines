@@ -9,12 +9,19 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.MinecraftServer;
+import net.neoforged.neoforge.common.IOUtilities;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
+/**
+ * A codec-backed file that stores several instances of typed data, indexed by a key.
+ *
+ * @param <Key> The key used for instance lookups.
+ * @param <T>
+ */
 public class CMKeyedDataFileManager<Key, T extends CMDataFile & CodecHolder<T>> implements IKeyedDataFileManager<Key, T> {
 
    protected final MinecraftServer server;
@@ -25,6 +32,16 @@ public class CMKeyedDataFileManager<Key, T extends CMDataFile & CodecHolder<T>> 
 	  this.server = server;
 	  this.creator = creator;
 	  this.cache = new HashMap<>();
+   }
+
+	/**
+	 * Used to get the filename for a given item, if {@code key.toString()} is not sufficient.
+	 *
+	 * @param key
+	 * @return
+	 */
+   public String getFileKey(Key key) {
+	   return key.toString();
    }
 
    @Override
@@ -55,7 +72,7 @@ public class CMKeyedDataFileManager<Key, T extends CMDataFile & CodecHolder<T>> 
 		 fullData.put("data", fileData);
 
 		 try {
-			NbtIo.writeCompressed(fullData, data.getDataLocation(server).resolve(key.toString() + ".dat"));
+			 IOUtilities.writeNbtCompressed(fullData, data.getDataLocation(server).resolve(getFileKey(key) + ".dat"));
 		 } catch (IOException e) {
 			LoggingUtil.modLog().error("Failed to write data: " + e.getMessage(), e);
 		 }

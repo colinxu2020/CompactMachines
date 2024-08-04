@@ -2,7 +2,7 @@ package dev.compactmods.machines.machine.item;
 
 import dev.compactmods.machines.api.Translations;
 import dev.compactmods.machines.api.machine.MachineTranslations;
-import dev.compactmods.machines.api.room.RoomTemplate;
+import dev.compactmods.machines.api.room.template.RoomTemplate;
 import dev.compactmods.machines.machine.Machines;
 import net.minecraft.Util;
 import net.minecraft.client.gui.screens.Screen;
@@ -53,17 +53,6 @@ public class UnboundCompactMachineItem extends BlockItem {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flags) {
         super.appendHoverText(stack, context, tooltip, flags);
 
-        var registries = context.registries();
-
-        // We need NBT data for the rest of this
-        boolean sneaking = Screen.hasShiftDown();
-
         tooltip.add(Component.translatableWithFallback(MachineTranslations.IDs.NEW_MACHINE, "New Machine"));
-
-        if (sneaking && registries != null) {
-            stack.addToTooltip(Machines.DataComponents.ROOM_TEMPLATE, context, tooltip::add, flags);
-        } else {
-            tooltip.add(Translations.HINT_HOLD_SHIFT.get());
-        }
     }
 }

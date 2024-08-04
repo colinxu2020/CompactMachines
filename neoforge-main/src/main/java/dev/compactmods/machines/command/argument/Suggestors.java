@@ -3,7 +3,7 @@ package dev.compactmods.machines.command.argument;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import dev.compactmods.machines.api.CompactMachines;
-import dev.compactmods.machines.api.room.RoomTemplate;
+import dev.compactmods.machines.api.room.template.RoomTemplate;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.core.Registry;

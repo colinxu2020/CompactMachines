@@ -8,9 +8,14 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.MinecraftServer;
+import net.neoforged.neoforge.common.IOUtilities;
 
 import java.io.IOException;
 
+/**
+ * A codec-backed file that stores a single data instance.
+ * @param <T>
+ */
 public class CMSingletonDataFileManager<T extends CMDataFile & CodecHolder<T>> implements IDataFileManager<T> {
 
    protected final MinecraftServer server;
@@ -46,12 +51,10 @@ public class CMSingletonDataFileManager<T extends CMDataFile & CodecHolder<T>> i
 		 fullData.put("data", fileData);
 
 		 try {
-			NbtIo.writeCompressed(fullData, instance.getDataLocation(server).resolve(dataKey + ".dat"));
+			 IOUtilities.writeNbtCompressed(fullData, instance.getDataLocation(server).resolve(dataKey + ".dat"));
 		 } catch (IOException e) {
 			LoggingUtil.modLog().error("Failed to write data: " + e.getMessage(), e);
 		 }
 	  }
    }
-
-
 }

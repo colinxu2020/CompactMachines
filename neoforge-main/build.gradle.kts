@@ -88,47 +88,29 @@ runs {
         programArguments.addAll("--width", "1920")
         programArguments.addAll("--height", "1080")
     }
-}
-//neoForge {
-//    version = neoforged.versions.neoforge
-//
-//    this.mods.create(modId) {
-//        modSourceSets.add(sourceSets.main)
-//        modSourceSets.add(sourceSets.test)
-//        this.dependency(coreApi)
-//    }
-//
-//    unitTest {
-//        enable()
-//        testedMod = mods.named(modId)
-//    }
-//
 
-//        create("server") {
-//            server()
-//            gameDirectory.set(file("runs/server"))
-//
-//            systemProperty("forge.enabledGameTestNamespaces", modId)
-//            programArgument("nogui")
-//
-//            environment.put("CM_TEST_RESOURCES", file("src/test/resources").path)
-//
-//            sourceSet = project.sourceSets.test
-//            // sourceSets.add(project.sourceSets.test.get())
-//        }
-//
-//        create("gameTestServer") {
-//            type = "gameTestServer"
-//            gameDirectory.set(file("runs/gametest"))
-//
-//            systemProperty("forge.enabledGameTestNamespaces", modId)
-//            environment.put("CM_TEST_RESOURCES", file("src/test/resources").path)
-//
-//            sourceSet = project.sourceSets.test
-//            // sourceSets.add(project.sourceSets.test.get())
-//        }
-//    }
-//}
+    create("server") {
+        server()
+        workingDirectory.set(file("runs/server"))
+
+        systemProperty("forge.enabledGameTestNamespaces", modId)
+        programArgument("nogui")
+
+        environmentVariable("CM_TEST_RESOURCES", file("src/test/resources").path)
+
+        sourceSets.add(project.sourceSets.test.get())
+    }
+
+    create("gameTestServer") {
+        gameTest()
+        workingDirectory.set(file("runs/gametest"))
+
+        systemProperty("forge.enabledGameTestNamespaces", modId)
+        environmentVariable("CM_TEST_RESOURCES", file("src/test/resources").path)
+
+        sourceSets.add(project.sourceSets.test.get())
+    }
+}
 
 repositories {
     mavenLocal()
@@ -184,7 +166,6 @@ dependencies {
     testImplementation(neoforged.testframework)
     testImplementation("org.junit.jupiter:junit-jupiter:5.7.1")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-
 
 
     // Mods

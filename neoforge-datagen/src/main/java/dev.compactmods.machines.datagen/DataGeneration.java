@@ -30,14 +30,15 @@ public class DataGeneration {
 
         // Server
         boolean server = event.includeServer();
-        generator.addProvider(server, new DatapackRegisteredStuff(packOut, holderLookup));
+
+        var dataRegistered = generator.addProvider(server, new DatapackRegisteredStuff(packOut, holderLookup));
         generator.addProvider(server, new LootTableProvider(packOut,
                 Collections.emptySet(),
                 List.of(new LootTableProvider.SubProviderEntry(BlockLootGenerator::new, LootContextParamSets.BLOCK)),
                 holderLookup
         ));
 
-        generator.addProvider(server, new RecipeGenerator(packOut, holderLookup));
+        generator.addProvider(server, new RecipeGenerator(packOut, dataRegistered.getRegistryProvider()));
 
         final var blocks = new BlockTagGenerator(packOut, fileHelper, holderLookup);
         generator.addProvider(server, blocks);

@@ -8,6 +8,7 @@ import dev.compactmods.feather.node.Node;
 import dev.compactmods.feather.traversal.GraphNodeTransformationFunction;
 import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.api.dimension.CompactDimension;
+import dev.compactmods.machines.api.room.data.CMRoomDataLocations;
 import dev.compactmods.machines.api.room.history.IPlayerEntryPointHistoryManager;
 import dev.compactmods.machines.api.room.history.PlayerRoomHistoryEntry;
 import dev.compactmods.machines.api.room.history.RoomEntryPoint;
@@ -87,9 +88,7 @@ public class PlayerEntryPointHistoryManager implements CodecHolder<PlayerEntryPo
 
     @Override
     public Path getDataLocation(MinecraftServer server) {
-        return CompactDimension.getDataDirectory(server)
-            .resolve("data")
-            .resolve("player_spawns");
+        return CMRoomDataLocations.PLAYER_SPAWNS.apply(server);
     }
 
     private static PlayerRoomHistoryEntry fromEdge(PlayerRoomEntryEdge edge) {

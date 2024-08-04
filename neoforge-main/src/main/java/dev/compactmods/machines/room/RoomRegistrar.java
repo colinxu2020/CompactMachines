@@ -5,7 +5,7 @@ import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.api.room.data.CMRoomDataLocations;
 import dev.compactmods.machines.data.CMDataFile;
 import dev.compactmods.machines.api.room.RoomInstance;
-import dev.compactmods.machines.api.room.RoomTemplate;
+import dev.compactmods.machines.api.room.template.RoomTemplate;
 import dev.compactmods.machines.api.room.registration.IRoomRegistrar;
 import dev.compactmods.machines.api.room.registration.IRoomBuilder;
 import dev.compactmods.feather.MemoryGraph;
@@ -19,6 +19,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
@@ -120,7 +121,13 @@ public class RoomRegistrar implements IRoomRegistrar, CodecHolder<RoomRegistrar>
 
     @Override
     public Path getDataLocation(MinecraftServer server) {
-        return CMRoomDataLocations.REGISTRATION_DATA.apply(server);
+        return CMRoomDataLocations.DATA_ROOT.apply(server);
+    }
+
+    public static File getFile(MinecraftServer server) {
+        return CMRoomDataLocations.DATA_ROOT.apply(server)
+            .resolve("room_registrations.dat")
+            .toFile();
     }
 
     @Override

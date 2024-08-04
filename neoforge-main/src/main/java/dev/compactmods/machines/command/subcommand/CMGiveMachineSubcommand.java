@@ -5,10 +5,11 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.compactmods.machines.api.CompactMachines;
-import dev.compactmods.machines.api.room.RoomTemplate;
+import dev.compactmods.machines.api.room.template.RoomTemplate;
 import dev.compactmods.machines.LoggingUtil;
 import dev.compactmods.machines.api.command.CommandTranslations;
 import dev.compactmods.machines.api.room.RoomTranslations;
+import dev.compactmods.machines.api.room.template.RoomTemplateHelper;
 import dev.compactmods.machines.command.argument.Suggestors;
 import dev.compactmods.machines.config.ServerConfig;
 import dev.compactmods.machines.machine.Machines;
@@ -108,12 +109,9 @@ public class CMGiveMachineSubcommand {
 
     private static void createAndGiveNewMachine(CommandSourceStack src, ResourceLocation templateId, ServerPlayer player) {
 
-        final var template = src.getServer().registryAccess()
-                .registryOrThrow(RoomTemplate.REGISTRY_KEY)
-                .get(templateId);
-
-        if(template != null) {
-            final var item = Machines.Items.forNewRoom(templateId, template);
+        final var template = RoomTemplateHelper.getTemplateHolder(src.getServer().registryAccess(), templateId);
+        if(template.isBound()) {
+            final var item = Machines.Items.forNewRoom(template);
             if (!player.addItem(item)) {
                 src.sendFailure(CommandTranslations.CANNOT_GIVE_MACHINE.get());
             } else {
