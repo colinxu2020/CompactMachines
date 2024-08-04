@@ -8,6 +8,7 @@ import dev.compactmods.machines.machine.Machines;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -32,6 +33,24 @@ public class BoundCompactMachineBlockEntity extends BlockEntity implements IBoun
    public BoundCompactMachineBlockEntity(BlockPos pos, BlockState state) {
 	  super(Machines.BlockEntities.MACHINE.get(), pos, state);
    }
+
+	@Override
+	protected void applyImplicitComponents(DataComponentInput components) {
+		super.applyImplicitComponents(components);
+		this.roomCode = components.get(Machines.DataComponents.BOUND_ROOM_CODE);
+	}
+
+	@Override
+	protected void collectImplicitComponents(DataComponentMap.Builder builder) {
+		super.collectImplicitComponents(builder);
+		builder.set(Machines.DataComponents.BOUND_ROOM_CODE, this.roomCode);
+	}
+
+	@Override
+	public void removeComponentsFromTag(CompoundTag tag) {
+		super.removeComponentsFromTag(tag);
+		tag.remove(Machines.DataComponents.KEY_ROOM_CODE);
+	}
 
    @Override
    protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider holders) {

@@ -111,14 +111,17 @@ public interface Machines {
 	}
 
 	interface DataComponents {
+		String KEY_ROOM_TEMPLATE = "room_template";
+		String KEY_ROOM_CODE = "room_code";
+
 		DeferredHolder<DataComponentType<?>, DataComponentType<String>> BOUND_ROOM_CODE = CMRegistries.DATA_COMPONENTS
-			.registerComponentType("room_code", MachineComponents.BOUND_ROOM_CODE);
+			.registerComponentType(KEY_ROOM_CODE, MachineComponents.BOUND_ROOM_CODE);
 
 		DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> MACHINE_COLOR = CMRegistries.DATA_COMPONENTS
 			.registerComponentType("machine_color", MachineComponents.MACHINE_COLOR);
 
 		DeferredHolder<DataComponentType<?>, DataComponentType<ResourceLocation>> ROOM_TEMPLATE_ID = CMRegistries.DATA_COMPONENTS
-			.registerComponentType("room_template", MachineComponents.ROOM_TEMPLATE_ID);
+			.registerComponentType(KEY_ROOM_TEMPLATE, MachineComponents.ROOM_TEMPLATE_ID);
 
 		static void prepare() {
 		}

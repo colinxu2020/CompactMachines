@@ -54,5 +54,9 @@ public class UnboundCompactMachineItem extends BlockItem {
         super.appendHoverText(stack, context, tooltip, flags);
 
         tooltip.add(Component.translatableWithFallback(MachineTranslations.IDs.NEW_MACHINE, "New Machine"));
+
+        if(stack.has(Machines.DataComponents.ROOM_TEMPLATE_ID)) {
+            tooltip.add(Component.literal(stack.get(Machines.DataComponents.ROOM_TEMPLATE_ID).toString()));
+        }
     }
 }

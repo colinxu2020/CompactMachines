@@ -5,7 +5,6 @@ import dev.compactmods.machines.command.Commands;
 import dev.compactmods.machines.compat.InterModCompat;
 import dev.compactmods.machines.config.CommonConfig;
 import dev.compactmods.machines.config.ServerConfig;
-import dev.compactmods.machines.data.functions.LootFunctions;
 import dev.compactmods.machines.dimension.Dimension;
 import dev.compactmods.machines.dimension.WorldBorderFixer;
 import dev.compactmods.machines.machine.Machines;
@@ -48,7 +47,6 @@ public class CompactMachinesCommon {
         RoomUpgrades.prepare();
         Dimension.prepare();
         Commands.prepare();
-        LootFunctions.prepare();
         Villagers.prepare();
     }
 

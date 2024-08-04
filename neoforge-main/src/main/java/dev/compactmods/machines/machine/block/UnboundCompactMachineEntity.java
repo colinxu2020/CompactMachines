@@ -5,6 +5,7 @@ import dev.compactmods.machines.api.room.template.RoomTemplate;
 import dev.compactmods.machines.machine.Machines;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -21,6 +22,24 @@ public class UnboundCompactMachineEntity extends BlockEntity implements IUnbound
     public UnboundCompactMachineEntity(BlockPos pos, BlockState state) {
         super(Machines.BlockEntities.UNBOUND_MACHINE.get(), pos, state);
         this.templateId = null;
+    }
+
+    @Override
+    protected void applyImplicitComponents(DataComponentInput components) {
+        super.applyImplicitComponents(components);
+        this.templateId = components.get(Machines.DataComponents.ROOM_TEMPLATE_ID);
+    }
+
+    @Override
+    protected void collectImplicitComponents(DataComponentMap.Builder builder) {
+        super.collectImplicitComponents(builder);
+        builder.set(Machines.DataComponents.ROOM_TEMPLATE_ID, this.templateId);
+    }
+
+    @Override
+    public void removeComponentsFromTag(CompoundTag tag) {
+        super.removeComponentsFromTag(tag);
+        tag.remove(Machines.DataComponents.KEY_ROOM_TEMPLATE);
     }
 
     @Override
