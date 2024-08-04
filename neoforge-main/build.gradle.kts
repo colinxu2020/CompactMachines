@@ -228,11 +228,6 @@ tasks.withType<ProcessResources>().configureEach {
     }
 }
 
-tasks.jar {
-    from(sourceSets.main.get().output)
-    from(coreApi.sourceSets.main.get().output)
-}
-
 val PACKAGES_URL = System.getenv("GH_PKG_URL") ?: "https://maven.pkg.github.com/compactmods/compactmachines"
 publishing {
     publications.register<MavenPublication>("compactmachines") {
