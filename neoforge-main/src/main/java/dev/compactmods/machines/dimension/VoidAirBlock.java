@@ -1,6 +1,8 @@
 package dev.compactmods.machines.dimension;
 
-import dev.compactmods.machines.config.ServerConfig;
+import dev.compactmods.machines.api.dimension.CompactDimension;
+import dev.compactmods.machines.room.Rooms;
+import dev.compactmods.machines.server.ServerConfig;
 import dev.compactmods.machines.util.PlayerUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
@@ -39,21 +41,44 @@ public class VoidAirBlock extends AirBlock {
 
     @Override
     public void entityInside(BlockState pState, Level pLevel, BlockPos pPos, Entity pEntity) {
-        if (ServerConfig.isAllowedOutsideOfMachine()) return;
         if (pLevel.isClientSide) return;
+        if (!CompactDimension.isLevelCompact(pLevel)) return;
 
-        // TODO: Configurable behavior
         if (pEntity instanceof ServerPlayer player) {
-            if (player.isCreative()) return;
+            // If players are allowed outside of machine bounds, early exit -- but damage them if configured
+            if (ServerConfig.isAllowedOutsideOfMachine()) {
+                tryDamagingAdventurousPlayer(pLevel, player);
+                return;
+            }
 
-            player.addEffect(new MobEffectInstance(MobEffects.POISON, 5 * 20));
-            player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 5 * 20));
-            player.hurt(pLevel.damageSources().fellOutOfWorld(), 1);
+            tryDamagingAdventurousPlayer(pLevel, player);
 
             // FIXME - Achievement
             // PlayerUtil.howDidYouGetThere(player);
-            // player.getCapability(RoomCapabilities.ROOM_HISTORY).ifPresent(IRoomHistory::clear);
             PlayerUtil.teleportPlayerToRespawnOrOverworld(player.server, player);
+        }
+    }
+
+    /**
+     * Attempts to inflict the bad effects on players that are touching a void air block.
+     * Does nothing to players that are in creative mode.
+     *
+     * @param pLevel
+     * @param player
+     */
+    private static void tryDamagingAdventurousPlayer(Level pLevel, ServerPlayer player) {
+        if (player.isCreative()) return;
+
+        if (ServerConfig.damagePlayersOutOfBounds()) {
+            if(!player.hasEffect(MobEffects.CONFUSION)) {
+                player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 5 * 20));
+                player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 5 * 20));
+                player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 5 * 20));
+            }
+
+            if (player.getHealth() > 1) {
+                player.hurt(pLevel.damageSources().fellOutOfWorld(), player.getHealth() - 1);
+            }
         }
     }
 }

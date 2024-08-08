@@ -26,6 +26,7 @@ public class StateGenerator extends BlockStateProvider {
         // New machine block
         final var m = models
                 .withExistingParent("block/machine/machine", mcLoc("block/block"))
+                .texture("particle", modLoc("block/machine/tint"))
                 .texture("border", modLoc("block/machine/border"))
                 .texture("tint", modLoc("block/machine/tint"))
                 .texture("overlay", modLoc("block/machine/overlay"))

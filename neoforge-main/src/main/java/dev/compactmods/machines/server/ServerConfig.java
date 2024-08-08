@@ -1,4 +1,4 @@
-package dev.compactmods.machines.config;
+package dev.compactmods.machines.server;
 
 import com.electronwill.nightconfig.core.EnumGetMethod;
 import dev.compactmods.machines.machine.config.EnumMachinePlayersBreakHandling;
@@ -21,6 +21,7 @@ public class ServerConfig {
     private static ModConfigSpec.IntValue CHANGE_ROOM_UPGRADES;
 
     private static ModConfigSpec.BooleanValue ALLOWED_OUTSIDE_MACHINE;
+    private static ModConfigSpec.BooleanValue DAMAGE_PLAYERS_OUTSIDE_MACHINE;
 
     static {
         generateConfig();
@@ -48,9 +49,14 @@ public class ServerConfig {
                         EnumGetMethod.NAME_IGNORECASE);
 
         ALLOWED_OUTSIDE_MACHINE = builder
-                .comment("Specify if we want to damage player's that managed to escape the boundries")
+                .comment("Specify if we want to allow players outside the room boundaries")
                 .comment("default: false")
                 .define("allowOutside", false);
+
+        DAMAGE_PLAYERS_OUTSIDE_MACHINE = builder
+                .comment("Specify if we want to damage players that are outside the room boundaries")
+                .comment("default: false")
+                .define("damagePlayersOutOfBounds", false);
 
         builder.pop();
 
@@ -99,5 +105,9 @@ public class ServerConfig {
 
     public static Boolean isAllowedOutsideOfMachine() {
         return ALLOWED_OUTSIDE_MACHINE.get();
+    }
+
+    public static Boolean damagePlayersOutOfBounds() {
+        return DAMAGE_PLAYERS_OUTSIDE_MACHINE.get();
     }
 }

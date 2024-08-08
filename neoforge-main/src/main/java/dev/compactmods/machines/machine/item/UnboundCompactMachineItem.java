@@ -1,8 +1,11 @@
 package dev.compactmods.machines.machine.item;
 
 import dev.compactmods.machines.api.Translations;
+import dev.compactmods.machines.api.machine.MachineColor;
 import dev.compactmods.machines.api.machine.MachineTranslations;
+import dev.compactmods.machines.api.room.RoomTranslations;
 import dev.compactmods.machines.api.room.template.RoomTemplate;
+import dev.compactmods.machines.machine.MachineColors;
 import dev.compactmods.machines.machine.Machines;
 import net.minecraft.Util;
 import net.minecraft.client.gui.screens.Screen;
@@ -41,7 +44,7 @@ public class UnboundCompactMachineItem extends BlockItem {
     public ItemStack getDefaultInstance() {
         var stack = new ItemStack(this);
         stack.set(Machines.DataComponents.ROOM_TEMPLATE_ID, RoomTemplate.NO_TEMPLATE);
-        stack.set(Machines.DataComponents.MACHINE_COLOR, CommonColors.WHITE);
+        stack.set(Machines.DataComponents.MACHINE_COLOR, MachineColors.WHITE);
         return stack;
     }
 
@@ -56,7 +59,8 @@ public class UnboundCompactMachineItem extends BlockItem {
         tooltip.add(Component.translatableWithFallback(MachineTranslations.IDs.NEW_MACHINE, "New Machine"));
 
         if(stack.has(Machines.DataComponents.ROOM_TEMPLATE_ID)) {
-            tooltip.add(Component.literal(stack.get(Machines.DataComponents.ROOM_TEMPLATE_ID).toString()));
+            // TODO Room Dimensions
+            Component.literal(stack.get(Machines.DataComponents.ROOM_TEMPLATE_ID).toString());
         }
     }
 }

@@ -1,6 +1,7 @@
 package dev.compactmods.machines.api.item.component;
 
 import com.mojang.serialization.Codec;
+import dev.compactmods.machines.api.machine.MachineColor;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.resources.ResourceLocation;
@@ -23,8 +24,8 @@ public interface MachineComponents {
             .persistent(ResourceLocation.CODEC)
             .networkSynchronized(ResourceLocation.STREAM_CODEC);
 
-    UnaryOperator<DataComponentType.Builder<Integer>> MACHINE_COLOR = (builder) -> builder
-            .persistent(Codec.INT)
-            .networkSynchronized(ByteBufCodecs.INT);
+    UnaryOperator<DataComponentType.Builder<MachineColor>> MACHINE_COLOR = (builder) -> builder
+            .persistent(MachineColor.CODEC)
+            .networkSynchronized(MachineColor.STREAM_CODEC);
 
 }

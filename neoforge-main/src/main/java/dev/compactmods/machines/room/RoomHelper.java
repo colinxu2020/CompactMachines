@@ -125,7 +125,6 @@ public abstract class RoomHelper {
 			 },
 			 () -> {
 				serverPlayer.removeData(Rooms.DataAttachments.LAST_ROOM_ENTRYPOINT);
-				serverPlayer.removeData(Rooms.DataAttachments.CURRENT_ROOM_CODE);
 				PlayerUtil.teleportPlayerToRespawnOrOverworld(serv, serverPlayer);
 			 }
 		 );

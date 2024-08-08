@@ -7,7 +7,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.api.machine.MachineTranslations;
 import dev.compactmods.machines.LoggingUtil;
-import dev.compactmods.machines.config.ServerConfig;
+import dev.compactmods.machines.server.ServerConfig;
 import dev.compactmods.machines.machine.block.BoundCompactMachineBlockEntity;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;

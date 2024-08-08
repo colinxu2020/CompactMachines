@@ -5,7 +5,7 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.api.command.CommandTranslations;
-import dev.compactmods.machines.config.ServerConfig;
+import dev.compactmods.machines.server.ServerConfig;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;

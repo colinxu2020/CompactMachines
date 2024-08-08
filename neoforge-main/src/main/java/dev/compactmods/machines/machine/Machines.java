@@ -1,6 +1,8 @@
 package dev.compactmods.machines.machine;
 
+import com.mojang.serialization.Codec;
 import dev.compactmods.machines.api.item.component.MachineComponents;
+import dev.compactmods.machines.api.machine.MachineColor;
 import dev.compactmods.machines.api.machine.MachineConstants;
 import dev.compactmods.machines.api.room.template.RoomTemplate;
 import dev.compactmods.machines.CMRegistries;
@@ -15,6 +17,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.nbt.IntTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.CommonColors;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.SoundType;
@@ -71,7 +74,7 @@ public interface Machines {
 
 		static ItemStack unboundColored(int color) {
 			final var stack = UNBOUND_MACHINE.toStack();
-			stack.set(Machines.DataComponents.MACHINE_COLOR, color);
+			stack.set(Machines.DataComponents.MACHINE_COLOR, MachineColor.fromARGB(color));
 			return stack;
 		}
 
@@ -80,6 +83,10 @@ public interface Machines {
 		}
 
 		static ItemStack boundToRoom(String roomCode, int color) {
+			return boundToRoom(roomCode, MachineColor.fromARGB(color));
+		}
+
+		static ItemStack boundToRoom(String roomCode, MachineColor color) {
 			ItemStack stack = BOUND_MACHINE.toStack();
 			stack.set(Machines.DataComponents.BOUND_ROOM_CODE, roomCode);
 			stack.set(Machines.DataComponents.MACHINE_COLOR, color);
@@ -91,7 +98,7 @@ public interface Machines {
 
 			final var stack = UNBOUND_MACHINE.toStack();
 			stack.set(Machines.DataComponents.ROOM_TEMPLATE_ID, templateHolder.key().location());
-			stack.set(Machines.DataComponents.MACHINE_COLOR, template.defaultMachineColor().rgb());
+			stack.set(Machines.DataComponents.MACHINE_COLOR, template.defaultMachineColor());
 			return stack;
 		}
 	}
@@ -113,12 +120,13 @@ public interface Machines {
 	interface DataComponents {
 		String KEY_ROOM_TEMPLATE = "room_template";
 		String KEY_ROOM_CODE = "room_code";
+		String KEY_MACHINE_COLOR = "machine_color";
 
 		DeferredHolder<DataComponentType<?>, DataComponentType<String>> BOUND_ROOM_CODE = CMRegistries.DATA_COMPONENTS
 			.registerComponentType(KEY_ROOM_CODE, MachineComponents.BOUND_ROOM_CODE);
 
-		DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> MACHINE_COLOR = CMRegistries.DATA_COMPONENTS
-			.registerComponentType("machine_color", MachineComponents.MACHINE_COLOR);
+		DeferredHolder<DataComponentType<?>, DataComponentType<MachineColor>> MACHINE_COLOR = CMRegistries.DATA_COMPONENTS
+			.registerComponentType(KEY_MACHINE_COLOR, MachineComponents.MACHINE_COLOR);
 
 		DeferredHolder<DataComponentType<?>, DataComponentType<ResourceLocation>> ROOM_TEMPLATE_ID = CMRegistries.DATA_COMPONENTS
 			.registerComponentType(KEY_ROOM_TEMPLATE, MachineComponents.ROOM_TEMPLATE_ID);
@@ -128,19 +136,9 @@ public interface Machines {
 	}
 
 	interface Attachments {
-		Supplier<AttachmentType<Integer>> MACHINE_COLOR = CMRegistries.ATTACHMENT_TYPES.register("machine_color", () -> AttachmentType
-			.builder(() -> 0xFFFFFFFF)
-			.serialize(new IAttachmentSerializer<IntTag, Integer>() {
-				@Override
-				public Integer read(IAttachmentHolder holder, IntTag tag, HolderLookup.Provider provider) {
-					return tag.getAsInt();
-				}
-
-				@Override
-				public @Nullable IntTag write(Integer attachment, HolderLookup.Provider provider) {
-					return IntTag.valueOf(attachment);
-				}
-			})
+		Supplier<AttachmentType<MachineColor>> MACHINE_COLOR = CMRegistries.ATTACHMENT_TYPES.register("machine_color", () -> AttachmentType
+			.builder(() -> MachineColor.fromARGB(CommonColors.WHITE))
+			.serialize(MachineColor.CODEC)
 			.build());
 
 		static void prepare() {

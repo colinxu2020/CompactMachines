@@ -28,18 +28,25 @@ public class UnboundCompactMachineEntity extends BlockEntity implements IUnbound
     protected void applyImplicitComponents(DataComponentInput components) {
         super.applyImplicitComponents(components);
         this.templateId = components.get(Machines.DataComponents.ROOM_TEMPLATE_ID);
+
+        final var desiredColor = components.get(Machines.DataComponents.MACHINE_COLOR);
+        if (desiredColor != null) {
+            this.setData(Machines.Attachments.MACHINE_COLOR, desiredColor);
+        }
     }
 
     @Override
     protected void collectImplicitComponents(DataComponentMap.Builder builder) {
         super.collectImplicitComponents(builder);
         builder.set(Machines.DataComponents.ROOM_TEMPLATE_ID, this.templateId);
+        builder.set(Machines.DataComponents.MACHINE_COLOR, this.getData(Machines.Attachments.MACHINE_COLOR));
     }
 
     @Override
     public void removeComponentsFromTag(CompoundTag tag) {
         super.removeComponentsFromTag(tag);
         tag.remove(Machines.DataComponents.KEY_ROOM_TEMPLATE);
+        tag.remove(Machines.DataComponents.KEY_MACHINE_COLOR);
     }
 
     @Override

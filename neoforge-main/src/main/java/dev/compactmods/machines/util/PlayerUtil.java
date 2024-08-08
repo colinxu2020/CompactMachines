@@ -17,6 +17,10 @@ import java.util.UUID;
 
 public abstract class PlayerUtil {
 
+    public static void resetPlayerHistory(@NotNull ServerPlayer player) {
+        player.removeData(Rooms.DataAttachments.LAST_ROOM_ENTRYPOINT);
+    }
+
     public static void teleportPlayerToRespawnOrOverworld(MinecraftServer serv, @NotNull ServerPlayer player) {
         ServerLevel level = Optional.ofNullable(serv.getLevel(player.getRespawnDimension())).orElse(serv.overworld());
         Vec3 worldPos = Vec3.atCenterOf(level.getSharedSpawnPos());
@@ -25,9 +29,8 @@ public abstract class PlayerUtil {
             worldPos = Vec3.atCenterOf(player.getRespawnPosition());
 
         player.changeDimension(CompactDimensionTransitions.to(level, worldPos));
-
-        player.removeData(Rooms.DataAttachments.LAST_ROOM_ENTRYPOINT);
     }
+
     public static Optional<GameProfile> getProfileByUUID(MinecraftServer server, UUID uuid) {
         final var player = server.getPlayerList().getPlayer(uuid);
         if (player == null) {

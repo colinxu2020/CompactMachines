@@ -69,7 +69,7 @@ public class UnboundCompactMachineBlock extends CompactMachineBlock implements E
 
 				RoomTemplate template = RoomTemplateHelper.getTemplate(level, unboundEntity.templateId());
 				if (!template.equals(RoomTemplate.INVALID_TEMPLATE)) {
-					int color = unboundEntity.getData(Machines.Attachments.MACHINE_COLOR);
+					var color = unboundEntity.getData(Machines.Attachments.MACHINE_COLOR);
 
 					try {
 						// Generate a new machine room

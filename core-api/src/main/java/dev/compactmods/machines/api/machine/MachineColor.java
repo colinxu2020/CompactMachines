@@ -6,6 +6,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.FastColor;
+import net.minecraft.world.item.DyeColor;
 
 import java.util.Locale;
 
@@ -18,7 +19,9 @@ public record MachineColor(int red, int green, int blue) {
         return new MachineColor(red, green, blue);
     }
 
-    public static final Codec<MachineColor> CODEC = Codec.STRING.comapFlatMap(str -> {
+    public static final Codec<MachineColor> INT_CODEC = Codec.INT.xmap(MachineColor::fromARGB, MachineColor::rgb);
+
+    public static final Codec<MachineColor> HEX_CODEC = Codec.STRING.comapFlatMap(str -> {
         if (!str.startsWith("#")) {
             return DataResult.error(() -> "Not a color code: " + str);
         } else {
@@ -35,7 +38,13 @@ public record MachineColor(int red, int green, int blue) {
         }
     }, MachineColor::formatValue);
 
+    public static final Codec<MachineColor> CODEC = Codec.withAlternative(HEX_CODEC, INT_CODEC);
+
     public static final StreamCodec<ByteBuf, MachineColor> STREAM_CODEC = ByteBufCodecs.INT.map(MachineColor::fromARGB, MachineColor::rgb);
+
+    public static MachineColor fromDyeColor(DyeColor color) {
+        return MachineColor.fromARGB(color.getFireworkColor());
+    }
 
     public int rgb() {
         return FastColor.ARGB32.color(red, green, blue);

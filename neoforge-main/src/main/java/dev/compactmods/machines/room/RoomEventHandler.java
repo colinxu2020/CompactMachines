@@ -1,19 +1,39 @@
 package dev.compactmods.machines.room;
 
+import dev.compactmods.machines.LoggingUtil;
 import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.api.Translations;
 import dev.compactmods.machines.api.dimension.CompactDimension;
+import dev.compactmods.machines.util.PlayerUtil;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.EntityTeleportEvent;
+import net.neoforged.neoforge.event.entity.EntityTravelToDimensionEvent;
 import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
+import org.apache.logging.log4j.Logger;
 
 public class RoomEventHandler {
 
+    private static final Logger LOGS = LoggingUtil.modLog();
 
+    /**
+     * Handles an entity that has moved to a non-CM dimension, clearing their history
+     * @param dimensionEvent
+     */
+    public static void entityChangedDimensions(final EntityTravelToDimensionEvent dimensionEvent) {
+        final var ent = dimensionEvent.getEntity();
+        if(!(ent instanceof Player p)) return;
+
+        if(!CompactDimension.isLevelCompact(dimensionEvent.getDimension())) {
+            if(p instanceof ServerPlayer sp) {
+                LOGS.debug("Resetting player {} room history due to dimension change.", sp.getDisplayName());
+                PlayerUtil.resetPlayerHistory(sp);
+            }
+        }
+    }
 
     public static void entityJoined(final EntityJoinLevelEvent evt) {
         Entity ent = evt.getEntity();

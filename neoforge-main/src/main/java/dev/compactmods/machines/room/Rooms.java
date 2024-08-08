@@ -118,6 +118,7 @@ public interface Rooms {
 	 });
 
 	 NeoForge.EVENT_BUS.addListener(RoomEventHandler::checkSpawn);
+	 NeoForge.EVENT_BUS.addListener(RoomEventHandler::entityChangedDimensions);
 	 NeoForge.EVENT_BUS.addListener(RoomEventHandler::entityJoined);
 	 NeoForge.EVENT_BUS.addListener(RoomEventHandler::entityTeleport);
   }

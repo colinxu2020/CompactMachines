@@ -50,6 +50,10 @@ public abstract class CompactDimension {
     }
 
     public static boolean isLevelCompact(Level level) {
-        return level.dimension().equals(LEVEL_KEY);
+        return isLevelCompact(level.dimension());
+    }
+
+    public static boolean isLevelCompact(ResourceKey<Level> level) {
+        return level.equals(LEVEL_KEY);
     }
 }

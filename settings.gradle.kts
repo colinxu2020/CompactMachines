@@ -1,5 +1,3 @@
-rootProject.name = "Compact Machines 21.0"
-
 dependencyResolutionManagement {
     versionCatalogs.create("neoforged") {
         version("neoforge", "21.0.143")
@@ -66,9 +64,9 @@ pluginManagement {
 
         // maven("https://maven.architectury.dev/")
 
-//        maven("https://maven.parchmentmc.org") {
-//            name = "ParchmentMC"
-//        }
+        maven("https://maven.parchmentmc.org") {
+            name = "ParchmentMC"
+        }
 
         maven("https://maven.neoforged.net/releases") {
             name = "NeoForged"

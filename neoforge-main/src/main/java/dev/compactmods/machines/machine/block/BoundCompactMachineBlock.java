@@ -4,7 +4,7 @@ import dev.compactmods.machines.LoggingUtil;
 import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.api.shrinking.PSDTags;
 import dev.compactmods.machines.machine.config.EnumMachinePlayersBreakHandling;
-import dev.compactmods.machines.config.ServerConfig;
+import dev.compactmods.machines.server.ServerConfig;
 import dev.compactmods.machines.machine.Machines;
 import dev.compactmods.machines.room.RoomHelper;
 import dev.compactmods.machines.room.Rooms;

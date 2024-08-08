@@ -1,5 +1,6 @@
 package dev.compactmods.machines.network.machine;
 
+import dev.compactmods.machines.api.machine.MachineColor;
 import dev.compactmods.machines.api.machine.MachineConstants;
 import dev.compactmods.machines.machine.Machines;
 import net.minecraft.client.Minecraft;
@@ -7,7 +8,7 @@ import net.minecraft.core.GlobalPos;
 import net.minecraft.world.level.block.Block;
 
 public class ClientMachinePacketHandler {
-    public static void setMachineColor(GlobalPos position, int newColor) {
+    public static void setMachineColor(GlobalPos position, MachineColor newColor) {
         var mc = Minecraft.getInstance();
         assert mc.level != null;
         if (mc.level.dimension() == position.dimension()) {

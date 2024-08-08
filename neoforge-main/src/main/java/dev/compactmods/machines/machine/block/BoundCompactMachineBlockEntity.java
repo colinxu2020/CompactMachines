@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import dev.compactmods.machines.api.CompactMachines;
 import dev.compactmods.machines.api.machine.block.IBoundCompactMachineBlockEntity;
+import dev.compactmods.machines.machine.MachineColors;
 import dev.compactmods.machines.machine.Machines;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
@@ -38,18 +39,25 @@ public class BoundCompactMachineBlockEntity extends BlockEntity implements IBoun
 	protected void applyImplicitComponents(DataComponentInput components) {
 		super.applyImplicitComponents(components);
 		this.roomCode = components.get(Machines.DataComponents.BOUND_ROOM_CODE);
+
+		final var desiredColor = components.get(Machines.DataComponents.MACHINE_COLOR);
+		if (desiredColor != null) {
+			this.setData(Machines.Attachments.MACHINE_COLOR, desiredColor);
+		}
 	}
 
 	@Override
 	protected void collectImplicitComponents(DataComponentMap.Builder builder) {
 		super.collectImplicitComponents(builder);
 		builder.set(Machines.DataComponents.BOUND_ROOM_CODE, this.roomCode);
+		builder.set(Machines.DataComponents.MACHINE_COLOR, this.getData(Machines.Attachments.MACHINE_COLOR));
 	}
 
 	@Override
 	public void removeComponentsFromTag(CompoundTag tag) {
 		super.removeComponentsFromTag(tag);
 		tag.remove(Machines.DataComponents.KEY_ROOM_CODE);
+		tag.remove(Machines.DataComponents.KEY_MACHINE_COLOR);
 	}
 
    @Override
@@ -136,7 +144,7 @@ public class BoundCompactMachineBlockEntity extends BlockEntity implements IBoun
 				this.setData(Machines.Attachments.MACHINE_COLOR, inst.defaultMachineColor());
 			 },
 			 () -> {
-				this.setData(Machines.Attachments.MACHINE_COLOR, DyeColor.WHITE.getTextColor());
+				this.setData(Machines.Attachments.MACHINE_COLOR, MachineColors.WHITE);
 			 });
 
 		 this.setChanged();

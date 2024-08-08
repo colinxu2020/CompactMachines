@@ -121,11 +121,15 @@ repositories {
         }
     }
 
-    maven("https://maven.pkg.github.com/compactmods/compactmachines-core") {
+    maven("https://maven.pkg.github.com/compactmods/feather") {
         name = "Github PKG Core"
         credentials {
             username = project.findProperty("gpr.user") as String? ?: System.getenv("GITHUB_ACTOR")
             password = project.findProperty("gpr.token") as String? ?: System.getenv("GITHUB_TOKEN")
+        }
+
+        content {
+            includeGroup("dev.compactmods")
         }
     }
 

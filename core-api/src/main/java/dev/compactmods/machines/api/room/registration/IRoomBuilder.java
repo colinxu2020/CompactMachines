@@ -12,11 +12,7 @@ public interface IRoomBuilder {
 
     IRoomBuilder owner(UUID owner);
 
-    default IRoomBuilder defaultMachineColor(MachineColor color) {
-        return defaultMachineColor(color.rgb());
-    }
-
-    IRoomBuilder defaultMachineColor(int color);
+    IRoomBuilder defaultMachineColor(MachineColor color);
 
     RoomInstance build();
 }

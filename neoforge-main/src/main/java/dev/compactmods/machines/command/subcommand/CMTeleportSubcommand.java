@@ -10,7 +10,7 @@ import dev.compactmods.machines.api.dimension.MissingDimensionException;
 import dev.compactmods.machines.api.room.RoomTranslations;
 import dev.compactmods.machines.api.room.history.RoomEntryPoint;
 import dev.compactmods.machines.command.argument.Suggestors;
-import dev.compactmods.machines.config.ServerConfig;
+import dev.compactmods.machines.server.ServerConfig;
 import dev.compactmods.machines.room.RoomHelper;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;

@@ -44,21 +44,21 @@ public class Commands {
         Commands.CM_COMMAND_ROOT.then(CMGiveMachineSubcommand.make());
         Commands.CM_COMMAND_ROOT.then(SpawnSubcommand.make());
 
-        CM_COMMAND_ROOT.then(net.minecraft.commands.Commands.literal("test").executes(ctx -> {
-            final var player = ctx.getSource().getPlayerOrException();
-
-            final var diamondAxe = new ItemStack(Items.DIAMOND_AXE);
-
-            final var treecutter = new TreeCutterUpgrade();
-
-            final var upgrades = new RoomUpgradeList(List.of(treecutter));
-
-            diamondAxe.set(RoomUpgrades.UPGRADE_LIST_COMPONENT, upgrades);
-
-            player.addItem(diamondAxe);
-
-            return 0;
-        }));
+//        CM_COMMAND_ROOT.then(net.minecraft.commands.Commands.literal("test").executes(ctx -> {
+//            final var player = ctx.getSource().getPlayerOrException();
+//
+//            final var diamondAxe = new ItemStack(Items.DIAMOND_AXE);
+//
+//            final var treecutter = new TreeCutterUpgrade();
+//
+//            final var upgrades = new RoomUpgradeList(List.of(treecutter));
+//
+//            diamondAxe.set(RoomUpgrades.UPGRADE_LIST_COMPONENT, upgrades);
+//
+//            player.addItem(diamondAxe);
+//
+//            return 0;
+//        }));
 
         event.getDispatcher().register(Commands.CM_COMMAND_ROOT);
     }
