@@ -113,6 +113,7 @@ public class PlayerEntryPointHistoryManager implements CodecHolder<PlayerEntryPo
 
     public Optional<PlayerRoomHistoryEntry> lastHistory(Player player) {
         final var lastEntry = latestEntryPoints.get(player.getUUID());
+        if(lastEntry == null) return Optional.empty();
         return graph.outboundEdges(lastEntry, RoomReferenceNode.class, PlayerRoomEntryEdge.class)
                 .max(Comparator.comparing(PlayerRoomEntryEdge::entryTime))
                 .map(PlayerEntryPointHistoryManager::fromEdge);

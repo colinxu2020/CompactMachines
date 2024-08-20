@@ -2,6 +2,7 @@ package dev.compactmods.machines.api.room.upgrade.components;
 
 import com.mojang.serialization.Codec;
 import dev.compactmods.machines.api.room.upgrade.RoomUpgrade;
+import dev.compactmods.machines.api.room.upgrade.RoomUpgradeCodecs;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -21,11 +22,11 @@ import java.util.function.Consumer;
  */
 public record RoomUpgradeList(List<RoomUpgrade> upgrades) implements TooltipProvider {
 
-  public static final Codec<RoomUpgradeList> CODEC = RoomUpgrade.DISPATCH_CODEC.listOf()
+  public static final Codec<RoomUpgradeList> CODEC = RoomUpgradeCodecs.DISPATCH_CODEC.listOf()
       .xmap(RoomUpgradeList::new, RoomUpgradeList::upgrades);
 
   public static final StreamCodec<RegistryFriendlyByteBuf, RoomUpgradeList> STREAM_CODEC = StreamCodec.composite(
-      RoomUpgrade.STREAM_CODEC.apply(ByteBufCodecs.list()), RoomUpgradeList::upgrades,
+      RoomUpgradeCodecs.STREAM_CODEC.apply(ByteBufCodecs.list()), RoomUpgradeList::upgrades,
       RoomUpgradeList::new
   );
 

@@ -13,6 +13,7 @@ import dev.compactmods.machines.command.subcommand.SpawnSubcommand;
 import dev.compactmods.machines.room.upgrade.RoomUpgrades;
 import dev.compactmods.machines.room.upgrade.example.TreeCutterUpgrade;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
@@ -44,21 +45,19 @@ public class Commands {
         Commands.CM_COMMAND_ROOT.then(CMGiveMachineSubcommand.make());
         Commands.CM_COMMAND_ROOT.then(SpawnSubcommand.make());
 
-//        CM_COMMAND_ROOT.then(net.minecraft.commands.Commands.literal("test").executes(ctx -> {
-//            final var player = ctx.getSource().getPlayerOrException();
-//
-//            final var diamondAxe = new ItemStack(Items.DIAMOND_AXE);
-//
-//            final var treecutter = new TreeCutterUpgrade();
-//
-//            final var upgrades = new RoomUpgradeList(List.of(treecutter));
-//
-//            diamondAxe.set(RoomUpgrades.UPGRADE_LIST_COMPONENT, upgrades);
-//
-//            player.addItem(diamondAxe);
-//
-//            return 0;
-//        }));
+        CM_COMMAND_ROOT.then(net.minecraft.commands.Commands.literal("test").executes(ctx -> {
+            final var player = ctx.getSource().getPlayerOrException();
+
+            final var axe = player.getMainHandItem();
+
+            if(!axe.is(ItemTags.AXES))
+                return -1;
+
+            final var treecutter = new TreeCutterUpgrade();
+            final var upgrades = new RoomUpgradeList(List.of(treecutter));
+            axe.set(RoomUpgrades.UPGRADE_LIST_COMPONENT, upgrades);
+            return 0;
+        }));
 
         event.getDispatcher().register(Commands.CM_COMMAND_ROOT);
     }

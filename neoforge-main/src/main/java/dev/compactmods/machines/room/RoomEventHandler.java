@@ -38,15 +38,12 @@ public class RoomEventHandler {
     public static void entityJoined(final EntityJoinLevelEvent evt) {
         Entity ent = evt.getEntity();
 
-        boolean isPlayer = ent instanceof Player;
-        boolean isCompact = CompactDimension.isLevelCompact(ent.level());
-
         // no-op clients and non-compact dimensions, we only care about server spawns
-        if (!isCompact || ent.level().isClientSide)
+        if (!CompactDimension.isLevelCompact(ent.level()) || ent.level().isClientSide)
             return;
 
         // Handle players
-        if (isPlayer && ent instanceof ServerPlayer serverPlayer) {
+        if (ent instanceof ServerPlayer serverPlayer) {
             // FIXME sync current room info to client player
 //            final var roomProvider = CompactRoomProvider.instance(serverPlayer.getLevel());
 //            roomProvider.findByChunk(serverPlayer.chunkPosition()).ifPresent(roomInfo -> {
@@ -68,7 +65,7 @@ public class RoomEventHandler {
         Entity ent = evt.getEntity();
 
         // Early exit if spawning in non-CM dimensions
-        if (!ent.level().dimension().equals(CompactDimension.LEVEL_KEY)) return;
+        if (!CompactDimension.isLevelCompact(ent.level())) return;
 
         if (!positionInsideRoom(ent, target))
             evt.setSpawnCancelled(true);
@@ -94,7 +91,7 @@ public class RoomEventHandler {
      */
     private static boolean positionInsideRoom(Entity entity, Vec3 target) {
         final var level = entity.level();
-        if (!level.dimension().equals(CompactDimension.LEVEL_KEY)) return false;
+        if (!CompactDimension.isLevelCompact(entity.level())) return false;
 
         return CompactMachines.roomApi().chunkManager()
                 .findRoomByChunk(entity.chunkPosition())

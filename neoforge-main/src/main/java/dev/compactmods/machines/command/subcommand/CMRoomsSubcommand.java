@@ -87,7 +87,7 @@ public class CMRoomsSubcommand {
                 .findRoomByChunk(chunkPos.toChunkPos())
 
                 // FIXME Translations
-                .map(code -> Component.translatableWithFallback("commands.cm.room_by_chunk", "Room at chunk %s has ID: %s", chunkPos, code))
+                .map(code -> Component.translatableWithFallback("commands.cm.room_by_chunk", "Room at chunk %s has ID: %s", chunkPos.toString(), code))
                 .orElse(Component.literal("Room not found at chunk: " + chunkPos));
 
         ctx.getSource().sendSuccess(() -> m, false);

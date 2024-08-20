@@ -68,7 +68,7 @@ public class MachineRoomScreen extends AbstractContainerScreen<MachineRoomMenu> 
                     PacketDistributor.sendToServer(new PlayerRequestedUpgradeUIPacket(menu.getRoom(), false));
                 }).build();
 
-//        addRenderableWidget(upgradeScreenBtn);
+        addRenderableWidget(upgradeScreenBtn);
     }
 
     @Override

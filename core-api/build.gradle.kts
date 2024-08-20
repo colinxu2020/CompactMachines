@@ -6,7 +6,7 @@ val versionMain: String = System.getenv("VERSION") ?: "9.9.9"
 plugins {
     id("java-library")
     id("maven-publish")
-    alias(neoforged.plugins.moddev)
+    alias(neoforged.plugins.neogradle)
 }
 
 sourceSets {
@@ -24,6 +24,7 @@ base {
 }
 
 java {
+    toolchain.vendor.set(JvmVendorSpec.JETBRAINS)
     toolchain.languageVersion.set(JavaLanguageVersion.of(21))
     withJavadocJar()
 }

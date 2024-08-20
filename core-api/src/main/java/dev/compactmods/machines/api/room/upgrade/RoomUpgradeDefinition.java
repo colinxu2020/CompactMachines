@@ -9,5 +9,4 @@ public record RoomUpgradeDefinition<T extends RoomUpgrade>(MapCodec<T> codec) {
 
    public static final ResourceKey<Registry<RoomUpgradeDefinition<?>>> REG_KEY = ResourceKey
        .createRegistryKey(CompactMachines.modRL("room_upgrades"));
-
 }

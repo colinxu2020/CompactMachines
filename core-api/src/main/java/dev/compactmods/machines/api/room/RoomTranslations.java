@@ -24,7 +24,7 @@ public interface RoomTranslations {
     Function<Player, Component> PLAYER_NOT_IN_COMPACT_DIM = (player) -> Component.translatableWithFallback(IDs.Errors.PLAYER_NOT_IN_COMPACT_DIM, "", player.getDisplayName());
 
     Function<Player, Component> UNKNOWN_ROOM_BY_PLAYER_CHUNK = (player) -> Component
-            .translatableWithFallback(IDs.Errors.UNKNOWN_ROOM_BY_PLAYER_CHUNK, "Room not found at chunk: %s", player.chunkPosition())
+            .translatableWithFallback(IDs.Errors.UNKNOWN_ROOM_BY_PLAYER_CHUNK, "Room not found at chunk: %s", player.chunkPosition().toString())
             .withStyle(ChatFormatting.DARK_RED);
 
     Function<String, Component> UNKNOWN_ROOM_BY_CODE = (roomCode) -> Component

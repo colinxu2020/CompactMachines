@@ -1,5 +1,6 @@
 @file:Suppress("SpellCheckingInspection")
 
+import org.slf4j.event.Level
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -29,7 +30,7 @@ base {
 }
 
 java {
-    // toolchain.vendor.set(JvmVendorSpec.JETBRAINS)
+    toolchain.vendor.set(JvmVendorSpec.JETBRAINS)
     toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 }
 
@@ -54,61 +55,81 @@ sourceSets.test {
     }
 }
 
-minecraft {
-    this.modIdentifier = modId
-    this.accessTransformers {
-        this.file(project.file("src/main/resources/META-INF/accesstransformer.cfg"))
+neoForge {
+    version = neoforged.versions.neoforge
+
+    this.mods.create(modId) {
+        modSourceSets.add(sourceSets.main)
+        modSourceSets.add(sourceSets.test)
+        this.dependency(coreApi)
     }
-}
 
-runs {
-    configureEach {
-        this.modSource(coreApi.sourceSets.main.get())
+    unitTest {
+        enable()
+        testedMod = mods.named(modId)
+    }
 
-        dependencies {
-            runtime(libraries.feather)
-            runtime(libraries.jnanoid)
+    runs {
+        // applies to all the run configs below
+        configureEach {
+
+            logLevel.set(Level.DEBUG)
+
+            sourceSet = project.sourceSets.main
+
+            if (!System.getenv().containsKey("CI")) {
+                // JetBrains Runtime Hotswap
+                // jvmArgument("-XX:+AllowEnhancedClassRedefinition")
+            }
         }
 
-//            if (!System.getenv().containsKey("CI")) {
-//                // JetBrains Runtime Hotswap
-//                // jvmArgument("-XX:+AllowEnhancedClassRedefinition")
-//            }
-    }
+        create("client") {
+            client()
+            gameDirectory.set(file("runs/client"))
 
-    this.create("client") {
-        client()
+            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
+            systemProperty("forge.enabledGameTestNamespaces", modId)
 
-        this.workingDirectory.set(file("runs/client"))
+            programArguments.addAll("--username", "Nano")
+            programArguments.addAll("--width", "1920")
+            programArguments.addAll("--height", "1080")
+        }
 
-        // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-        systemProperty("forge.enabledGameTestNamespaces", modId)
+        create("client2") {
+            client()
+            gameDirectory.set(file("runs/client"))
 
-        programArguments.addAll("--username", "Nano")
-        programArguments.addAll("--width", "1920")
-        programArguments.addAll("--height", "1080")
-    }
+            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
+            systemProperty("forge.enabledGameTestNamespaces", modId)
 
-    create("server") {
-        server()
-        workingDirectory.set(file("runs/server"))
+            programArguments.addAll("--username", "Nano2")
+            programArguments.addAll("--width", "1920")
+            programArguments.addAll("--height", "1080")
+        }
 
-        systemProperty("forge.enabledGameTestNamespaces", modId)
-        programArgument("nogui")
+        create("server") {
+            server()
+            gameDirectory.set(file("runs/server"))
 
-        environmentVariable("CM_TEST_RESOURCES", file("src/test/resources").path)
+            systemProperty("forge.enabledGameTestNamespaces", modId)
+            programArgument("nogui")
 
-        sourceSets.add(project.sourceSets.test.get())
-    }
+            environment.put("CM_TEST_RESOURCES", file("src/test/resources").path)
 
-    create("gameTestServer") {
-        gameTest()
-        workingDirectory.set(file("runs/gametest"))
+            sourceSet = project.sourceSets.test
+            // sourceSets.add(project.sourceSets.test.get())
+        }
 
-        systemProperty("forge.enabledGameTestNamespaces", modId)
-        environmentVariable("CM_TEST_RESOURCES", file("src/test/resources").path)
+        create("gameTestServer") {
+            type = "gameTestServer"
+            gameDirectory.set(file("runs/gametest"))
 
-        sourceSets.add(project.sourceSets.test.get())
+            systemProperty("forge.enabledGameTestNamespaces", modId)
+            environment.put("CM_TEST_RESOURCES", file("src/test/resources").path)
+
+            sourceSet = project.sourceSets.test
+            // sourceSets.add(project.sourceSets.test.get())
+        }
     }
 }
 
@@ -121,15 +142,11 @@ repositories {
         }
     }
 
-    maven("https://maven.pkg.github.com/compactmods/feather") {
+    maven("https://maven.pkg.github.com/compactmods/compactmachines-core") {
         name = "Github PKG Core"
         credentials {
             username = project.findProperty("gpr.user") as String? ?: System.getenv("GITHUB_ACTOR")
             password = project.findProperty("gpr.token") as String? ?: System.getenv("GITHUB_TOKEN")
-        }
-
-        content {
-            includeGroup("dev.compactmods")
         }
     }
 
@@ -154,23 +171,24 @@ dependencies {
     // Core Projects and Libraries
     this {
         compileOnly(libraries.jnanoid)
+        testImplementation(libraries.jnanoid)
         jarJar(libraries.jnanoid)
 
         compileOnly(coreApi)
         testCompileOnly(coreApi)
-        jarJar(coreApi)
 
         compileOnly(libraries.feather)
+        testImplementation(libraries.feather)
         jarJar(libraries.feather) { isTransitive = false }
     }
-
-    implementation(neoforged.neoforge)
 
     runtimeOnly(neoforged.testframework)
     testImplementation(neoforged.testframework)
     testImplementation("org.junit.jupiter:junit-jupiter:5.7.1")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
+    additionalRuntimeClasspath(libraries.feather)
+    additionalRuntimeClasspath(libraries.jnanoid)
 
     // Mods
 //    compileOnly(mods.bundles.jei)

@@ -5,7 +5,7 @@ plugins {
     id("eclipse")
     id("idea")
     id("maven-publish")
-    alias(neoforged.plugins.moddev)
+    alias(neoforged.plugins.neogradle)
 }
 
 val modId: String = "compactmachines"
@@ -17,6 +17,7 @@ project.evaluationDependsOn(coreApi.path)
 project.evaluationDependsOn(mainProject.path)
 
 java {
+    toolchain.vendor.set(JvmVendorSpec.JETBRAINS)
     toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 }
 
@@ -44,10 +45,10 @@ runs {
         // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
         systemProperty("forge.enabledGameTestNamespaces", modId)
 
-        programArguments.addAll("--mod", modId)
-        programArguments.addAll("--all")
-        programArguments.addAll("--output", mainProject.file("src/generated/resources").absolutePath)
-        programArguments.addAll("--existing", mainProject.file("src/main/resources").absolutePath)
+        arguments.addAll("--mod", modId)
+        arguments.addAll("--all")
+        arguments.addAll("--output", mainProject.file("src/generated/resources").absolutePath)
+        arguments.addAll("--existing", mainProject.file("src/main/resources").absolutePath)
     }
 }
 
@@ -61,19 +62,13 @@ repositories {
             password = project.findProperty("gpr.token") as String? ?: System.getenv("GITHUB_TOKEN")
         }
     }
-
-    // https://github.com/neoforged/NeoForge/pull/1303
-    maven("https://prmaven.neoforged.net/NeoForge/pr1303") {
-        content {
-            includeModule("net.neoforged", "neoforge")
-        }
-    }
 }
 
 dependencies {
-    implementation("net.neoforged:neoforge:21.0.159-pr-1303-feat-recipe-provider-lookup")
     compileOnly(coreApi)
     compileOnly(mainProject)
+
+    compileOnly(neoforged.neoforge)
 }
 
 tasks.compileJava {

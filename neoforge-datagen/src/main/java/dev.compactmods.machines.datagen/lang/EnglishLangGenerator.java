@@ -37,7 +37,7 @@ public class EnglishLangGenerator extends BaseLangGenerator {
         // Room Translations
         add(RoomTranslations.IDs.ROOM_SPAWNPOINT_SET, "New spawn point set.");
         add(RoomTranslations.IDs.MACHINE_ROOM_INFO, "Machine at %1$s is bound to a %2$s size room at %3$s");
-        add(RoomTranslations.IDs.PLAYER_ROOM_INFO, "Player '%1$s' is inside a %3$s room at %2$s.");
+        add(RoomTranslations.IDs.PLAYER_ROOM_INFO, "Player '%1$s' is inside room %2$s.");
 
         // Room Errors
         add(RoomTranslations.IDs.Errors.CANNOT_ENTER_ROOM, "You fumble with the shrinking device, to no avail. It refuses to work.");

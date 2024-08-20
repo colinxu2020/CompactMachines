@@ -55,8 +55,8 @@ public class ServerConfig {
 
         DAMAGE_PLAYERS_OUTSIDE_MACHINE = builder
                 .comment("Specify if we want to damage players that are outside the room boundaries")
-                .comment("default: false")
-                .define("damagePlayersOutOfBounds", false);
+                .comment("default: true")
+                .define("damagePlayersOutOfBounds", true);
 
         builder.pop();
 

@@ -36,7 +36,7 @@ public class RoomUpgradeUIMapping {
 	  final var player = Minecraft.getInstance().player;
 	  if (level != null && level.dimension().equals(CompactDimension.LEVEL_KEY)) {
 		 final var currentRoom = player.getData(Rooms.DataAttachments.CURRENT_ROOM_CODE);
-//		 PacketDistributor.sendToServer(new PlayerRequestedUpgradeUIPacket(currentRoom, true));
+		 PacketDistributor.sendToServer(new PlayerRequestedUpgradeUIPacket(currentRoom, true));
 	  }
    }
 }
