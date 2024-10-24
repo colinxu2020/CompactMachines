@@ -2,7 +2,7 @@ name: Announce Latest Nightly to Discord
 
 on:
   workflow_call:
-    
+
   workflow_dispatch:
     inputs:
       diagnostic_mode:
@@ -16,8 +16,8 @@ jobs:
     name: Get Variables
     runs-on: ubuntu-22.04
     outputs:
-      mcVersion: ${{steps.gradle_props.outputs.minecraft_version}}
-      forgeVersion: ${{steps.gradle_props.outputs.forge_version}}
+      mcVersion: ${{steps.minecraft.outputs.version}}
+      forgeVersion: ${{steps.forge.outputs.version}}
 
     steps:
       - name: Checkout
@@ -25,12 +25,26 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Read MC and Forge versions
-        id: gradle_props
-        uses: christian-draeger/read-properties@1.1.0
+      - name: Set up JDK
+        uses: actions/setup-java@v4
         with:
-          path: "gradle.properties"
-          properties: "minecraft_version forge_version"
+          distribution: temurin
+          java-version: 21
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: MC Version
+        id: minecraft
+        run: ./gradlew mcVersion -q >> "$GITHUB_OUTPUT"
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+
+      - name: Forge Version
+        id: forge
+        run: ./gradlew forgeVersion -q >> "$GITHUB_OUTPUT"
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
 
   get-package-info:
     name: Get Latest Package Info
@@ -46,8 +60,8 @@ jobs:
         with:
           owner: compactmods
           repo: compactmachines
-          group: dev.compactmods.compactmachines
-          filter: "^compactmachines-(?:[\\d\\.]+){4}.jar$"
+          group: dev.compactmods.compactmachines.compactmachines-forge
+          filter: "^compactmachines-forge-(?:[\\d\\.]+)-nightly.jar$"
           outputFile: compactmachines-nightly.json
 
       - name: Debug output
@@ -66,7 +80,7 @@ jobs:
           mv compactmachines-nightly.json release/compactmachines-nightly.json
 
       - name: Add Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: release
           path: release
@@ -77,7 +91,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Grab JAR and Info
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: release
           path: .
@@ -96,6 +110,4 @@ jobs:
           modName: Compact Machines
           modVersion: ${{ needs.get-package-info.outputs.version }}
           thumbnail: https://media.forgecdn.net/avatars/10/602/635460270800375500.png
-
-          forgeVersion: ${{ needs.vars.outputs.forgeVersion }}
           mcVersion: ${{ needs.vars.outputs.mcVersion }}

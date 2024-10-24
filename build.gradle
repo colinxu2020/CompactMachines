@@ -22,22 +22,25 @@ plugins {
 apply plugin: "net.minecraftforge.gradle"
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
-def semver = System.getenv("CM_SEMVER_VERSION")
-def buildNumber = System.getenv("CM_BUILD_NUM")
+var envVersion: String = System.getenv("VERSION") ?: "9.9.9"
+if (envVersion.startsWith("v"))
+    envVersion = envVersion.trimStart('v')
 
-def nightlyVersion = "${semver}.${buildNumber}"
-def isRelease = (System.getenv("CM_RELEASE") ?: "false").equalsIgnoreCase("true")
+archivesBaseName = mod_id
+group = "dev.compactmods.compactmachines"
+version = envVersion
 
-task getBuildInfo() {
-    println("Mod ID: ${mod_id}")
-    println("Version: ${isRelease ? semver : nightlyVersion}")
-    println("Semver Version: ${semver}")
-    println("Nightly Build: ${nightlyVersion}")
+tasks.create("mcVersion") {
+    doFirst {
+        println("version=$minecraft_version")
+    }
 }
 
-version = isRelease ? "${semver}" : nightlyVersion
-group = "dev.compactmods"
-archivesBaseName = mod_id
+tasks.create("forgeVersion") {
+    doFirst {
+        println("version=$forge_version")
+    }
+}
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 sourceSets {
@@ -364,23 +367,11 @@ artifacts {
 publishing {
     publications {
         release(MavenPublication) {
-            artifactId = mod_id
-            groupId = "dev.compactmods"
+            artifactId = "$mod_id-forge"
+            groupId = "dev.compactmods.compactmachines"
 
             artifacts {
                 artifact jar
-                artifact(apiJar) {
-                    classifier = "api"
-                }
-            }
-        }
-
-        nightly(MavenPublication) {
-            artifactId = mod_id
-            groupId = "dev.compactmods.nightly"
-
-            artifacts {
-                artifact(jar)
                 artifact(apiJar) {
                     classifier = "api"
                 }

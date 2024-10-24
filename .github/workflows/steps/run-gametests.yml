@@ -1,0 +1,67 @@
+name: Run Game Tests
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string
+
+env:
+  VERSION: ${{ inputs.version }}
+  GITHUB_ACTOR: ${{ secrets.GITHUB_ACTOR }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  run-tests:
+      name: Run Game Testss
+      runs-on: ubuntu-22.04
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+          with:
+            submodules: true
+
+        - name: Set up JDK
+          uses: actions/setup-java@v4
+          with:
+            distribution: temurin
+            java-version: 21
+
+        - name: Setup Gradle
+          uses: gradle/actions/setup-gradle@v3
+
+        - name: Pull Built Generated Data
+          uses: actions/download-artifact@v4
+          with:
+            name: generated-data
+            path: neoforge-main/src/generated/resources
+
+        - name: Build Core
+          run: ./gradlew :core-api:jar
+
+        - name: Upload built core
+          uses: actions/upload-artifact@v4
+          with:
+            name: built-core-api
+            path: core-api/build/libs
+
+        - name: Run Game Tests
+          run: ./gradlew :neoforge-main:runGameTestServer
+
+        - name: Upload build failure
+          if: failure()
+          uses: actions/upload-artifact@v4
+          with:
+            name: test-data
+            path: run/gametest
+
+        - name: Run JUnit Tests
+          run: ./gradlew :neoforge-main:test
+
+        - name: Upload test reports on failure
+          if: failure()
+          uses: actions/upload-artifact@v4
+          with:
+            name: test-reports
+            path: neoforge-main/build/reports
