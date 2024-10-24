@@ -22,7 +22,7 @@ plugins {
 apply plugin: "net.minecraftforge.gradle"
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
-var envVersion: String = System.getenv("VERSION") ?: "9.9.9"
+var envVersion = System.getenv("VERSION") ?: "9.9.9"
 if (envVersion.startsWith("v"))
     envVersion = envVersion.trimStart('v')
 
