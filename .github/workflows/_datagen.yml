@@ -38,4 +38,4 @@ jobs:
           uses: actions/upload-artifact@v4
           with:
             name: generated-data
-            path: neoforge-main/src/generated/resources
+            path: src/generated/resources

@@ -35,19 +35,10 @@ jobs:
           uses: actions/download-artifact@v4
           with:
             name: generated-data
-            path: neoforge-main/src/generated/resources
-
-        - name: Build Core
-          run: ./gradlew :core-api:jar
-
-        - name: Upload built core
-          uses: actions/upload-artifact@v4
-          with:
-            name: built-core-api
-            path: core-api/build/libs
+            path: src/generated/resources
 
         - name: Run Game Tests
-          run: ./gradlew :neoforge-main:runGameTestServer
+          run: ./gradlew :runGameTestServer
 
         - name: Upload build failure
           if: failure()
@@ -57,11 +48,11 @@ jobs:
             path: run/gametest
 
         - name: Run JUnit Tests
-          run: ./gradlew :neoforge-main:test
+          run: ./gradlew :test
 
         - name: Upload test reports on failure
           if: failure()
           uses: actions/upload-artifact@v4
           with:
             name: test-reports
-            path: neoforge-main/build/reports
+            path: build/reports
