@@ -14,7 +14,7 @@ env:
 
 jobs:
   run-tests:
-      name: Run Game Testss
+      name: Run Game Tests
       runs-on: ubuntu-22.04
       steps:
         - name: Checkout
@@ -26,7 +26,7 @@ jobs:
           uses: actions/setup-java@v4
           with:
             distribution: temurin
-            java-version: 21
+            java-version: 17
 
         - name: Setup Gradle
           uses: gradle/actions/setup-gradle@v3

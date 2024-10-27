@@ -36,3 +36,5 @@ logs/
 src/generated/
 
 raw-assets/
+
+.vscode/
