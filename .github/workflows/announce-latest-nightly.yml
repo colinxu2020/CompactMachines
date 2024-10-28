@@ -1,53 +1,13 @@
-name: Announce Latest Nightly to Discord
+name: Announce Latest Nightly Build to Discord
+env:
+  GH_PKG_URL: "https://maven.pkg.github.com/${{ github.repository }}"
 
 on:
-  workflow_call:
-
   workflow_dispatch:
-    inputs:
-      diagnostic_mode:
-        description: Diagnostic Mode
-        type: boolean
-        default: false
-        required: true
 
 jobs:
-  vars:
-    name: Get Variables
-    runs-on: ubuntu-22.04
-    outputs:
-      mcVersion: ${{steps.minecraft.outputs.version}}
-      neoVersion: ${{steps.neoforge.outputs.version}}
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 21
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
-
-      - name: MC Version
-        id: minecraft
-        run: ./gradlew mcVersion -q >> "$GITHUB_OUTPUT"
-        env:
-          VERSION: ${{ steps.version.outputs.version }}
-
-      - name: NeoForge Version
-        id: neoforge
-        run: ./gradlew neoVersion -q >> "$GITHUB_OUTPUT"
-        env:
-          VERSION: ${{ steps.version.outputs.version }}
-
   get-package-info:
-    name: Get Latest Package Info
+    name: Latest Package Info
     runs-on: ubuntu-22.04
     outputs:
       version: ${{ steps.download-info.outputs.version }}
@@ -69,45 +29,7 @@ jobs:
           echo "Version: ${{ steps.download-info.outputs.version }}"
           cat compactmachines-nightly.json
 
-      - name: Read info into variable [latest]
-        id: info
-        run: echo "latestJson=$(cat compactmachines-nightly.json)" >> $GITHUB_OUTPUT
-
-      - name: Download JAR and prepare artifacts
-        run: |
-          mkdir release
-          curl -L "${{ fromJson(steps.info.outputs.latestJson)[0].url }}" -o "release/${{ fromJson(steps.info.outputs.latestJson)[0].name}}"
-          mv compactmachines-nightly.json release/compactmachines-nightly.json
-
-      - name: Add Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: release
-          path: release
-
   announce:
     name: Discord Announcement
-    needs: [ vars, get-package-info ]
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Grab JAR and Info
-        uses: actions/download-artifact@v4
-        with:
-          name: release
-          path: .
-
-      - name: Read info into variable [latest]
-        id: info
-        run: echo "latestJson=$(cat compactmachines-nightly.json)" >> $GITHUB_OUTPUT
-
-      - name: Announce Release
-        uses: compactmods/discord-releaser@0.1.5
-        env:
-          DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
-        with:
-          filename: ${{ fromJson(steps.info.outputs.latestJson)[0].name}}
-          channel: ${{ secrets.NIGHTLY_CHANNEL_ID }}
-          modName: Compact Machines
-          modVersion: ${{ needs.get-package-info.outputs.version }}
-          thumbnail: https://media.forgecdn.net/avatars/10/602/635460270800375500.png
-          mcVersion: ${{ needs.vars.outputs.mcVersion }}
+    uses: ./.github/workflows/_announce-latest-nightly.yml
+    secrets: inherit

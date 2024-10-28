@@ -38,21 +38,21 @@ jobs:
 
   datagen:
     needs: [vars]
-    uses: ./.github/workflows/datagen.yml
+    uses: ./.github/workflows/_datagen.yml
     secrets: inherit
     with:
       version: ${{ needs.vars.outputs.version }}
 
   tests:
     needs: [vars, datagen]
-    uses: ./.github/workflows/run-gametests.yml
+    uses: ./.github/workflows/_run-gametests.yml
     secrets: inherit
     with:
       version: ${{ needs.vars.outputs.version }}
 
   publish:
     needs: [vars, tests]
-    uses: ./.github/workflows/publish.yml
+    uses: ./.github/workflows/_publish.yml
     secrets: inherit
     with:
       version: ${{ needs.vars.outputs.version }}
@@ -60,5 +60,5 @@ jobs:
   announce:
     name: Discord Announcement
     needs: [ publish ]
-    uses: ./.github/workflows/announce-latest-nightly.yml
+    uses: ./.github/workflows/_announce-latest-nightly.yml
     secrets: inherit
