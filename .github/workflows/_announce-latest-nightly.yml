@@ -11,45 +11,6 @@ on:
         required: true
 
 jobs:
-  vars:
-    name: Get Variables
-    runs-on: ubuntu-22.04
-    outputs:
-      mcVersion: ${{steps.minecraft.outputs.version}}
-      neoVersion: ${{steps.neoforge.outputs.version}}
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 21
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-
-      - name: Init Gradle
-        run: ./gradlew ngInitCM
-        env:
-          VERSION: ${{ steps.version.outputs.version }}
-
-      - name: MC Version
-        id: minecraft
-        run: ./gradlew mcVersion -q >> "$GITHUB_OUTPUT"
-        env:
-          VERSION: ${{ steps.version.outputs.version }}
-
-      - name: NeoForge Version
-        id: neoforge
-        run: ./gradlew neoVersion -q >> "$GITHUB_OUTPUT"
-        env:
-          VERSION: ${{ steps.version.outputs.version }}
-
   get-package-info:
     name: Get Latest Package Info
     runs-on: ubuntu-22.04
@@ -89,6 +50,50 @@ jobs:
           name: release
           path: release
 
+  vars:
+    name: Get Variables
+    runs-on: ubuntu-22.04
+    needs: [get-package-info]
+    outputs:
+      jarFile: ${{ fromJson(steps.info.outputs.latestJson)[0].name}}
+      mcVersion: ${{steps.minecraft.outputs.prop}}
+      neoVersion: ${{steps.neoforge.outputs.prop}}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Grab JAR and Info
+        uses: actions/download-artifact@v4
+        with:
+          name: release
+          path: .
+
+      - name: Read info into variable [latest]
+        id: info
+        run: echo "latestJson=$(cat compactmachines-nightly.json)" >> $GITHUB_OUTPUT
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Setup Groovy
+        uses: wtfjoke/setup-groovy@v2
+        with:
+          groovy-version: '4.x'
+
+      - name: MC Version
+        id: minecraft
+        run:  groovy read-manifest.groovy ${{ fromJson(steps.info.outputs.latestJson)[0].name}} "Minecraft-Version" >> "$GITHUB_OUTPUT"
+
+      - name: NeoForge Version
+        id: neoforge
+        run:  groovy read-manifest.groovy ${{ fromJson(steps.info.outputs.latestJson)[0].name}} "NeoForge-Version" >> "$GITHUB_OUTPUT"
+
   announce:
     name: Discord Announcement
     needs: [ vars, get-package-info ]
@@ -109,7 +114,7 @@ jobs:
         env:
           DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
         with:
-          filename: ${{ fromJson(steps.info.outputs.latestJson)[0].name}}
+          filename: ${{ needs.vars.outputs.jarFile }}
           channel: ${{ secrets.NIGHTLY_CHANNEL_ID }}
           modName: Compact Machines
           modVersion: ${{ needs.get-package-info.outputs.version }}
