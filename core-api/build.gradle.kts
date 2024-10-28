@@ -50,6 +50,7 @@ tasks.withType<Jar> {
         val now = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(Date())
         attributes(
             mapOf(
+                "Automatic-Module-Name" to "compactmachines.api",
                 "Specification-Title" to "Compact Machines - Core API",
                 "Specification-Version" to "1", // We are version 1 of ourselves
                 "Implementation-Title" to "Compact Machines - Core API",
@@ -57,8 +58,7 @@ tasks.withType<Jar> {
                 "FMLModType" to "LIBRARY",
                 "Minecraft-Version" to mojang.versions.minecraft.get(),
                 "NeoForge-Version" to neoforged.versions.neoforge.get(),
-                "Main-Commit" to gitVersion,
-                "Automatic-Module-Name" to "compactmachines.api"
+                "Main-Commit" to gitVersion
             )
         )
     }

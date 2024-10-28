@@ -35,7 +35,7 @@ jobs:
           path: neoforge-main/src/generated/resources
 
       - name: Publish
-        run: ./gradlew :neoforge-main:publish
+        run: ./gradlew :neoforge-main:publishCompactmachinesPublicationToGitHubPackagesRepository
         env:
           VERSION: ${{ inputs.version }}
           GITHUB_ACTOR: ${{ secrets.GITHUB_ACTOR }}

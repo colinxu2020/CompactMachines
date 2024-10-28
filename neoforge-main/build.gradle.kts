@@ -72,15 +72,13 @@ neoForge {
     runs {
         // applies to all the run configs below
         configureEach {
-
             logLevel.set(Level.DEBUG)
-
             sourceSet = project.sourceSets.main
 
-            if (!System.getenv().containsKey("CI")) {
-                // JetBrains Runtime Hotswap
-                // jvmArgument("-XX:+AllowEnhancedClassRedefinition")
-            }
+            // JetBrains Runtime Hotswap
+//            if (!System.getenv().containsKey("CI")) {
+//              jvmArgument("-XX:+AllowEnhancedClassRedefinition")
+//            }
         }
 
         create("client") {
@@ -127,7 +125,6 @@ neoForge {
             environment.put("CM_TEST_RESOURCES", file("src/test/resources").path)
 
             sourceSet = project.sourceSets.test
-            // sourceSets.add(project.sourceSets.test.get())
         }
     }
 }
@@ -141,8 +138,8 @@ repositories {
         }
     }
 
-    maven("https://maven.pkg.github.com/compactmods/compactmachines-core") {
-        name = "Github PKG Core"
+    maven("https://maven.pkg.github.com/compactmods/feather") {
+        name = "Github PKG - Feather"
         credentials {
             username = project.findProperty("gpr.user") as String? ?: System.getenv("GITHUB_ACTOR")
             password = project.findProperty("gpr.token") as String? ?: System.getenv("GITHUB_TOKEN")
@@ -173,9 +170,9 @@ dependencies {
         testImplementation(libraries.jnanoid)
         jarJar(libraries.jnanoid)
 
-        jarJar(coreApi)
         compileOnly(coreApi)
         testCompileOnly(coreApi)
+        jarJar(coreApi)
 
         compileOnly(libraries.feather)
         testImplementation(libraries.feather)
@@ -189,10 +186,6 @@ dependencies {
 
     additionalRuntimeClasspath(libraries.feather)
     additionalRuntimeClasspath(libraries.jnanoid)
-
-    // Mods
-//    compileOnly(mods.bundles.jei)
-//    compileOnly(mods.jade)
 }
 
 tasks.withType<Test> {
@@ -234,7 +227,7 @@ tasks.withType<Jar> {
 }
 
 tasks.withType<ProcessResources>().configureEach {
-    var replaceProperties: Map<String, Any> = mapOf(
+    val replaceProperties: Map<String, Any> = mapOf(
         "minecraft_version" to mojang.versions.minecraft.get(),
         "neo_version" to neoforged.versions.neoforge.get(),
         "minecraft_version_range" to mojang.versions.minecraftRange.get(),
