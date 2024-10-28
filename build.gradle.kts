@@ -5,15 +5,21 @@ plugins {
     alias(neoforged.plugins.moddev).apply(false)
 }
 
-tasks.create("mcVersion") {
-    doFirst {
+tasks.register("ngInitCM") {
+    doLast {
+        println("ForgeGradle+CM initialized")
+    }
+}
+
+tasks.register("mcVersion") {
+    doLast {
         val mc = mojang.versions.minecraft.get()
         println("version=$mc")
     }
 }
 
-tasks.create("neoVersion") {
-    doFirst {
+tasks.register("neoVersion") {
+    doLast {
         val neo = neoforged.versions.neoforge.get()
         println("version=$neo")
     }
