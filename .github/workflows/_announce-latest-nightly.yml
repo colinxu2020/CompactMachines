@@ -15,8 +15,8 @@ jobs:
     name: Get Latest Package Info
     runs-on: ubuntu-22.04
     outputs:
-      jarFile: ${{ steps.info.outputs.jarFilename }}
       version: ${{ steps.download-info.outputs.version }}
+      jarFile: ${{ fromJson(steps.info.outputs.latestJson)[0].name }}
       mcVersion: ${{steps.minecraft.outputs.prop}}
       neoVersion: ${{steps.neoforge.outputs.prop}}
 
@@ -54,24 +54,21 @@ jobs:
 
       - name: Read info into variable [latest]
         id: info
-        run: |
-          echo "latestJson=$(cat compactmachines-nightly.json)" >> $GITHUB_OUTPUT
-          echo "jarFileUrl=${{ fromJson(steps.info.outputs.latestJson)[0].url }}" >> $GITHUB_OUTPUT
-          echo "jarFilename=${{ fromJson(steps.info.outputs.latestJson)[0].name }}" >> $GITHUB_OUTPUT
+        run: echo "latestJson=$(cat compactmachines-nightly.json)" >> $GITHUB_OUTPUT
 
       - name: Download JAR and prepare artifacts
         run: |
           mkdir release
-          curl -L "${{ steps.info.outputs.jarFileUrl }}" -o "release/${{ steps.info.outputs.jarFilename }}"
+          curl -L "${{ fromJson(steps.info.outputs.latestJson)[0].url }}" -o "release/${{ fromJson(steps.info.outputs.latestJson)[0].name }}"
           mv compactmachines-nightly.json release/compactmachines-nightly.json     
 
       - name: MC Version
         id: minecraft
-        run:  groovy read-manifest.groovy release/${{ steps.info.outputs.jarFilename }} "Minecraft-Version" >> "$GITHUB_OUTPUT"
+        run:  groovy read-manifest.groovy release/${{ fromJson(steps.info.outputs.latestJson)[0].name }} "Minecraft-Version" >> "$GITHUB_OUTPUT"
 
       - name: NeoForge Version
         id: neoforge
-        run:  groovy read-manifest.groovy release/${{ steps.info.outputs.jarFilename }} "NeoForge-Version" >> "$GITHUB_OUTPUT"
+        run:  groovy read-manifest.groovy release/${{ fromJson(steps.info.outputs.latestJson)[0].name }} "NeoForge-Version" >> "$GITHUB_OUTPUT"
 
       - name: Add Artifact
         uses: actions/upload-artifact@v4
