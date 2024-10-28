@@ -1,8 +1,8 @@
 dependencyResolutionManagement {
     versionCatalogs.create("neoforged") {
-        version("neoforge", "21.1.22")
+        version("neoforge", "21.1.73")
         version("neogradle", "7.0.161")
-        version("mdg", "1.0.14")
+        version("mdg", "2.0.42-beta")
 
         version("neoforgeRange") {
             require("[21.1,22)")

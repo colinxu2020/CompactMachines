@@ -61,7 +61,7 @@ neoForge {
     this.mods.create(modId) {
         modSourceSets.add(sourceSets.main)
         modSourceSets.add(sourceSets.test)
-        this.dependency(coreApi)
+        // this.dependency(coreApi)
     }
 
     unitTest {

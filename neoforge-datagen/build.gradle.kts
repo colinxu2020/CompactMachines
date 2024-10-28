@@ -1,11 +1,9 @@
-import org.slf4j.event.Level
-
 plugins {
     id("java")
     id("eclipse")
     id("idea")
     id("maven-publish")
-    alias(neoforged.plugins.neogradle)
+    alias(neoforged.plugins.moddev)
 }
 
 val modId: String = "compactmachines"
@@ -21,34 +19,29 @@ java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 }
 
-minecraft {
-    this.modIdentifier = modId
-}
+neoForge {
+    version = neoforged.versions.neoforge
 
-runs {
-    configureEach {
-        this.modSource(coreApi.sourceSets.main.get())
-        this.modSource(sourceSets.main.get())
-        this.modSource(mainProject.sourceSets.main.get())
-
-        dependencies {
-            runtime(libraries.feather)
-            runtime(libraries.jnanoid)
-        }
+    mods.create(modId) {
+        this.sourceSet(coreApi.sourceSets.main.get())
+        this.sourceSet(sourceSets.main.get())
+        this.sourceSet(mainProject.sourceSets.main.get())
     }
 
-    this.create("data") {
-        this.dataGenerator()
+    runs {
+        this.create("data") {
+            this.data()
 
-        this.workingDirectory.set(file("runs/data"))
+            this.gameDirectory.set(file("runs/data"))
 
-        // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-        systemProperty("forge.enabledGameTestNamespaces", modId)
+            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
+            systemProperty("forge.enabledGameTestNamespaces", modId)
 
-        arguments.addAll("--mod", modId)
-        arguments.addAll("--all")
-        arguments.addAll("--output", mainProject.file("src/generated/resources").absolutePath)
-        arguments.addAll("--existing", mainProject.file("src/main/resources").absolutePath)
+            programArguments.addAll("--mod", modId)
+            programArguments.addAll("--all")
+            programArguments.addAll("--output", mainProject.file("src/generated/resources").absolutePath)
+            programArguments.addAll("--existing", mainProject.file("src/main/resources").absolutePath)
+        }
     }
 }
 
@@ -67,12 +60,10 @@ repositories {
 dependencies {
     compileOnly(coreApi)
     compileOnly(mainProject)
-
-    compileOnly(neoforged.neoforge)
 }
 
 tasks.compileJava {
-    options.encoding = "UTF-8";
+    options.encoding = "UTF-8"
 }
 
 tasks.withType<ProcessResources> {
