@@ -59,9 +59,9 @@ neoForge {
     version = neoforged.versions.neoforge
 
     this.mods.create(modId) {
+        modSourceSets.add(coreApi.sourceSets.main)
         modSourceSets.add(sourceSets.main)
         modSourceSets.add(sourceSets.test)
-        // this.dependency(coreApi)
     }
 
     unitTest {
@@ -117,7 +117,6 @@ neoForge {
             environment.put("CM_TEST_RESOURCES", file("src/test/resources").path)
 
             sourceSet = project.sourceSets.test
-            // sourceSets.add(project.sourceSets.test.get())
         }
 
         create("gameTestServer") {
@@ -174,6 +173,7 @@ dependencies {
         testImplementation(libraries.jnanoid)
         jarJar(libraries.jnanoid)
 
+        jarJar(coreApi)
         compileOnly(coreApi)
         testCompileOnly(coreApi)
 

@@ -54,10 +54,11 @@ tasks.withType<Jar> {
                 "Specification-Version" to "1", // We are version 1 of ourselves
                 "Implementation-Title" to "Compact Machines - Core API",
                 "Implementation-Timestamp" to now,
-                "FMLModType" to "GAMELIBRARY",
+                "FMLModType" to "LIBRARY",
                 "Minecraft-Version" to mojang.versions.minecraft.get(),
                 "NeoForge-Version" to neoforged.versions.neoforge.get(),
-                "Main-Commit" to gitVersion
+                "Main-Commit" to gitVersion,
+                "Automatic-Module-Name" to "compactmachines.api"
             )
         )
     }
