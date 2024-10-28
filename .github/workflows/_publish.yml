@@ -34,8 +34,14 @@ jobs:
           name: generated-data
           path: neoforge-main/src/generated/resources
 
+      - name: Pull Compilation Data
+        uses: actions/download-artifact@v4
+        with:
+          name: build-main
+          path: neoforge-main/build
+
       - name: Publish
-        run: ./gradlew :neoforge-main:publishCompactmachinesPublicationToGitHubPackagesRepository
+        run: ./gradlew :neoforge-main:publishCompactmachinesPublicationToGitHubPackagesRepository --stacktrace
         env:
           VERSION: ${{ inputs.version }}
           GITHUB_ACTOR: ${{ secrets.GITHUB_ACTOR }}
