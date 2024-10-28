@@ -6,7 +6,7 @@ val versionMain: String = System.getenv("VERSION") ?: "9.9.9"
 plugins {
     id("java-library")
     id("maven-publish")
-    alias(neoforged.plugins.neogradle)
+    alias(neoforged.plugins.moddev)
 }
 
 sourceSets {
@@ -29,10 +29,8 @@ java {
     withJavadocJar()
 }
 
-minecraft {}
-
-dependencies {
-    api(neoforged.neoforge)
+neoForge {
+    version = neoforged.versions.neoforge
 }
 
 tasks.withType<JavaCompile> {
