@@ -22,6 +22,12 @@ archivesBaseName = mod_id
 group = "dev.compactmods.compactmachines"
 version = envVersion
 
+tasks.register("fgInitCM") {
+    doLast {
+        println("ForgeGradle+CM initialized")
+    }
+}
+
 tasks.register("mcVersion") {
     doFirst {
         println("version=$minecraft_version")
