@@ -2,7 +2,6 @@ name: Announce Latest Nightly to Discord
 
 on:
   workflow_call:
-
   workflow_dispatch:
     inputs:
       diagnostic_mode:
@@ -35,7 +34,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Init Gradle
-        run: ./gradlew ngInifCM
+        run: ./gradlew ngInitCM
         env:
           VERSION: ${{ steps.version.outputs.version }}
 
