@@ -37,7 +37,7 @@ dependencyResolutionManagement {
         library("jnanoid", "com.aventrix.jnanoid", "jnanoid")
                 .versionRef("jnanoid")
 
-        version("feather", "[0.1.8, 2.0)")
+        version("feather", "0.1.8")
         version("jnanoid", "[2.0.0, 3)")
 
         version("parchment-mc", "1.21")
