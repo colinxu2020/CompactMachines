@@ -36,7 +36,7 @@ jobs:
 
       - name: Init Gradle
         run: ./gradlew fgInitCM
-        
+
       - name: MC Version
         id: minecraft
         run: ./gradlew mcVersion -q >> "$GITHUB_OUTPUT"

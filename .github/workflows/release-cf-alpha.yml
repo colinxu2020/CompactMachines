@@ -64,15 +64,12 @@ jobs:
         id: info
         run: echo "latestJson=$(cat compactmachines.json)" >> $GITHUB_OUTPUT
 
-      - name: Debug Files
-        run: ls
-
-      # - name: Create CurseForge Release
-      #   uses: itsmeow/curseforge-upload@master
-      #   with:
-      #     token: ${{ secrets.CURSEFORGE_TOKEN }}
-      #     project_id: ${{ secrets.CF_PROJECT }}
-      #     game_endpoint: minecraft
-      #     file_path: ${{ fromJson(steps.info.outputs.latestJson)[0].name}}
-      #     game_versions: java:Java 17,NeoForge
-      #     release_type: alpha
+      - name: Create CurseForge Release
+        uses: itsmeow/curseforge-upload@master
+        with:
+          token: ${{ secrets.CURSEFORGE_TOKEN }}
+          project_id: ${{ secrets.CF_PROJECT }}
+          game_endpoint: minecraft
+          file_path: ${{ fromJson(steps.info.outputs.latestJson)[0].name}}
+          game_versions: java:Java 17,Forge
+          release_type: alpha
