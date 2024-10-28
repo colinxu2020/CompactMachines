@@ -41,7 +41,7 @@ jobs:
           path: neoforge-main/build
 
       - name: Publish
-        run: ./gradlew :publishAllPublicationsToGitHubPackagesRepository
+        run: ./gradlew :neoforge-main:publish
         env:
           VERSION: ${{ inputs.version }}
           GITHUB_ACTOR: ${{ secrets.GITHUB_ACTOR }}
