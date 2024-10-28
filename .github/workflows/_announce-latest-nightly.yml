@@ -64,11 +64,11 @@ jobs:
 
       - name: MC Version
         id: minecraft
-        run:  groovy read-manifest.groovy ${{ fromJson(steps.info.outputs.latestJson)[0].name}} "Minecraft-Version" >> "$GITHUB_OUTPUT"
+        run:  groovy read-manifest.groovy release/${{ fromJson(steps.info.outputs.latestJson)[0].url }} "Minecraft-Version" >> "$GITHUB_OUTPUT"
 
       - name: NeoForge Version
         id: neoforge
-        run:  groovy read-manifest.groovy ${{ fromJson(steps.info.outputs.latestJson)[0].name}} "NeoForge-Version" >> "$GITHUB_OUTPUT"
+        run:  groovy read-manifest.groovy release/${{ fromJson(steps.info.outputs.latestJson)[0].name}} "NeoForge-Version" >> "$GITHUB_OUTPUT"
 
       - name: Add Artifact
         uses: actions/upload-artifact@v4
