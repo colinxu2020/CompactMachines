@@ -22,24 +22,33 @@ import java.util.stream.LongStream;
 public class CMRoomsSubcommand {
 
     public static LiteralArgumentBuilder<CommandSourceStack> make() {
+        // /cm rooms
         final LiteralArgumentBuilder<CommandSourceStack> subRoot = LiteralArgumentBuilder.literal("rooms");
 
+        // /cm rooms summary
         final var summary = Commands.literal("summary")
                 .executes(CMRoomsSubcommand::exec);
 
+        // /cm rooms find ...
         final var find = Commands.literal("find");
 
+        // /cm rooms find chunk
         find.then(Commands.literal("chunk").then(
+                // /cm rooms find chunk [pos]
                 Commands.argument("chunk", ColumnPosArgument.columnPos())
                         .executes(CMRoomsSubcommand::fetchByChunkPos)
         ));
 
+        // /cm rooms find connected_to
         find.then(Commands.literal("connected_to").then(
+                // /cm rooms find connected_to [pos]
                 Commands.argument("pos", BlockPosArgument.blockPos())
                         .executes(CMRoomsSubcommand::fetchByMachineBlock)
         ));
 
+        // /cm rooms find player
         find.then(Commands.literal("player").then(
+                // /cm rooms find player [@p]
                 Commands.argument("player", EntityArgument.player())
                         .executes(CMRoomsSubcommand::findByContainingPlayer)
         ));
